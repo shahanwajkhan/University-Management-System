@@ -26,7 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-cv^%oy2mm@hz9a@%!k=p3ocv@b+d@rj216%0@oej^4746r0dnj')
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-dev-secret-key-67890')
-CLOUDFLARE_SITE_KEY = os.getenv('CLOUDFLARE_SITE_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = ['*'] # Allow all for Vercel/Cloudflare custom domains

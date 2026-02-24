@@ -36,7 +36,6 @@ def login_page(request, role):
     # Role can be 'student', 'faculty', 'admin'
     context = {
         'role': role.capitalize(),
-        'turnstile_site_key': settings.CLOUDFLARE_SITE_KEY
     }
 
     if request.method == 'POST':
