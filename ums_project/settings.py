@@ -29,7 +29,9 @@ JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-dev-secret-key-67890')
 CLOUDFLARE_SITE_KEY = os.getenv('CLOUDFLARE_SITE_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.onrender.com']
+ALLOWED_HOSTS = ['*'] # Allow all for Vercel/Cloudflare custom domains
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app'] # Add custom domains to this if forms fail
 
 # Application definition
 
