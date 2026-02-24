@@ -82,6 +82,7 @@ WSGI_APPLICATION = 'ums_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+import dj_database_url
 
 DATABASES = {
     'default': {
@@ -89,6 +90,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db2.sqlite3',
     }
 }
+
+# Override with cloud database if DATABASE_URL exists (e.g., Neon Postgres)
+if os.getenv('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.parse(os.getenv('DATABASE_URL'))
 
 
 # Password validation
