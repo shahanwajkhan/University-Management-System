@@ -1,0 +1,160 @@
+/* style.css */
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+}
+
+/* Navbar */
+.ums-navbar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.brand-icon {
+    color: #ff5722;
+    font-size: 1.5rem;
+}
+
+.brand-text {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #0d2b56;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ff5722 !important;
+}
+
+.btn-get-started {
+    background-color: #ff5722;
+    color: white;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 10px 24px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-get-started:hover {
+    background-color: #e64a19;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+}
+
+/* Landing Page */
+.hero-image {
+    max-height: 400px;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #fff0eb;
+    color: #ff5722;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.icon-circle:hover {
+    background-color: #ff5722;
+    color: white;
+    transform: scale(1.1);
+}
+
+.title-underline {
+    width: 60px;
+    height: 4px;
+    background-color: #ff5722;
+    border-radius: 2px;
+}
+
+/* Role Selection Page */
+.role-title-line {
+    height: 3px;
+    width: 60px;
+    background-color: #ff5722;
+    margin: -1.4rem auto 1rem auto;
+    position: relative;
+    z-index: 0;
+}
+
+.role-cards-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.role-card {
+    background-color: #fcfbfa;
+    border-radius: 4px;
+    padding: 40px 20px;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    background-color: #ffffff;
+    border-color: #f0f0f0;
+}
+
+/* Specific Avatar circles matching the provided image */
+.avatar-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #e3effa;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-avatar { background-color: #0b5bce; }
+.admin-avatar { background-color: #004bad; }
+.faculty-avatar { background-color: #0b60d4; }
+.department-avatar { background-color: #92bce6; }
+
+.role-title {
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: #222;
+}
+
+.role-subtitle {
+    font-size: 0.9rem;
+    color: #666;
+}
