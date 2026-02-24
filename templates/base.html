@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UMS - University Management System{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome styling for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    {% block navbar %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top ums-navbar px-4">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <i class="fa-solid fa-building-columns brand-icon me-2"></i>
+                <span class="brand-text">UMS</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium"
+                            href="{% url 'services' %}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium"
+                            href="{% url 'portfolio' %}">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex">
+                <a href="{% url 'role_selection' %}" class="btn btn-get-started">Get Started</a>
+            </div>
+        </div>
+    </nav>
+    {% endblock navbar %}
+
+    <!-- Main Content -->
+    <main>
+        {% block global_messages %}
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message|safe }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}
+    <!-- Global Footer -->
+    <footer class="ums-footer pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                
+                <!-- Column 1: University Information -->
+                <div class="col-lg-3 col-md-6 col-12 text-center text-md-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+                        <div class="footer-logo-box me-3 d-flex justify-content-center align-items-center rounded-3">
+                            <i class="fa-solid fa-graduation-cap fs-4 text-white"></i>
+                        </div>
+                        <h4 class="fw-bold text-white mb-0 text-start" style="line-height: 1.2; font-size: 1.1rem;">Lovely<br>Professional<br>University</h4>
+                    </div>
+                    <p class="footer-text-muted small mb-4 pe-lg-3">
+                        A modern, scalable, and secure University Management System (UMS) platform empowering our institution to digitize administration and enhance student success.
+                    </p>
+                    <div class="d-flex align-items-start mb-2 footer-text-muted justify-content-center justify-content-md-start">
+                        <i class="fa-solid fa-location-dot mt-1 me-2 text-primary-accent"></i>
+                        <span class="small text-start">Jalandhar - Delhi G.T. Road, Phagwara, Punjab (India) - 144411</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2 footer-text-muted justify-content-center justify-content-md-start">
+                        <i class="fa-solid fa-envelope me-2 text-primary-accent"></i>
+                        <span class="small">support@lpu.co.in</span>
+                    </div>
+                    <div class="d-flex align-items-center footer-text-muted justify-content-center justify-content-md-start">
+                        <i class="fa-solid fa-phone me-2 text-primary-accent"></i>
+                        <span class="small">+91 1824 517000</span>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="col-lg-3 col-md-6 col-12 text-center text-md-start">
+                    <h5 class="fw-bold mb-4 text-white position-relative footer-heading">Quick Links</h5>
+                    <ul class="list-unstyled footer-links-list">
+                        <li><a href="{% url 'role_selection' %}"><i class="bi bi-chevron-right small me-1"></i> Dashboard</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Students</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Faculty</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Courses</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Attendance</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Fees</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> ID Card Generator</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Reports</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Resources -->
+                <div class="col-lg-3 col-md-6 col-12 text-center text-md-start">
+                    <h5 class="fw-bold mb-4 text-white position-relative footer-heading">Resources</h5>
+                    <ul class="list-unstyled footer-links-list">
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Academic Calendar</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Examination Portal</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Results</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Announcements</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Help & Support</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right small me-1"></i> Terms & Conditions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Connect With Us -->
+                <div class="col-lg-3 col-md-6 col-12 text-center text-md-start">
+                    <h5 class="fw-bold mb-4 text-white position-relative footer-heading">Connect With Us</h5>
+                    
+                    <div class="social-icons d-flex justify-content-center justify-content-md-start gap-2 mb-4">
+                        <a href="#" class="social-btn facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn linkedin"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="social-btn twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                    
+                    <h6 class="text-white mb-2 small fw-semibold">Subscribe to Newsletter</h6>
+                    <form class="newsletter-form position-relative mb-3 mx-auto mx-md-0" style="max-width: 300px;">
+                        <input type="email" class="form-control rounded-pill pe-5 bg-dark-soft border-0 text-white shadow-none" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary rounded-circle position-absolute end-0 top-0 bottom-0 m-1 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding: 0; transition: transform 0.3s ease;">
+                            <i class="bi bi-send-fill small"></i>
+                        </button>
+                    </form>
+                    
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light rounded-pill btn-sm px-4 fw-medium mt-1 hover-lift">
+                        <i class="bi bi-headset me-2"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section (Footer Bar) -->
+            <div class="row pt-3 align-items-center footer-bottom-bar text-center text-md-start">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="footer-text-muted small mb-0">
+                        &copy; 2026 <strong>Lovely Professional University</strong> | University Management System
+                    </p>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center justify-content-md-end align-items-center gap-3">
+                    <span class="footer-text-muted smaller">Developed by UMS Team</span>
+                    <span class="text-white-50 smaller">|</span>
+                    <span class="badge bg-dark-soft text-light border border-secondary border-opacity-25 rounded-pill">v1.0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Top Button -->
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center rounded-circle shadow">
+            <i class="bi bi-arrow-up text-white"></i>
+        </a>
+    </footer>
+    {% endblock footer %}
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Maintain Flexbox layout to push footer to bottom */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        /* Modern Footer Styling */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .ums-footer {
+            background-color: #0b1426; /* Deep Navy Theme */
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            margin-top: auto;
+        }
+
+        .footer-logo-box {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff5722 0%, #ff9800 100%);
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+            flex-shrink: 0;
+        }
+
+        .text-primary-accent {
+            color: #ff5722 !important;
+        }
+
+        .bg-dark-soft {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .footer-text-muted {
+            color: rgba(255, 255, 255, 0.65);
+            transition: color 0.3s ease;
+        }
+        
+        .smaller {
+            font-size: 0.75rem;
+        }
+
+        /* Headings */
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 30px;
+            height: 2px;
+            background-color: #ff5722;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 767px) {
+            .ums-footer .footer-heading::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        .ums-footer:hover .footer-heading::after {
+            width: 50px;
+        }
+
+        /* Links */
+        .footer-links-list li {
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-links-list a {
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .footer-links-list a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #ff5722;
+            transition: width 0.3s ease;
+        }
+
+        .footer-links-list a:hover {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        .footer-links-list a:hover::after {
+            width: 100%;
+        }
+
+        /* Social Icons */
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            color: #ffffff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .social-btn.facebook:hover { background-color: #1877f2; }
+        .social-btn.instagram:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .social-btn.linkedin:hover { background-color: #0a66c2; }
+        .social-btn.twitter:hover { background-color: #1da1f2; }
+
+        /* Newsletter */
+        .newsletter-form input:focus {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            color: white !important;
+        }
+        
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+
+        .newsletter-form button:hover {
+            transform: scale(1.05);
+            background-color: #e64a19;
+            border-color: #e64a19;
+        }
+
+        /* Buttons & Utils */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, color 0.3s;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+            background-color: #ffffff;
+            color: #0b1426 !important;
+            border-color: #ffffff;
+        }
+
+        .footer-bottom-bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background-color: #ff5722;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            text-decoration: none;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: #e64a19;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.4) !important;
+        }
+    </style>
+
+    <script>
+        // Back to top behavior
+        document.addEventListener("DOMContentLoaded", function() {
+            var backToTop = document.querySelector('.back-to-top');
+            
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('show');
+                    } else {
+                        backToTop.classList.remove('show');
+                    }
+                });
+
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

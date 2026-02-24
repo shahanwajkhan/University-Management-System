@@ -1,0 +1,231 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - ID Card Management{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold text-dark">ID Card Management</h1>
+            <p class="text-muted">Generate and manage identity cards for students and faculty.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <form class="d-flex" method="GET">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 rounded-start-pill px-3">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0 rounded-end-pill me-2 px-3" 
+                           placeholder="Search name or ID..." value="{{ search_query }}">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabs for Students/Faculty -->
+    <ul class="nav nav-pills mb-4 bg-white p-2 rounded-pill shadow-sm d-inline-flex" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill px-4" id="pills-students-tab" data-bs-toggle="pill" data-bs-target="#pills-students" type="button" role="tab">Students</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-4" id="pills-faculty-tab" data-bs-toggle="pill" data-bs-target="#pills-faculty" type="button" role="tab">Faculty Members</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+        <!-- Students Tab -->
+        <div class="tab-pane fade show active" id="pills-students" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 border-0">STUDENT</th>
+                                <th class="py-3 border-0">ADDRESS & VALIDITY</th>
+                                <th class="py-3 border-0 text-end px-4">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td class="px-4 py-3 border-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
+                                            {{ student.username|slice:":1"|upper }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ student.full_name|default:student.username }}</div>
+                                            <div class="text-muted small">Roll: {{ student.student_profile.roll_number|default:"N/A" }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3 border-0">
+                                    <div class="small text-muted">
+                                        <i class="bi bi-geo-alt me-1"></i> {{ student.student_profile.address|default:"Address not set"|truncatechars:30 }}
+                                    </div>
+                                    <div class="small text-muted">
+                                        <i class="bi bi-calendar-event me-1"></i> Valid: {{ student.student_profile.valid_from|default:"-" }} to {{ student.student_profile.valid_till|default:"-" }}
+                                    </div>
+                                </td>
+                                <td class="py-3 border-0 text-end px-4">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2" 
+                                            onclick='editStudentID("{{ student.id }}", "{{ student.student_profile.address|escapejs }}", "{{ student.student_profile.valid_from|date:"Y-m-d" }}", "{{ student.student_profile.valid_till|date:"Y-m-d" }}")'>
+                                        Update Info
+                                    </button>
+                                    <a href="{% url 'generate_id_card' 'Student' student.id %}" target="_blank" class="btn btn-sm btn-primary rounded-pill px-3">
+                                        <i class="bi bi-printer me-1"></i>Generate ID
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-5 text-muted">No students found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Tab -->
+        <div class="tab-pane fade" id="pills-faculty" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 border-0">FACULTY</th>
+                                <th class="py-3 border-0">DEPARTMENT & JOINING</th>
+                                <th class="py-3 border-0 text-end px-4">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for faculty in faculties %}
+                            <tr>
+                                <td class="px-4 py-3 border-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
+                                            {{ faculty.username|slice:":1"|upper }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ faculty.full_name|default:faculty.username }}</div>
+                                            <div class="text-muted small">UID: {{ faculty.faculty_profile.faculty_uid|default:"N/A" }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3 border-0">
+                                    <div class="small text-muted">
+                                        <i class="bi bi-building me-1"></i> {{ faculty.faculty_profile.department.name|default:"Unassigned" }}
+                                    </div>
+                                    <div class="small text-muted">
+                                        <i class="bi bi-calendar-check me-1"></i> Joined: {{ faculty.faculty_profile.joining_date|default:"-" }}
+                                    </div>
+                                </td>
+                                <td class="py-3 border-0 text-end px-4">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2" 
+                                            onclick='editFacultyID("{{ faculty.id }}", "{{ faculty.faculty_profile.joining_date|date:"Y-m-d" }}")'>
+                                        Update Info
+                                    </button>
+                                    <a href="{% url 'generate_id_card' 'Faculty' faculty.id %}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3">
+                                        <i class="bi bi-printer me-1"></i>Generate ID
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-5 text-muted">No faculty found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Student ID Modal -->
+<div class="modal fade" id="editStudentIDModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">Update Student ID Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="user_role" value="Student">
+                <input type="hidden" name="user_id" id="edit-student-id">
+                <div class="modal-body p-4 pt-0">
+                    <div class="mb-3 text-center">
+                        <label class="form-label small fw-bold text-muted d-block mb-3">PROFILE PICTURE</label>
+                        <input type="file" name="profile_picture" class="form-control rounded-3 shadow-none border" accept="image/*">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">RESIDENTIAL ADDRESS</label>
+                        <textarea name="address" id="edit-student-address" class="form-control rounded-3 p-3 border" rows="3" required></textarea>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">VALID FROM</label>
+                            <input type="date" name="valid_from" id="edit-student-from" class="form-control rounded-3 p-2 border" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">VALID TILL</label>
+                            <input type="date" name="valid_till" id="edit-student-till" class="form-control rounded-3 p-2 border" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Faculty ID Modal -->
+<div class="modal fade" id="editFacultyIDModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">Update Faculty ID Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="user_role" value="Faculty">
+                <input type="hidden" name="user_id" id="edit-faculty-id">
+                <div class="modal-body p-4 pt-0">
+                    <div class="mb-3 text-center">
+                        <label class="form-label small fw-bold text-muted d-block mb-3">PROFILE PICTURE</label>
+                        <input type="file" name="profile_picture" class="form-control rounded-3 shadow-none border" accept="image/*">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">JOINING DATE</label>
+                        <input type="date" name="joining_date" id="edit-faculty-joining" class="form-control rounded-3 p-3 border" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function editStudentID(id, address, from, till) {
+    document.getElementById('edit-student-id').value = id;
+    document.getElementById('edit-student-address').value = address;
+    document.getElementById('edit-student-from').value = from;
+    document.getElementById('edit-student-till').value = till;
+    new bootstrap.Modal(document.getElementById('editStudentIDModal')).show();
+}
+
+function editFacultyID(id, joining) {
+    document.getElementById('edit-faculty-id').value = id;
+    document.getElementById('edit-faculty-joining').value = joining;
+    new bootstrap.Modal(document.getElementById('editFacultyIDModal')).show();
+}
+</script>
+{% endblock %}

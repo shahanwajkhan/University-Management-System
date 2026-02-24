@@ -1,0 +1,127 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Manage Complaints{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold text-dark"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Student Complaints</h2>
+            <p class="text-muted">Review and resolve academic complaints from students in your department.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-4 py-3 border-0 text-muted small fw-bold">STUDENT</th>
+                        <th class="py-3 border-0 text-muted small fw-bold">SUBJECT</th>
+                        <th class="py-3 border-0 text-muted small fw-bold">CATEGORY</th>
+                        <th class="py-3 border-0 text-muted small fw-bold">STATUS</th>
+                        <th class="py-3 border-0 text-muted small fw-bold">DATE</th>
+                        <th class="px-4 py-3 border-0 text-muted small fw-bold text-end">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in complaints %}
+                    <tr>
+                        <td class="px-4 py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">{{ c.student.full_name|default:c.student.username }}</div>
+                                    <div class="smaller text-muted">{{ c.student.student_profile.roll_number }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3">
+                            <div class="fw-medium text-dark">{{ c.subject }}</div>
+                        </td>
+                        <td class="py-3">
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">{{ c.category }}</span>
+                        </td>
+                        <td class="py-3">
+                            {% if c.status == 'Pending' %}
+                                <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill">Pending</span>
+                            {% elif c.status == 'In Progress' %}
+                                <span class="badge bg-info bg-opacity-10 text-info px-3 py-1 rounded-pill">In Progress</span>
+                            {% elif c.status == 'Resolved' %}
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill">Resolved</span>
+                            {% else %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-1 rounded-pill">{{ c.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 text-muted small">{{ c.created_at|date:"M d, Y" }}</td>
+                        <td class="px-4 py-3 text-end">
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#complaintModal{{ c.id }}">
+                                View & Handle
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Complaint Detail Modal -->
+                    <div class="modal fade" id="complaintModal{{ c.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content rounded-4 border-0 shadow">
+                                <form action="{% url 'faculty_update_complaint' c.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="modal-header border-0 pb-0">
+                                        <h5 class="modal-title fw-bold">Update Complaint</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-4">
+                                            <label class="form-label text-muted small fw-bold text-uppercase">Student Message</label>
+                                            <div class="p-3 bg-light rounded-3 small">
+                                                {{ c.message }}
+                                            </div>
+                                            {% if c.attachment %}
+                                            <div class="mt-2">
+                                                <a href="{{ c.attachment.url }}" class="text-decoration-none small fw-bold" target="_blank">
+                                                    <i class="bi bi-paperclip me-1"></i>View Attachment
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small fw-bold text-uppercase">Update Status</label>
+                                            <select name="status" class="form-select rounded-3">
+                                                <option value="Pending" {% if c.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                                <option value="In Progress" {% if c.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                                <option value="Resolved" {% if c.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                                <option value="Rejected" {% if c.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-0">
+                                            <label class="form-label text-muted small fw-bold text-uppercase">Remarks / Response</label>
+                                            <textarea name="remarks" class="form-control rounded-3" rows="3" placeholder="Add your comments here...">{{ c.admin_comments }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-0 pt-0">
+                                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-check-circle-fill display-4 mb-3 d-block opacity-25"></i>
+                            <div class="fw-bold">All clear! No pending academic complaints.</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

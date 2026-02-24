@@ -1,0 +1,280 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Manage Requests — Admin Portal{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-3 px-lg-5">
+
+    <!-- Page Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h3 class="fw-black mb-1" style="color:var(--text-dark)">
+                <i class="bi bi-file-earmark-text me-2" style="color:#6366f1"></i>Student Requests
+            </h3>
+            <p class="text-muted small mb-0">Manage leave applications and bonafide certificate requests from students.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <span class="badge rounded-pill px-3 py-2 fw-bold" style="background:rgba(245,158,11,.12);color:#b45309;font-size:.8rem;">
+                <i class="bi bi-hourglass-split me-1"></i>{{ pending_count }} Pending
+            </span>
+        </div>
+    </div>
+
+
+    <!-- Filter Bar -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Request Type</label>
+                    <select name="type" class="form-select rounded-3 border-light">
+                        <option value="">All Types</option>
+                        <option value="Leave" {% if type_filter == 'Leave' %}selected{% endif %}>Leave Requests</option>
+                        <option value="Bonafide" {% if type_filter == 'Bonafide' %}selected{% endif %}>Bonafide Certificate</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Status</label>
+                    <select name="status" class="form-select rounded-3 border-light">
+                        <option value="">All Statuses</option>
+                        <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                        <option value="Approved" {% if status_filter == 'Approved' %}selected{% endif %}>Approved</option>
+                        <option value="Rejected" {% if status_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Search Student</label>
+                    <input type="text" name="q" class="form-control rounded-3 border-light"
+                           placeholder="Name or username…" value="{{ search_q }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold w-100">
+                        <i class="bi bi-funnel me-1"></i>Filter
+                    </button>
+                </div>
+                <div class="col-md-1">
+                    <a href="{% url 'manage_requests' %}" class="btn btn-outline-secondary rounded-pill fw-bold w-100">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#6366f1">{{ total_count }}</div>
+                <div class="small text-muted fw-semibold">Total</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#f59e0b">{{ pending_count }}</div>
+                <div class="small text-muted fw-semibold">Pending</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#22c55e">{{ approved_count }}</div>
+                <div class="small text-muted fw-semibold">Approved</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#ef4444">{{ rejected_count }}</div>
+                <div class="small text-muted fw-semibold">Rejected</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Requests Table -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-white border-0 px-4 py-3 d-flex align-items-center justify-content-between"
+             style="border-bottom:1px solid rgba(0,0,0,0.05) !important;">
+            <h6 class="fw-bold mb-0">All Requests</h6>
+            <span class="small text-muted">{{ requests|length }} result{{ requests|length|pluralize }}</span>
+        </div>
+
+        {% if requests %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="font-size:.88rem;">
+                <thead style="background:rgba(99,102,241,.04);">
+                    <tr>
+                        <th class="ps-4 py-3 text-muted small fw-bold">Student</th>
+                        <th class="py-3 text-muted small fw-bold">Type</th>
+                        <th class="py-3 text-muted small fw-bold">Details</th>
+                        <th class="py-3 text-muted small fw-bold">Submitted</th>
+                        <th class="py-3 text-muted small fw-bold">Status</th>
+                        <th class="pe-4 py-3 text-muted small fw-bold text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <!-- Student -->
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center fw-bold text-primary flex-shrink-0"
+                                     style="width:38px;height:38px;">
+                                    {{ req.student.username|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold" style="color:var(--text-dark)">{{ req.student.full_name|default:req.student.username }}</div>
+                                    <div class="smaller text-muted">
+                                        {% with req.student.student_profile as sp %}
+                                        {% if sp %}{{ sp.department }} · Sem {{ sp.semester }}{% else %}No profile{% endif %}
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Type -->
+                        <td>
+                            <span class="badge rounded-pill px-3 py-1 fw-bold badge-type-{{ req.request_type|lower }}">
+                                <i class="bi {% if req.request_type == 'Leave' %}bi-calendar-x{% else %}bi-file-earmark-person{% endif %} me-1"></i>
+                                {{ req.get_request_type_display }}
+                            </span>
+                        </td>
+
+                        <!-- Details -->
+                        <td style="max-width:240px;">
+                            {% if req.request_type == 'Leave' and req.leave_from_date %}
+                            <div class="small fw-semibold mb-1">
+                                <i class="bi bi-calendar3 me-1 text-muted"></i>
+                                {{ req.leave_from_date }} → {{ req.leave_to_date }}
+                            </div>
+                            {% endif %}
+                            <div class="small text-muted text-truncate" style="max-width:220px;" title="{{ req.message }}">
+                                {{ req.message|truncatewords:8 }}
+                            </div>
+                            <button class="btn btn-link btn-sm p-0 smaller fw-bold text-decoration-none" 
+                                    onclick="toggleDetails('{{ req.id }}')">
+                                <i class="bi bi-eye me-1"></i>View Full
+                            </button>
+                        </td>
+
+                        <!-- Date -->
+                        <td class="text-muted small">{{ req.created_at|timesince }} ago</td>
+
+                        <!-- Status -->
+                        <td>
+                            <span class="badge rounded-pill px-3 py-1 fw-bold badge-status-{{ req.status|lower }}">
+                                {% if req.status == 'Approved' %}<i class="bi bi-check-circle-fill me-1"></i>
+                                {% elif req.status == 'Pending' %}<i class="bi bi-hourglass-split me-1"></i>
+                                {% else %}<i class="bi bi-x-circle-fill me-1"></i>{% endif %}
+                                {{ req.status }}
+                            </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="pe-4 text-center">
+                            {% if req.status == 'Pending' %}
+                            <div class="d-flex justify-content-center gap-2">
+                                <form method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="approve">
+                                    <input type="hidden" name="request_id" value="{{ req.id }}">
+                                    <button type="submit" class="btn btn-sm rounded-pill fw-bold px-3"
+                                            style="background:#dcfce7;color:#15803d;border:none;"
+                                            title="Approve">
+                                        <i class="bi bi-check-lg me-1"></i>Approve
+                                    </button>
+                                </form>
+                                <form method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="reject">
+                                    <input type="hidden" name="request_id" value="{{ req.id }}">
+                                    <button type="submit" class="btn btn-sm rounded-pill fw-bold px-3"
+                                            style="background:#fee2e2;color:#b91c1c;border:none;"
+                                            title="Reject">
+                                        <i class="bi bi-x-lg me-1"></i>Reject
+                                    </button>
+                                </form>
+                            </div>
+                            {% elif req.status == 'Approved' %}
+                            <!-- Allow re-rejection -->
+                            <form method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="reject">
+                                <input type="hidden" name="request_id" value="{{ req.id }}">
+                                <button type="submit" class="btn btn-sm rounded-pill"
+                                        style="background:rgba(239,68,68,.1);color:#b91c1c;border:none;font-size:.75rem;"
+                                        title="Revoke Approval">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Revoke
+                                </button>
+                            </form>
+                            {% else %}
+                            <form method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="approve">
+                                <input type="hidden" name="request_id" value="{{ req.id }}">
+                                <button type="submit" class="btn btn-sm rounded-pill"
+                                        style="background:rgba(34,197,94,.1);color:#15803d;border:none;font-size:.75rem;"
+                                        title="Re-Approve">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Re-Approve
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <!-- Expandable reason row -->
+                    <tr style="background:rgba(99,102,241,.02);display:none;" id="detail-{{ req.id }}">
+                        <td colspan="6" class="px-4 py-3">
+                            <div class="d-flex gap-4 flex-wrap">
+                                <div>
+                                    <span class="small fw-bold text-muted d-block mb-1">Full Message</span>
+                                    <p class="small mb-0">{{ req.message }}</p>
+                                </div>
+                                {% if req.request_type == 'Leave' and req.leave_from_date %}
+                                <div>
+                                    <span class="small fw-bold text-muted d-block mb-1">Leave Period</span>
+                                    <p class="small mb-0">{{ req.leave_from_date }} to {{ req.leave_to_date }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+                <i class="bi bi-inbox fs-2 text-muted opacity-50"></i>
+            </div>
+            <h5 class="fw-bold text-muted mb-1">No Requests Found</h5>
+            <p class="text-muted small">No student requests match the current filters.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .fw-black { font-weight: 900; }
+    .smaller  { font-size: .72rem; }
+
+    /* Type Badges */
+    .badge-type-leave { background: rgba(14,165,233,.12); color: #0369a1; }
+    .badge-type-bonafide { background: rgba(99,102,241,.12); color: #6366f1; }
+
+    /* Status Badges */
+    .badge-status-approved { background: #dcfce7; color: #15803d; }
+    .badge-status-pending { background: #fef3c7; color: #b45309; }
+    .badge-status-rejected { background: #fee2e2; color: #b91c1c; }
+</style>
+
+<script>
+    function toggleDetails(id) {
+        const row = document.getElementById('detail-' + id);
+        if (row.style.display === 'none') {
+            row.style.display = 'table-row';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

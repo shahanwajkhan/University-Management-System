@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}UMS - Our Team{% endblock %}
+
+{% block content %}
+<div class="team-section py-5 bg-light">
+
+    <!-- Header -->
+    <div class="container text-center mb-5 pb-3">
+        <h1 class="display-5 fw-bold text-dark mb-3">Meet The Visionaries</h1>
+        <div class="title-underline mx-auto mb-4"></div>
+        <p class="lead text-muted mx-auto" style="max-width: 800px;">
+            At UMS, our strength lies in our collaborative and innovative team. With expertise across software
+            engineering, academic administration, and user experience design, we are driven to transform campus
+            management globally.
+        </p>
+    </div>
+
+    <!-- Main Team Photo Section (User Provided) -->
+    <div class="container mb-5 pb-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <div class="position-relative d-inline-block rounded-4 shadow-lg overflow-hidden group-photo-wrapper bg-white p-3 mx-auto"
+                    style="max-width: 650px;">
+                    <!-- The photo provided by the user -->
+                    <img src="{% static 'images/team_photo.jpeg' %}" class="img-fluid rounded-3 team-hero-image"
+                        alt="UMS Core Team">
+
+                    <!-- Decorative floating badge -->
+                    <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4 z-1">
+                        <span class="badge bg-primary text-white py-2 px-4 shadow-sm fs-6 rounded-pill">
+                            <i class="fa-solid fa-people-group me-2"></i>The Core Engineering Team
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leadership Team -->
+    <div class="container mb-5">
+        <h2 class="fw-bold mb-4 text-center">🧠 Leadership</h2>
+        <div class="row justify-content-center g-4">
+
+            <!-- Project Lead -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm team-member-card text-center p-4">
+                    <div class="position-relative mx-auto mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Liam&clothing=blazerAndShirt"
+                            class="rounded-circle member-img" alt="Project Lead">
+                        <div class="social-overlay d-flex justify-content-center align-items-center gap-3">
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                            <a href="#" class="text-white fs-5"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <span class="badge bg-primary text-white rounded-pill mb-2 px-3 align-self-center">Project
+                        Lead</span>
+                    <h4 class="fw-bold mb-1">Liam Carter</h4>
+                    <p class="text-muted small mb-3">Driving the vision and strategy for UMS implementation.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-auto">
+                        <span class="badge bg-light text-dark border border-secondary">Leadership</span>
+                        <span class="badge bg-light text-dark border border-secondary">Strategy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Architect -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm team-member-card text-center p-4">
+                    <div class="position-relative mx-auto mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia&clothing=blazerAndSweater"
+                            class="rounded-circle member-img" alt="System Architect">
+                        <div class="social-overlay d-flex justify-content-center align-items-center gap-3">
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-github"></i></a>
+                        </div>
+                    </div>
+                    <span class="badge bg-danger text-white rounded-pill mb-2 px-3 align-self-center">System
+                        Architect</span>
+                    <h4 class="fw-bold mb-1">Sophia Lin</h4>
+                    <p class="text-muted small mb-3">Designing scalable, high-performance database infrastructure.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-auto">
+                        <span class="badge bg-light text-dark border border-secondary">Architecture</span>
+                        <span class="badge bg-light text-dark border border-secondary">Security</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Development Team -->
+    <div class="container mb-5 pb-4">
+        <h2 class="fw-bold mb-4 text-center mt-5">💻 Development Team</h2>
+        <div class="row justify-content-center g-4">
+
+            <!-- Backend Developer -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm team-member-card text-center p-4">
+                    <div class="position-relative mx-auto mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Noah&clothing=hoodie"
+                            class="rounded-circle member-img" alt="Backend Developer">
+                        <div class="social-overlay d-flex justify-content-center align-items-center gap-3">
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <span class="badge bg-success text-white rounded-pill mb-2 px-3 align-self-center">Backend
+                        Developer</span>
+                    <h5 class="fw-bold mb-1">Noah Davis</h5>
+                    <p class="text-muted small mb-3" style="font-size: 0.8rem;">Building robust server-side logic and
+                        processing.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-auto">
+                        <span class="badge bg-light text-dark border border-secondary">Django</span>
+                        <span class="badge bg-light text-dark border border-secondary">Python</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frontend Developer -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm team-member-card text-center p-4">
+                    <div class="position-relative mx-auto mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma"
+                            class="rounded-circle member-img" alt="Frontend Developer">
+                        <div class="social-overlay d-flex justify-content-center align-items-center gap-3">
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <span class="badge bg-info text-dark rounded-pill mb-2 px-3 align-self-center">Frontend
+                        Developer</span>
+                    <h5 class="fw-bold mb-1">Emma Wilson</h5>
+                    <p class="text-muted small mb-3" style="font-size: 0.8rem;">Crafting beautiful, responsive user
+                        interfaces.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-auto">
+                        <span class="badge bg-light text-dark border border-secondary">Bootstrap</span>
+                        <span class="badge bg-light text-dark border border-secondary">UI/UX</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Developer -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm team-member-card text-center p-4">
+                    <div class="position-relative mx-auto mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=James"
+                            class="rounded-circle member-img" alt="API Developer">
+                        <div class="social-overlay d-flex justify-content-center align-items-center gap-3">
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <span class="badge bg-warning text-dark rounded-pill mb-2 px-3 align-self-center">API
+                        Developer</span>
+                    <h5 class="fw-bold mb-1">James Taylor</h5>
+                    <p class="text-muted small mb-3" style="font-size: 0.8rem;">Connecting UMS seamlessly to third-party
+                        services.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-auto">
+                        <span class="badge bg-light text-dark border border-secondary">REST APIs</span>
+                        <span class="badge bg-light text-dark border border-secondary">Flask</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Engineer -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm team-member-card text-center p-4">
+                    <div class="position-relative mx-auto mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Olivia"
+                            class="rounded-circle member-img" alt="Database Engineer">
+                        <div class="social-overlay d-flex justify-content-center align-items-center gap-3">
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" class="text-white fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <span class="badge bg-secondary text-white rounded-pill mb-2 px-3 align-self-center">Database
+                        Engineer</span>
+                    <h5 class="fw-bold mb-1">Olivia Brown</h5>
+                    <p class="text-muted small mb-3" style="font-size: 0.8rem;">Ensuring data integrity and rapid query
+                        execution.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-auto">
+                        <span class="badge bg-light text-dark border border-secondary">MySQL</span>
+                        <span class="badge bg-light text-dark border border-secondary">PostgreSQL</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Join Us Call to Action -->
+    <div class="container text-center mt-5 pt-4 border-top">
+        <h3 class="fw-bold mb-3">Want to join our mission?</h3>
+        <p class="text-muted fs-5 mb-4">We are always looking for passionate engineers, designers, and educators to join
+            our ranks.</p>
+        <a href="#" class="btn btn-outline-primary btn-lg px-5 border-2 rounded-pill fw-semibold">View Open Roles</a>
+    </div>
+
+</div>
+
+<style>
+    /* Scoped CSS for Team page */
+    .group-photo-wrapper img {
+        transition: transform 0.5s ease;
+    }
+
+    .team-hero-image {
+        /* Using CSS filters to enhance dull photos */
+        filter: brightness(1.2) contrast(1.15) saturate(1.2);
+    }
+
+    .group-photo-wrapper:hover img {
+        transform: scale(1.02);
+    }
+
+    .team-member-card {
+        border-radius: 16px;
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .team-member-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .member-img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        background-color: #f0f4f8;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .social-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .social-overlay a {
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .social-overlay a:hover {
+        transform: scale(1.2);
+        color: #ff5722 !important;
+    }
+
+    .position-relative:hover .social-overlay {
+        opacity: 1;
+    }
+
+    .position-relative:hover .member-img {
+        filter: blur(2px);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Manage Subjects{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold text-dark">Course & Subject Management</h1>
+            <p class="text-muted">Configure university subjects and assign faculty members.</p>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+            <i class="bi bi-plus-lg me-2"></i>Add Subject
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-4 py-3 border-0">CODE</th>
+                        <th class="py-3 border-0">SUBJECT NAME</th>
+                        <th class="py-3 border-0">DEPARTMENT</th>
+                        <th class="py-3 border-0">ASSIGNED FACULTY</th>
+                        <th class="py-3 border-0 text-end px-4">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <td class="px-4 py-3 border-0"><span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3">{{ subject.code }}</span></td>
+                        <td class="py-3 border-0 fw-bold text-dark">{{ subject.name }}</td>
+                        <td class="py-3 border-0 text-muted">{{ subject.department.name }}</td>
+                        <td class="py-3 border-0">
+                            {% for fp in subject.assigned_faculty.all %}
+                                <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2 small">{{ fp.user.username }}</span>
+                            {% empty %}
+                                <span class="text-muted smaller">Unassigned</span>
+                            {% endfor %}
+                        </td>
+                        <td class="py-3 border-0 text-end px-4">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-2" 
+                                    onclick="editSubject('{{ subject.id }}', '{{ subject.name|escapejs }}', '{{ subject.code|escapejs }}', '{{ subject.department.id }}', [{% for fp in subject.assigned_faculty.all %}'{{ fp.user.id }}'{% if not forloop.last %},{% endif %}{% endfor %}])">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <form action="{% url 'manage_subjects' %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="subject_id" value="{{ subject.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" 
+                                        onclick="return confirm('Are you sure? This will delete the subject.')">
+                                    <i class="bi bi-trash me-1"></i>Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-book display-4 opacity-25 d-block mb-3"></i>
+                            No subjects found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addSubjectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">Add New Subject</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'manage_subjects' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <div class="modal-body p-4 pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">SUBJECT NAME</label>
+                        <input type="text" name="name" class="form-control rounded-3 p-3" placeholder="e.g. Data Structures" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">SUBJECT CODE</label>
+                        <input type="text" name="code" class="form-control rounded-3 p-3" placeholder="e.g. CS101" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">DEPARTMENT</label>
+                        <select name="dept_id" class="form-select rounded-3 p-3" required>
+                            <option value="" disabled selected>Select Department</option>
+                            {% for dept in departments %}
+                            <option value="{{ dept.id }}">{{ dept.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">ASSIGN FACULTY</label>
+                        <select name="faculty_ids" class="form-select rounded-3 p-3" multiple style="height: 120px;">
+                            {% for faculty in faculties %}
+                            <option value="{{ faculty.id }}">{{ faculty.username }} ({{ faculty.full_name|default:"No Name" }})</option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple members</small>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Create Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editSubjectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">Edit Subject</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'manage_subjects' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="subject_id" id="edit-subject-id">
+                <div class="modal-body p-4 pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">SUBJECT NAME</label>
+                        <input type="text" name="name" id="edit-subject-name" class="form-control rounded-3 p-3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">SUBJECT CODE</label>
+                        <input type="text" name="code" id="edit-subject-code" class="form-control rounded-3 p-3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">DEPARTMENT</label>
+                        <select name="dept_id" id="edit-subject-dept" class="form-select rounded-3 p-3" required>
+                            {% for dept in departments %}
+                            <option value="{{ dept.id }}">{{ dept.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">ASSIGN FACULTY</label>
+                        <select name="faculty_ids" id="edit-subject-faculty" class="form-select rounded-3 p-3" multiple style="height: 120px;">
+                            {% for faculty in faculties %}
+                            <option value="{{ faculty.id }}">{{ faculty.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function editSubject(id, name, code, deptId, facultyIds) {
+    document.getElementById('edit-subject-id').value = id;
+    document.getElementById('edit-subject-name').value = name;
+    document.getElementById('edit-subject-code').value = code;
+    document.getElementById('edit-subject-dept').value = deptId;
+    
+    // Set selected faculty
+    const facultySelect = document.getElementById('edit-subject-faculty');
+    Array.from(facultySelect.options).forEach(option => {
+        option.selected = facultyIds.includes(option.value);
+    });
+    
+    new bootstrap.Modal(document.getElementById('editSubjectModal')).show();
+}
+</script>
+{% endblock %}

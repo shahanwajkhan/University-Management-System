@@ -1,0 +1,222 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}My Results & CGPA — UMS{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-3 px-lg-5">
+
+    <!-- CGPA Hero Banner -->
+    <div class="res-hero rounded-4 p-4 p-md-5 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-4">
+        <div>
+            <p class="res-hero-sub mb-1">Academic Performance Report</p>
+            <h2 class="text-white fw-black mb-2">Your Results & Grades</h2>
+            <p class="text-white opacity-60 small mb-0">Marks, grade letters, and CGPA — updated by administration in real time.</p>
+        </div>
+        <div class="res-cgpa-ring">
+            <svg viewBox="0 0 120 120" class="res-ring-svg" style="width:130px;height:130px;">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="10"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#fff" stroke-width="10"
+                        stroke-linecap="round" stroke-dasharray="314"
+                        id="cgpaRing"
+                        data-pct="{{ cgpa_pct|default:0 }}"
+                        style="stroke-dashoffset:314;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset 1.5s ease;"/>
+            </svg>
+            <div class="res-ring-center text-white text-center">
+                <div class="fw-black" style="font-size:1.6rem;line-height:1;">{{ cgpa }}</div>
+                <div style="font-size:.7rem;opacity:.7;font-weight:600;">CGPA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-black fs-3" style="color:#6366f1">{{ total_subjects|default:0 }}</div>
+                <div class="small text-muted fw-semibold">Subjects</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-black fs-3" style="color:#22c55e">{{ semester_results|length }}</div>
+                <div class="small text-muted fw-semibold">Semesters</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-black fs-3" style="color:#f59e0b">{{ total_credits|default:0 }}</div>
+                <div class="small text-muted fw-semibold">Total Credits</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-black fs-3 {% if cgpa >= 7 %}text-success{% elif cgpa >= 5 %}text-warning{% else %}text-danger{% endif %}">
+                    {% if cgpa >= 8 %}Excellent{% elif cgpa >= 7 %}Very Good{% elif cgpa >= 6 %}Good{% elif cgpa >= 5 %}Average{% elif cgpa > 0 %}Below Avg{% else %}N/A{% endif %}
+                </div>
+                <div class="small text-muted fw-semibold">Performance</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semester-wise Results -->
+    {% if semester_results %}
+    <div class="d-flex flex-column gap-4">
+        {% for sem, records in semester_results.items %}
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <!-- Semester Header -->
+            <div class="px-4 py-3 d-flex justify-content-between align-items-center"
+                 style="background:linear-gradient(90deg,rgba(99,102,241,.07),rgba(14,165,233,.04));border-bottom:1px solid rgba(99,102,241,.1);">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center fw-black text-white"
+                         style="width:40px;height:40px;background:linear-gradient(135deg,#6366f1,#0ea5e9);">
+                        {{ sem }}
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Semester {{ sem }}</h6>
+                        <span class="small text-muted">{{ records|length }} subject{{ records|length|pluralize }}</span>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="small text-muted fw-semibold mb-1">Semester GPA</div>
+                    <span class="badge rounded-pill px-3 py-2 fw-black fs-6"
+                          style="background:rgba(99,102,241,.12);color:#6366f1;">
+                        {{ semester_gpas|get_item:sem }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Records Table -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" style="font-size:.88rem;">
+                    <thead style="background:rgba(0,0,0,0.02);">
+                        <tr>
+                            <th class="ps-4 py-3 text-muted small fw-bold">Subject</th>
+                            <th class="py-3 text-muted small fw-bold">Code</th>
+                            <th class="py-3 text-muted small fw-bold">Type</th>
+                            <th class="py-3 text-muted small fw-bold">Marks</th>
+                            <th class="py-3 text-muted small fw-bold">%</th>
+                            <th class="py-3 text-muted small fw-bold">Grade</th>
+                            <th class="py-3 text-muted small fw-bold">Points</th>
+                            <th class="pe-4 py-3 text-muted small fw-bold">Credits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rec in records %}
+                        <tr>
+                            <td class="ps-4 fw-semibold">{{ rec.subject.name }}</td>
+                            <td class="text-muted small">{{ rec.subject.code }}</td>
+                            <td>
+                                <span class="badge rounded-pill px-2 py-1 badge-exam-{% if rec.exam_type == 'Internal' %}internal{% elif rec.exam_type == 'External' %}external{% elif rec.exam_type == 'Practical' %}practical{% else %}other{% endif %}" style="font-size:.65rem;">
+                                    {{ rec.exam_type }}
+                                </span>
+                            </td>
+                            <td>
+                                <strong>{{ rec.marks_obtained }}</strong>
+                                <span class="text-muted small">/{{ rec.max_marks }}</span>
+                            </td>
+                            <td>
+                                {% if rec.max_marks > 0 %}
+                                <div style="width:60px;">
+                                    {% widthratio rec.marks_obtained rec.max_marks 100 as pct %}
+                                    <div class="progress rounded-pill" style="height:5px;">
+                                        <div class="progress-bar rounded-pill {% if rec.grade_letter == 'F' %}bg-danger{% elif rec.grade_letter == 'P' or rec.grade_letter == 'C' %}bg-warning{% else %}bg-success{% endif %}" style="width: {{ pct }}%;"></div>
+                                    </div>
+                                </div>
+                                {% else %}—{% endif %}
+                            </td>
+                            <td>
+                                <span class="badge fw-bold px-3 py-1 rounded-pill grade-badge-{% if rec.grade_letter == 'O' %}o{% elif rec.grade_letter == 'A+' %}a-plus{% elif rec.grade_letter == 'A' %}a{% elif rec.grade_letter == 'B+' %}b-plus{% elif rec.grade_letter == 'B' %}b{% elif rec.grade_letter == 'C' %}c{% elif rec.grade_letter == 'P' %}p{% else %}fail{% endif %}">
+                                    {{ rec.grade_letter }}
+                                </span>
+                            </td>
+                            <td class="fw-bold" style="color:#6366f1">{{ rec.grade_point }}</td>
+                            <td class="pe-4 text-muted">{{ rec.credits }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot style="background:rgba(99,102,241,.04);border-top:2px solid rgba(99,102,241,.15);">
+                        <tr>
+                            <td colspan="6" class="ps-4 py-2 fw-bold text-muted small">Semester GPA</td>
+                            <td class="fw-black py-2" style="color:#6366f1">{{ semester_gpas|get_item:sem }}</td>
+                            <td class="pe-4"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Grade Scale Info -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mt-4">
+        <h6 class="fw-bold mb-3 text-muted"><i class="bi bi-info-circle me-2"></i>Grading Scale</h6>
+        <div class="d-flex flex-wrap gap-2">
+            {% for grade, label, bg, col in grade_scale %}
+            {% with 'style="background:'|add:bg|add:';color:'|add:col|add:';"' as badge_style %}
+            <span class="badge rounded-pill px-3 py-2" {{ badge_style|safe }}>{{ grade }} — {{ label }}</span>
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+        <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+            <i class="bi bi-file-earmark-bar-graph fs-2 text-muted opacity-50"></i>
+        </div>
+        <h5 class="fw-bold text-muted mb-2">No Results Yet</h5>
+        <p class="text-muted small">Your marks will appear here once the administration enters them.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .res-hero {
+        background: linear-gradient(135deg, #0d2b56 0%, #1e40af 60%, #6366f1 100%);
+        position: relative; overflow: hidden;
+    }
+    .res-hero::before {
+        content:''; position:absolute;
+        width:300px;height:300px;border-radius:50%;
+        background:rgba(255,255,255,0.04);
+        top:-150px;right:-50px;
+    }
+    .res-hero-sub { color:rgba(255,255,255,0.6); font-size:.8rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+    .res-cgpa-ring { position:relative; }
+    .res-ring-center {
+        position:absolute; inset:0;
+        display:flex; flex-direction:column;
+        align-items:center; justify-content:center;
+    }
+    .fw-black { font-weight:900; }
+
+    /* Exam Type Badges */
+    .badge-exam-internal { background:rgba(14,165,233,.12); color:#0369a1; }
+    .badge-exam-external { background:rgba(239,68,68,.12); color:#dc2626; }
+    .badge-exam-practical { background:rgba(20,184,166,.12); color:#0f766e; }
+    .badge-exam-other { background:rgba(99,102,241,.12); color:#6366f1; }
+
+    /* Grade Badges */
+    .grade-badge-o { background:#dcfce7; color:#15803d; }
+    .grade-badge-a-plus { background:#d1fae5; color:#047857; }
+    .grade-badge-a { background:#dbeafe; color:#1d4ed8; }
+    .grade-badge-b-plus { background:#ede9fe; color:#6d28d9; }
+    .grade-badge-b { background:#fef3c7; color:#b45309; }
+    .grade-badge-c { background:#ffedd5; color:#c2410c; }
+    .grade-badge-p { background:#f0fdf4; color:#166534; }
+    .grade-badge-fail { background:#fee2e2; color:#b91c1c; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ring = document.getElementById('cgpaRing');
+    if (ring) {
+        const pct = parseFloat(ring.dataset.pct) || 0;
+        const offset = 314 - (pct / 100) * 314;
+        setTimeout(() => { ring.style.strokeDashoffset = offset; }, 400);
+    }
+});
+</script>
+{% endblock %}

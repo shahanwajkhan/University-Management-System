@@ -1,0 +1,388 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Mark Attendance{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-3 px-2 px-md-4 animation-fade-in">
+    <!-- Header -->
+    <div class="row align-items-center mb-4">
+        <div class="col-md-7">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}" class="text-decoration-none text-muted"><i class="bi bi-house-door me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'edit_attendance' %}" class="text-decoration-none text-muted">Attendance</a></li>
+                    <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Mark</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                <i class="bi bi-book-half text-primary"></i> 
+                {{ subject.name }}
+            </h2>
+            <p class="text-muted mb-0"><span class="badge bg-light text-dark shadow-sm">{{ subject.code }}</span> • {{ subject.department.name }}</p>
+        </div>
+        <div class="col-md-5 text-md-end mt-3 mt-md-0">
+            <div class="d-inline-flex align-items-center bg-white rounded-pill px-4 py-2 shadow-sm border border-light">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                    <i class="bi bi-calendar3"></i>
+                </div>
+                <div class="text-start">
+                    <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.7rem;">Session Date</div>
+                    <div class="fw-bold text-dark text-nowrap">{{ attendance_date|default:selected_date }}</div>
+                </div>
+                <input type="date" name="date" id="dateInput" value="{{ selected_date }}" 
+                       class="form-control form-control-sm border-0 bg-transparent text-transparent position-absolute opacity-0" 
+                       style="width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;">
+            </div>
+            <div class="small text-muted mt-2 text-end me-3">Tap date to change</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden premium-card mb-5 pb-5">
+        <form method="POST" id="attendanceForm">
+            {% csrf_token %}
+            <input type="hidden" name="date" value="{{ selected_date }}">
+            
+            <!-- Context Bar -->
+            <div class="bg-light px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="bi bi-people-fill text-primary me-2"></i>Student List
+                    </h5>
+                    {% if existing_records %}
+                    <span class="badge bg-warning bg-opacity-25 text-warning-emphasis border border-warning border-opacity-25 rounded-pill px-3 mt-2">
+                        <i class="bi bi-pencil-square me-1"></i> Editing existing records
+                    </span>
+                    {% else %}
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 mt-2">
+                        <i class="bi bi-plus-circle me-1"></i> New entry
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="d-none d-md-flex align-items-center gap-3">
+                    <span class="text-muted small fw-medium">Mark all as:</span>
+                    <button type="button" id="markAllPresent" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold bg-success bg-opacity-10 shadow-sm border-success border-opacity-25">
+                        <i class="bi bi-check-all"></i> Present
+                    </button>
+                    <button type="button" id="markAllAbsent" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold bg-danger bg-opacity-10 shadow-sm border-danger border-opacity-25">
+                        <i class="bi bi-x"></i> Absent
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 custom-data-grid">
+                    <thead class="bg-white sticky-top shadow-sm" style="z-index: 10; top: 0;">
+                        <tr>
+                            <th class="border-0 px-4 py-3 text-muted text-uppercase fw-bold" style="font-size: 0.8rem; width: 15%">Roll No.</th>
+                            <th class="border-0 py-3 text-muted text-uppercase fw-bold" style="font-size: 0.8rem; width: 50%">Student Details</th>
+                            <th class="border-0 py-3 text-muted text-uppercase fw-bold text-center" style="font-size: 0.8rem; width: 35%">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {% for student_data in students_with_attendance %}
+                        {% with student_profile=student_data.profile existing_status=student_data.existing_status %}
+                        <tr class="attendance-row transition-all">
+                            <td class="px-4 py-3 align-middle">
+                                <span class="fw-bold text-dark bg-light px-2 py-1 rounded-3 font-monospace border">
+                                    {{ student_profile.roll_number|default:"N/A" }}
+                                </span>
+                            </td>
+                            <td class="py-3 align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle me-3 flex-shrink-0 bg-primary bg-opacity-10 text-primary fw-bold border border-primary border-opacity-25 d-flex align-items-center justify-content-center">
+                                        {{ student_profile.user.full_name|default:student_profile.user.username|make_list|first|upper }}
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark fs-6 mb-1">
+                                            {{ student_profile.user.full_name|default:student_profile.user.username }}
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary border rounded-pill px-2">Sem {{ student_profile.semester }}</span>
+                                            <span class="text-muted" style="font-size: 0.75rem;">{{ student_profile.user.email }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 text-center align-middle">
+                                <div class="modern-toggle mx-auto">
+                                    {% if existing_status is not None %}
+                                        {% if existing_status %}
+                                            <input type="radio" class="toggle-input present-radio" 
+                                                name="status_{{ student_profile.user.id }}" 
+                                                id="present_{{ student_profile.user.id }}" value="present" checked>
+                                            <label class="toggle-label present-label" for="present_{{ student_profile.user.id }}">P</label>
+                                            
+                                            <input type="radio" class="toggle-input absent-radio" 
+                                                name="status_{{ student_profile.user.id }}" 
+                                                id="absent_{{ student_profile.user.id }}" value="absent">
+                                            <label class="toggle-label absent-label" for="absent_{{ student_profile.user.id }}">A</label>
+                                        {% else %}
+                                            <input type="radio" class="toggle-input present-radio" 
+                                                name="status_{{ student_profile.user.id }}" 
+                                                id="present_{{ student_profile.user.id }}" value="present">
+                                            <label class="toggle-label present-label" for="present_{{ student_profile.user.id }}">P</label>
+                                            
+                                            <input type="radio" class="toggle-input absent-radio" 
+                                                name="status_{{ student_profile.user.id }}" 
+                                                id="absent_{{ student_profile.user.id }}" value="absent" checked>
+                                            <label class="toggle-label absent-label" for="absent_{{ student_profile.user.id }}">A</label>
+                                        {% endif %}
+                                    {% else %}
+                                        <input type="radio" class="toggle-input present-radio" 
+                                            name="status_{{ student_profile.user.id }}" 
+                                            id="present_{{ student_profile.user.id }}" value="present" checked>
+                                        <label class="toggle-label present-label" for="present_{{ student_profile.user.id }}">P</label>
+                                        
+                                        <input type="radio" class="toggle-input absent-radio" 
+                                            name="status_{{ student_profile.user.id }}" 
+                                            id="absent_{{ student_profile.user.id }}" value="absent">
+                                        <label class="toggle-label absent-label" for="absent_{{ student_profile.user.id }}">A</label>
+                                    {% endif %}
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center py-5">
+                                <div class="empty-state">
+                                    <div class="display-1 text-muted opacity-25 mb-4">
+                                        <i class="bi bi-people-fill"></i>
+                                    </div>
+                                    <h4 class="fw-bold text-dark">No students found</h4>
+                                    <p class="text-muted">There are no students enrolled in the department linked to this subject.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Sticky Bottom Action Bar -->
+            {% if students %}
+            <div class="fixed-bottom action-bar-wrapper">
+                <div class="container py-3">
+                    <div class="card border-0 shadow-lg rounded-pill bg-white px-4 py-2 mx-auto d-flex flex-row align-items-center justify-content-between" style="max-width: 800px;">
+                        <div class="d-none d-sm-block">
+                            <span class="fw-bold text-dark me-2">Total:</span> 
+                            <span class="badge bg-primary rounded-pill px-3">{{ students|length }} Students</span>
+                        </div>
+                        <div class="d-flex w-100 w-sm-auto justify-content-end gap-3">
+                            <a href="{% url 'edit_attendance' %}" class="btn btn-light rounded-pill px-4 fw-bold text-muted border">Cancel</a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm d-flex align-items-center gap-2 submit-btn">
+                                <i class="bi bi-cloud-arrow-up-fill"></i> {% if existing_records %}Update{% else %}Save{% endif %} Records
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Styling for the modern aesthetic */
+    :root {
+        --primary-color: #ff5722;
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+    }
+
+    .animation-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .premium-card {
+        border-radius: 1.25rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+    }
+
+    /* Custom Data Grid */
+    .custom-data-grid th {
+        background-color: #f8f9fa;
+        letter-spacing: 0.5px;
+    }
+
+    .custom-data-grid td {
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .custom-data-grid tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .attendance-row:hover {
+        background-color: #f8faff !important;
+    }
+
+    .avatar-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+    }
+
+    /* Modern Toggle Slider for Attendance */
+    .modern-toggle {
+        position: relative;
+        display: inline-flex;
+        width: 140px;
+        height: 44px;
+        background-color: #f1f5f9;
+        border-radius: 30px;
+        padding: 4px;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .toggle-input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+
+    .toggle-label {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #64748b;
+        transition: color 0.3s ease;
+        margin: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: calc(50% - 4px);
+        height: calc(100% - 8px);
+        border-radius: 26px;
+        background-color: white;
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 1;
+    }
+
+    .toggle-input.present-radio:checked ~ .toggle-label.present-label {
+        color: white;
+    }
+
+    .toggle-input.absent-radio:checked ~ .toggle-label.absent-label {
+        color: white;
+    }
+
+    .toggle-input.present-radio:checked ~ .toggle-slider {
+        transform: translateX(0);
+        background-color: var(--success-color);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .toggle-input.absent-radio:checked ~ .toggle-slider {
+        transform: translateX(100%);
+        background-color: var(--danger-color);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .toggle-input:focus ~ .toggle-label {
+        outline: none;
+    }
+
+    /* Action bar styles */
+    .action-bar-wrapper {
+        pointer-events: none;
+        z-index: 1000;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    
+    .action-bar-wrapper .container {
+        pointer-events: auto;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #e64a19 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(255, 87, 34, 0.3) !important;
+    }
+    
+    /* Make table rows visually distinct based on state */
+    tr:has(.present-radio:checked) {
+        border-left: 4px solid var(--success-color);
+    }
+    
+    tr:has(.absent-radio:checked) {
+        border-left: 4px solid var(--danger-color);
+        background-color: #fef2f2 !important; /* Very light red */
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Date Change Handler
+        const dateInput = document.getElementById('dateInput');
+        dateInput.addEventListener('change', function() {
+            const selectedDate = this.value;
+            const currentUrl = window.location.pathname;
+            window.location.href = currentUrl + '?date=' + selectedDate;
+        });
+
+        // Add visual flair to rows based on selection
+        const radios = document.querySelectorAll('.toggle-input');
+        
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const tr = this.closest('tr');
+                if (this.value === 'absent') {
+                    tr.style.backgroundColor = '#fef2f2';
+                } else {
+                    tr.style.backgroundColor = '';
+                }
+            });
+        });
+
+        // Mark All Actions
+        const markAllPresentBtn = document.getElementById('markAllPresent');
+        const markAllAbsentBtn = document.getElementById('markAllAbsent');
+        
+        if (markAllPresentBtn) {
+            markAllPresentBtn.addEventListener('click', function() {
+                const presentRadios = document.querySelectorAll('.present-radio');
+                presentRadios.forEach(radio => {
+                    radio.checked = true;
+                    // Trigger change event to update rowing styling if needed
+                    radio.dispatchEvent(new Event('change'));
+                });
+            });
+        }
+        
+        if (markAllAbsentBtn) {
+            markAllAbsentBtn.addEventListener('click', function() {
+                const absentRadios = document.querySelectorAll('.absent-radio');
+                absentRadios.forEach(radio => {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

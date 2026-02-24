@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}UMS - Role Selection{% endblock %}
+
+{% block content %}
+<!-- Preload Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="role-selection-wrapper min-vh-100 d-flex flex-column justify-content-center align-items-center position-relative overflow-hidden bg-light py-5">
+
+    <!-- Premium Add-ons: Soft Background Blur Circles & Floating Shapes -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 pointer-events-none overflow-hidden z-index-0">
+        <!-- Floating Gradients -->
+        <div class="blur-circle circle-1 position-absolute rounded-circle opacity-25" style="background: radial-gradient(circle, #8b5cf6 0%, transparent 70%); width: 600px; height: 600px; top: -200px; left: -100px; filter: blur(60px); animation: float 15s ease-in-out infinite;"></div>
+        <div class="blur-circle circle-2 position-absolute rounded-circle opacity-25" style="background: radial-gradient(circle, #0ea5e9 0%, transparent 70%); width: 500px; height: 500px; bottom: -150px; right: -100px; filter: blur(60px); animation: float 18s ease-in-out infinite reverse;"></div>
+        <div class="blur-circle circle-3 position-absolute rounded-circle opacity-10" style="background: radial-gradient(circle, #f59e0b 0%, transparent 70%); width: 400px; height: 400px; top: 30%; left: 50%; transform: translateX(-50%); filter: blur(50px); animation: float 20s ease-in-out infinite alternate;"></div>
+    </div>
+
+    <div class="container position-relative z-index-2 w-100" data-aos="fade-in" data-aos-duration="1000">
+        
+        <!-- Top Header Section -->
+        <div class="text-center mb-5" data-aos="fade-down" data-aos-delay="100">
+            <span class="badge bg-white text-secondary border shadow-sm rounded-pill px-3 py-2 mb-3 fw-semibold letter-spacing-1 text-uppercase rs-top-badge">
+                <i class="bi bi-shield-check text-primary me-1"></i> University Management System
+            </span>
+            <h1 class="display-4 fw-bolder text-dark mb-2 font-poppins rs-title">Welcome Back!</h1>
+            <p class="fs-5 text-secondary fw-medium rs-subtitle">Choose your role to continue to your portal</p>
+        </div>
+
+        <!-- Role Selection Cards Section -->
+        <div class="row justify-content-center g-4 g-lg-5 rs-grid">
+            
+            <!-- 1. STUDENT CARD -->
+            <div class="col-lg-4 col-md-6 col-10" data-aos="fade-up" data-aos-delay="200">
+                <a href="{% url 'login_page' role='student' %}" class="card rs-card text-decoration-none border-0 h-100 bg-white position-relative text-center">
+                    
+                    <!-- Role Tag Badge -->
+                    <div class="rs-tag position-absolute top-0 end-0 m-3 rounded-pill px-3 py-1 fw-bold rs-tag-student">
+                        User Portal
+                    </div>
+
+                    <div class="card-body p-4 p-xl-5 d-flex flex-column align-items-center">
+                        <div class="rs-glow rs-glow-student"></div>
+                        
+                        <!-- Avatar Circle -->
+                        <div class="rs-avatar rs-avatar-student rounded-circle mb-4 position-relative d-flex align-items-center justify-content-center">
+                            <!-- Premium SVG Avatar (Student) -->
+                            <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=4f46e5" alt="Student Avatar" class="w-100 h-100 rounded-circle p-1">
+                        </div>
+
+                        <!-- Role Title & Description -->
+                        <h2 class="fw-bold text-dark font-poppins mb-2 rs-card-title">Student</h2>
+                        <p class="text-secondary small mb-4 rs-card-desc">Access your results, attendance & more</p>
+
+                        <!-- Login Button Link -->
+                        <div class="mt-auto w-100">
+                            <span class="rs-btn rs-btn-student fw-bold d-inline-flex align-items-center gap-2">
+                                Login as Student <i class="bi bi-arrow-right rs-arrow"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 2. FACULTY CARD -->
+            <div class="col-lg-4 col-md-6 col-10" data-aos="fade-up" data-aos-delay="300">
+                <a href="{% url 'login_page' role='faculty' %}" class="card rs-card text-decoration-none border-0 h-100 bg-white position-relative text-center">
+                    
+                    <!-- Role Tag Badge -->
+                    <div class="rs-tag position-absolute top-0 end-0 m-3 rounded-pill px-3 py-1 fw-bold rs-tag-faculty">
+                        Instructor Portal
+                    </div>
+
+                    <div class="card-body p-4 p-xl-5 d-flex flex-column align-items-center">
+                        <div class="rs-glow rs-glow-faculty"></div>
+                        
+                        <!-- Avatar Circle -->
+                        <div class="rs-avatar rs-avatar-faculty rounded-circle mb-4 position-relative d-flex align-items-center justify-content-center">
+                            <!-- Premium SVG Avatar (Faculty) -->
+                            <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Abby&backgroundColor=0ea5e9" alt="Faculty Avatar" class="w-100 h-100 rounded-circle p-1">
+                        </div>
+
+                        <!-- Role Title & Description -->
+                        <h2 class="fw-bold text-dark font-poppins mb-2 rs-card-title">Faculty</h2>
+                        <p class="text-secondary small mb-4 rs-card-desc">Manage attendance, courses & announcements</p>
+
+                        <!-- Login Button Link -->
+                        <div class="mt-auto w-100">
+                            <span class="rs-btn rs-btn-faculty fw-bold d-inline-flex align-items-center gap-2">
+                                Login as Faculty <i class="bi bi-arrow-right rs-arrow"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 3. ADMIN CARD -->
+            <div class="col-lg-4 col-md-6 col-10" data-aos="fade-up" data-aos-delay="400">
+                <a href="{% url 'login_page' role='admin' %}" class="card rs-card text-decoration-none border-0 h-100 bg-white position-relative text-center">
+                    
+                    <!-- Role Tag Badge -->
+                    <div class="rs-tag position-absolute top-0 end-0 m-3 rounded-pill px-3 py-1 fw-bold rs-tag-admin">
+                        Admin Portal
+                    </div>
+
+                    <div class="card-body p-4 p-xl-5 d-flex flex-column align-items-center">
+                        <div class="rs-glow rs-glow-admin"></div>
+                        
+                        <!-- Avatar Circle -->
+                        <div class="rs-avatar rs-avatar-admin rounded-circle mb-4 position-relative d-flex align-items-center justify-content-center">
+                            <!-- Premium SVG Avatar (Admin) -->
+                            <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Jack&backgroundColor=f59e0b" alt="Admin Avatar" class="w-100 h-100 rounded-circle p-1">
+                        </div>
+
+                        <!-- Role Title & Description -->
+                        <h2 class="fw-bold text-dark font-poppins mb-2 rs-card-title">Admin</h2>
+                        <p class="text-secondary small mb-4 rs-card-desc">Full system access & management control</p>
+
+                        <!-- Login Button Link -->
+                        <div class="mt-auto w-100">
+                            <span class="rs-btn rs-btn-admin fw-bold d-inline-flex align-items-center gap-2">
+                                Login as Admin <i class="bi bi-arrow-right rs-arrow"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        AOS.init({ once: true, offset: 50 });
+    });
+</script>
+
+<style>
+/* Base Setup */
+:root {
+    --student-color: #8b5cf6;
+    --student-light: rgba(139, 92, 246, 0.1);
+    --student-bg: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+    
+    --faculty-color: #0ea5e9;
+    --faculty-light: rgba(14, 165, 233, 0.1);
+    --faculty-bg: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    
+    --admin-color: #f59e0b;
+    --admin-light: rgba(245, 158, 11, 0.1);
+    --admin-bg: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    
+    --trans: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+.letter-spacing-1 { letter-spacing: 1px; }
+.z-index-0 { z-index: 0; }
+.z-index-2 { z-index: 2; }
+.pointer-events-none { pointer-events: none; }
+
+/* Floating Animation */
+@keyframes float {
+    0% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+    100% { transform: translateY(0px) scale(1); }
+}
+
+/* Card Base Styling */
+.rs-card {
+    border-radius: 20px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.03) !important;
+    transition: var(--trans);
+    overflow: hidden;
+}
+
+.rs-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Avatar Styling */
+.rs-avatar {
+    width: 120px;
+    height: 120px;
+    border: 4px solid white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: var(--trans);
+    z-index: 2;
+}
+
+.rs-avatar-student { background: var(--student-bg); }
+.rs-avatar-faculty { background: var(--faculty-bg); }
+.rs-avatar-admin { background: var(--admin-bg); }
+
+.rs-card:hover .rs-avatar {
+    transform: scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Glow Effect behind Avatar */
+.rs-glow {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    filter: blur(20px);
+    opacity: 0.4;
+    transition: var(--trans);
+    z-index: 1;
+}
+
+.rs-glow-student { background: var(--student-color); }
+.rs-glow-faculty { background: var(--faculty-color); }
+.rs-glow-admin { background: var(--admin-color); }
+
+.rs-card:hover .rs-glow {
+    opacity: 0.6;
+    filter: blur(25px);
+    transform: translateX(-50%) scale(1.1);
+}
+
+/* Tag Badges */
+.rs-tag {
+    font-size: 0.75rem;
+    z-index: 5;
+}
+
+.rs-tag-student { background: var(--student-light); color: var(--student-color); }
+.rs-tag-faculty { background: var(--faculty-light); color: var(--faculty-color); }
+.rs-tag-admin { background: var(--admin-light); color: var(--admin-color); }
+
+/* Bottom Action Button */
+.rs-btn {
+    font-size: 0.95rem;
+    transition: var(--trans);
+}
+
+.rs-btn-student { color: var(--student-color); }
+.rs-btn-faculty { color: var(--faculty-color); }
+.rs-btn-admin { color: var(--admin-color); }
+
+.rs-arrow {
+    transition: var(--trans);
+}
+
+.rs-card:hover .rs-arrow {
+    transform: translateX(5px);
+}
+
+/* Dark Mode Overrides */
+body.dark-mode .bg-light { background-color: #0b1426 !important; }
+body.dark-mode .rs-top-badge { background-color: #1a2236 !important; border-color: rgba(255,255,255,0.1) !important; color: #cbd5e1 !important;}
+body.dark-mode .rs-card { background-color: #1a2236 !important; border-color: rgba(255,255,255,0.05) !important; }
+body.dark-mode .text-dark { color: #f8fafc !important; }
+body.dark-mode .text-secondary { color: #94a3b8 !important; }
+body.dark-mode .rs-avatar { border-color: #1a2236; }
+body.dark-mode .rs-card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important; }
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .rs-title { font-size: 2.2rem; }
+    .rs-card { margin-bottom: 1rem; }
+    .rs-grid { justify-content: center; }
+}
+</style>
+{% endblock %}

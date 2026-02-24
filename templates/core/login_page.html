@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}UMS - {{ role }} Portal{% endblock %}
+
+{% block content %}
+<!-- Preload Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="login-page-wrapper min-vh-100 d-flex flex-column justify-content-center align-items-center position-relative overflow-hidden bg-light py-5 theme-{{ role|lower }}">
+
+    <!-- Floating Background Shapes for subtle depth -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 pointer-events-none overflow-hidden z-index-0">
+        <div class="blur-circle position-absolute rounded-circle opacity-25" style="background: radial-gradient(circle, {% if role == 'Student' %}#8b5cf6{% elif role == 'Faculty' %}#0ea5e9{% else %}#1e3a8a{% endif %} 0%, transparent 70%); width: 600px; height: 600px; top: -10%; left: -5%; filter: blur(60px);"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container position-relative z-index-2 w-100 d-flex justify-content-center" data-aos="fade-up" data-aos-duration="600">
+        
+        <div class="login-card card bg-white border-0 shadow-lg position-relative">
+            <div class="card-body p-4 p-md-5 d-flex flex-column">
+
+                <!-- 1. Header & Avatar Area -->
+                <div class="text-center mb-4">
+                    <!-- Dynamic Avatar -->
+                    <div class="login-avatar mx-auto mb-3 position-relative rounded-circle d-flex align-items-center justify-content-center 
+                        {% if role == 'Admin' %}shadow-md{% else %}shadow-sm{% endif %}">
+                        {% if role == 'Student' %}
+                        <!-- Purple/Indigo gradient for Student -->
+                        <div class="avatar-bg student-bg position-absolute w-100 h-100 rounded-circle"></div>
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=transparent" alt="Student" class="w-100 h-100 position-relative z-index-2 p-1">
+                        
+                        {% elif role == 'Faculty' %}
+                        <!-- Teal/Blue gradient for Faculty -->
+                        <div class="avatar-bg faculty-bg position-absolute w-100 h-100 rounded-circle"></div>
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Abby&backgroundColor=transparent" alt="Faculty" class="w-100 h-100 position-relative z-index-2 p-1">
+                        
+                        {% else %}
+                        <!-- Deep Navy gradient for Admin -->
+                        <div class="avatar-bg admin-bg position-absolute w-100 h-100 rounded-circle"></div>
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Jack&backgroundColor=transparent" alt="Admin" class="w-100 h-100 position-relative z-index-2 p-1">
+                        {% endif %}
+                    </div>
+
+                    <!-- Dynamic Titles -->
+                    <h2 class="fw-bold text-dark font-poppins mb-1">{{ role }} Portal</h2>
+                    <p class="text-secondary small mb-0 px-2 login-subtext">
+                        {% if role == 'Student' %}
+                        Sign in to your account or create a new one.
+                        {% elif role == 'Faculty' %}
+                        Sign in to manage attendance, courses and announcements.
+                        {% else %}
+                        Full system access and management control.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- 2. Tabs: Login / Sign Up -->
+                <ul class="nav nav-pills nav-justified mb-4 mx-auto login-tabs" id="authTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-semibold letter-spacing-1 text-uppercase small tab-btn" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab">Login</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold letter-spacing-1 text-uppercase small tab-btn" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-pane" type="button" role="tab">Sign Up</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="authTabContent">
+                    
+                    <!-- Login Form Pane -->
+                    <div class="tab-pane fade show active" id="login-pane" role="tabpanel" tabindex="0">
+                        <form method="POST" action="{% url 'login_page' role|lower %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="login">
+                            
+                            <!-- Username Field -->
+                            <div class="mb-3">
+                                <label class="form-label text-secondary small fw-medium">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                    <input type="text" name="username" class="form-control form-control-lg bg-light border-start-0 ps-0" placeholder="Enter your username" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Password Field -->
+                            <div class="mb-3">
+                                <label class="form-label text-secondary small fw-medium">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+                                    <input type="password" name="password" class="form-control form-control-lg bg-light border-start-0 ps-0" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <!-- Options -->
+                            <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
+                                <div class="form-check custom-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label text-secondary small" for="rememberMe">Remember me</label>
+                                </div>
+                                <a href="{% url 'password_reset' %}" class="text-decoration-none small fw-semibold forgot-link">Forgot password?</a>
+                            </div>
+
+                            <!-- Cloudflare Turnstile -->
+                            <div class="cf-turnstile-wrapper mb-4 d-flex justify-content-center">
+                                <div class="cf-turnstile" data-sitekey="{% if turnstile_site_key %}{{ turnstile_site_key }}{% else %}1x00000000000000000000AA{% endif %}" data-theme="light"></div>
+                            </div>
+
+                            <!-- Primary Submit Button -->
+                            <button type="submit" class="btn btn-primary-orange w-100 py-3 fs-6 fw-bold rounded-pill shadow-sm hover-darken">Sign In</button>
+                        </form>
+                    </div>
+
+                    <!-- Sign Up Form Pane -->
+                    <div class="tab-pane fade" id="signup-pane" role="tabpanel" tabindex="0">
+                        <form method="POST" action="{% url 'login_page' role|lower %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="signup">
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-secondary small fw-medium">Full Name</label>
+                                <input type="text" name="full_name" class="form-control form-control-lg bg-light" placeholder="John Doe" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-secondary small fw-medium">Username</label>
+                                <input type="text" name="username" class="form-control form-control-lg bg-light" placeholder="johndoe123" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-secondary small fw-medium">Email Address</label>
+                                <input type="email" name="email" class="form-control form-control-lg bg-light" placeholder="name@example.com" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label text-secondary small fw-medium">Password</label>
+                                <input type="password" name="password" class="form-control form-control-lg bg-light" placeholder="Create a strong password" required>
+                            </div>
+
+                            <!-- Primary Submit Button -->
+                            <button type="submit" class="btn btn-primary-orange w-100 py-3 fs-6 fw-bold rounded-pill shadow-sm hover-darken">Create Account</button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- Back Link -->
+                <div class="text-center mt-4 pt-3 border-top">
+                    <a href="{% url 'role_selection' %}" class="text-muted text-decoration-none small fw-medium hover-text-primary">
+                        <i class="bi bi-arrow-left me-1"></i> Back to roles
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        AOS.init({ once: true, offset: 50 });
+    });
+</script>
+
+<style>
+/* Reset & Base Fonts */
+body { font-family: 'Inter', sans-serif !important; }
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+.letter-spacing-1 { letter-spacing: 1px; }
+
+/* Wrapper Styling */
+.login-page-wrapper {
+    background-color: #f5f6fa; /* Light neutral background */
+}
+.theme-admin .login-page-wrapper {
+    background-color: #f0f2f5; /* Slightly darker tone for Admin */
+}
+
+/* Card Styling - Universal */
+.login-card {
+    border-radius: 20px;
+    width: 100%;
+    max-width: 440px; /* Consistently around ~420-480px as requested */
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06) !important;
+}
+
+.theme-admin .login-card {
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1) !important; /* Larger shadow for Admin */
+}
+
+/* Avatar Circle */
+.login-avatar {
+    width: 100px;
+    height: 100px;
+    border: 4px solid #ffffff;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden; /* Prevent gradient bleeding */
+    background-color: transparent;
+}
+.login-avatar:hover {
+    transform: scale(1.05);
+}
+.avatar-bg { z-index: 1; }
+.student-bg { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%); }
+.faculty-bg { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); }
+.admin-bg { background: linear-gradient(135deg, #1e3a8a 0%, #0a2342 100%); }
+
+.login-avatar img {
+    z-index: 2;
+    padding: 0px !important; /* Fixed padding to ensure SVG goes to edges */
+}
+
+.shadow-md { box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+/* Custom Form Controls */
+.form-control, .input-group-text {
+    border-color: #e2e8f0;
+    transition: all 0.3s ease;
+}
+.form-control:focus, .input-group-text:focus-within {
+    box-shadow: none;
+    border-color: #ff5a1f; 
+}
+.form-control:focus + .input-group-text {
+    border-color: #ff5a1f;
+}
+.input-group:focus-within .input-group-text, 
+.input-group:focus-within .form-control {
+    border-color: #ff5a1f;
+    background-color: #fff !important;
+}
+
+/* Checkbox alignment */
+.custom-check .form-check-input {
+    cursor: pointer;
+    border-color: #cbd5e1;
+}
+.custom-check .form-check-input:checked {
+    background-color: #ff5a1f;
+    border-color: #ff5a1f;
+}
+
+/* Forgot Link Dynamic color */
+.forgot-link { color: #64748b; transition: color 0.3s ease; }
+.forgot-link:hover { color: #ff5a1f; }
+.theme-faculty .forgot-link:hover { color: #0284c7; }
+
+/* Tab Styles - Inactive Gray, Active Orange (or Blue for Faculty) */
+.login-tabs { max-width: 320px; }
+.tab-btn {
+    border-radius: 12px !important;
+    background-color: #f1f5f9;
+    color: #64748b;
+    margin: 0 4px;
+    padding: 10px 15px !important; /* Added consistent padding to fix height alignment */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.tab-btn:hover { background-color: #e2e8f0; color: #334155; }
+
+/* Setting active tab colors based on theme */
+.theme-student .tab-btn.active, .theme-admin .tab-btn.active {
+    background-color: #ff5a1f !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(255, 90, 31, 0.3);
+}
+
+.theme-faculty .tab-btn.active {
+    background-color: #0ea5e9 !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+/* Universal Primary Orange Button */
+.btn-primary-orange {
+    background-color: #ff5a1f;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.hover-darken:hover {
+    background-color: #e04a14;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Turnstile Wrapper */
+.cf-turnstile-wrapper { min-height: 65px; }
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .login-card { border-radius: 0; box-shadow: none !important; margin: -3rem 0; width: 100vw; min-height: 100vh;}
+    .login-page-wrapper { padding: 0 !important; background-color: white !important; }
+}
+</style>
+{% endblock %}

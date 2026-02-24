@@ -1,0 +1,158 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Announcement Hub{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-2 px-md-4">
+    <!-- Header -->
+    <div class="row mb-5 align-items-center">
+        <div class="col-8">
+            <h1 class="fw-bold text-dark display-6 mb-1">Announcement Hub</h1>
+            <p class="text-muted mb-0">Broadcast updates and notices to the campus community.</p>
+        </div>
+        <div class="col-4 text-end">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Post New Announcement -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-lg-top" style="top: 2rem; z-index: 100;">
+                <h4 class="fw-bold mb-4">Post New Notice</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Title</label>
+                        <input type="text" name="title" class="form-control rounded-3 py-2" placeholder="e.g. End Semester Exam Schedule" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Target Audience</label>
+                        <select name="target_role" class="form-select rounded-3 py-2">
+                            <option value="Both">Everyone (Faculty & Students)</option>
+                            <option value="Student">Students Only</option>
+                            <option value="Faculty">Faculty Only</option>
+                        </select>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Department</label>
+                            <select name="department" class="form-select rounded-3 py-2">
+                                <option value="">Global (All Depts)</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Semester</label>
+                            <select name="semester" class="form-select rounded-3 py-2">
+                                <option value="">All Semesters</option>
+                                {% for s in semesters %}
+                                <option value="{{ s }}">Semester {{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Message Content</label>
+                        <textarea name="content" class="form-control rounded-3" rows="5" placeholder="Write your announcement here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary rounded-pill w-100 py-3 fw-bold shadow-sm">
+                        <i class="bi bi-send me-2"></i>Publish Announcement
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Announcement History -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="p-4 border-bottom bg-light">
+                    <h4 class="fw-bold mb-0">Broadcast History</h4>
+                </div>
+                <div class="p-0">
+                    <div class="list-group list-group-flush">
+                        {% for a in announcements %}
+                        <div class="list-group-item p-4 border-bottom-0 hover-bg transition">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1">{{ a.title }}</h5>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary small p-1 px-3">
+                                            <i class="bi bi-people-fill me-1"></i>{{ a.get_target_role_display }}
+                                        </span>
+                                        {% if a.department %}
+                                        <span class="badge rounded-pill bg-info bg-opacity-10 text-info small p-1 px-3">
+                                            <i class="bi bi-building me-1"></i>{{ a.department.name }}
+                                        </span>
+                                        {% endif %}
+                                        {% if a.semester %}
+                                        <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning small p-1 px-3">
+                                            <i class="bi bi-calendar-event me-1"></i>Sem {{ a.semester }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
+                                        <li>
+                                            <a class="dropdown-item text-danger d-flex align-items-center" href="{% url 'delete_announcement' a.id %}" onclick="return confirm('Delete this announcement?')">
+                                                <i class="bi bi-trash3 me-2"></i>Delete Message
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="text-muted small mb-3 text-break">{{ a.content|linebreaksbr }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted extra-small">
+                                    <i class="bi bi-clock me-1"></i>{{ a.created_at|date:"d M, Y | h:i A" }}
+                                </span>
+                                <span class="text-muted extra-small">
+                                    <i class="bi bi-person me-1"></i>Admin
+                                </span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-5">
+                            <div class="display-1 text-muted opacity-10 mb-3">
+                                <i class="bi bi-megaphone"></i>
+                            </div>
+                            <h5 class="text-muted">No announcements published yet.</h5>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-bg:hover {
+        background-color: #f8f9fa;
+    }
+    .transition {
+        transition: all 0.2s ease;
+    }
+    .extra-small {
+        font-size: 0.75rem;
+    }
+    .list-group-item:not(:last-child) {
+        border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    }
+</style>
+{% endblock %}

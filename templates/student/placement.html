@@ -1,0 +1,338 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Placement Portal - UMS{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-lg-5">
+    <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom border-light">
+        <div>
+            <h2 class="fw-bold mb-1">Career & Placements</h2>
+            <p class="text-muted small">Discover opportunities and manage your professional future</p>
+        </div>
+        <div class="d-flex gap-3">
+            <div class="stat-card px-4 py-2 bg-white rounded-pill shadow-sm border-0 d-flex align-items-center gap-3">
+                <div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+                <div>
+                    <span class="text-muted smaller d-block fw-bold">CGPA</span>
+                    <span class="fw-black text-dark">{{ cgpa|floatformat:2 }}</span>
+                </div>
+            </div>
+            <div class="stat-card px-4 py-2 bg-white rounded-pill shadow-sm border-0 d-flex align-items-center gap-3">
+                <div class="p-2 rounded-circle bg-success bg-opacity-10 text-success">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+                <div>
+                    <span class="text-muted smaller d-block fw-bold">ATTENDANCE</span>
+                    <span class="fw-black text-dark">{{ attendance|floatformat:1 }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Resume Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body p-4 p-lg-5 text-white">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h3 class="fw-bold mb-2">Your Professional Resume</h3>
+                            <p class="opacity-75 mb-4">This resume will be your primary profile for all campus placement
+                                drives. Administrators will use this to review your candidature.</p>
+
+                            {% if profile.resume %}
+                            <div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+                                <div class="p-3 rounded-4 d-flex align-items-center gap-3"
+                                    style="background: rgba(255,255,255,0.2);">
+                                    <i class="bi bi-file-earmark-pdf-fill fs-3 text-white"></i>
+                                    <div>
+                                        <span class="d-block small fw-bold text-white">Current CV</span>
+                                        <a href="{{ profile.resume.url }}"
+                                            class="text-white text-decoration-none fw-black" target="_blank">View
+                                            Uploaded Resume <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% else %}
+                            <div class="alert bg-white bg-opacity-10 border-white border-opacity-25 text-white mb-4">
+                                <i class="bi bi-info-circle-fill me-2"></i> No resume uploaded yet. Please upload your
+                                CV to become eligible for more drives.
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-4 text-lg-end">
+                            <button class="btn btn-lg rounded-pill px-4 fw-bold shadow-sm"
+                                style="background: white; color: #764ba2;" data-bs-toggle="modal"
+                                data-bs-target="#updateResumeModal">
+                                <i class="bi bi-cloud-arrow-up-fill me-2"></i>
+                                {% if profile.resume %}Update CV{% else %}Upload CV{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Resume Modal -->
+    <div class="modal fade" id="updateResumeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4">
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="fw-bold">{% if profile.resume %}Update{% else %}Upload{% endif %} Your Resume</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_cv">
+                    <div class="modal-body p-4">
+                        <div class="mb-4 text-center p-4 rounded-4 border-dashed" style="border: 2px dashed #eee;">
+                            <i class="bi bi-file-earmark-pdf display-4 text-muted mb-3 d-block"></i>
+                            <label class="form-label fw-bold">Select Resume (PDF Only)</label>
+                            <input type="file" name="resume" class="form-control rounded-pill" accept=".pdf" required>
+                            <small class="text-muted mt-2 d-block">Your file will be safely stored and accessible to the
+                                placement admin.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="submit" class="btn w-100 rounded-pill py-3 fw-bold text-white shadow-sm"
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">Save Resume</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Drives -->
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <h4 class="fw-bold mb-4">Open Opportunities</h4>
+        </div>
+
+        {% for drive in eligible_drives %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-3 drive-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="icon-box p-3 rounded-4"
+                            style="background-color: rgba(255, 87, 34, 0.1); color: #ff5722;">
+                            <i class="bi bi-briefcase fs-4"></i>
+                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Eligible</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">{{ drive.company_name }}</h5>
+                    <p class="text-muted small mb-3">{{ drive.role }}</p>
+
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <span class="badge bg-light text-dark border">
+                            <i class="bi bi-currency-dollar me-1" style="color: #ff5722;"></i>{{ drive.package }}
+                        </span>
+                        <span class="badge bg-light text-dark border">
+                            <i class="bi bi-calendar-event me-1" style="color: #ff5722;"></i>
+                            {{ drive.date_of_drive|date:"M d, Y" }}
+                        </span>
+                    </div>
+
+                    {% if drive.has_applied %}
+                    <button
+                        class="btn w-100 rounded-pill py-2 fw-bold bg-success bg-opacity-10 text-success border-0 shadow-none disabled"
+                        disabled>
+                        <i class="bi bi-check-circle-fill me-2"></i>Applied
+                    </button>
+                    {% else %}
+                    <button class="btn w-100 rounded-pill py-2 fw-bold text-white shadow-sm"
+                        style="background-color: #ff5722;" data-bs-toggle="modal"
+                        data-bs-target="#applyModal{{ drive.id }}">
+                        Apply Now
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Apply Modal -->
+            <div class="modal fade" id="applyModal{{ drive.id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 rounded-4">
+                        <div class="modal-header border-0 p-4 pb-0">
+                            <h5 class="fw-bold">Apply for {{ drive.company_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="drive_id" value="{{ drive.id }}">
+                            <div class="modal-body p-4">
+                                {% if profile.resume %}
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Choose Resume Source</label>
+                                    <div class="d-flex gap-3">
+                                        <div class="form-check card border p-3 flex-fill drive-card cursor-pointer"
+                                            onclick="toggleResumeInput('profile', '{{ drive.id }}')">
+                                            <input class="form-check-input" type="radio" name="use_profile_resume"
+                                                value="true" id="useProfile{{ drive.id }}" checked>
+                                            <label class="form-check-label ms-2" for="useProfile{{ drive.id }}">
+                                                <span class="fw-bold d-block">Use Profile Resume</span>
+                                                <small class="text-muted">Use the resume already uploaded to your
+                                                    profile.</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check card border p-3 flex-fill drive-card cursor-pointer"
+                                            onclick="toggleResumeInput('upload', '{{ drive.id }}')">
+                                            <input class="form-check-input" type="radio" name="use_profile_resume"
+                                                value="false" id="useUpload{{ drive.id }}">
+                                            <label class="form-check-label ms-2" for="useUpload{{ drive.id }}">
+                                                <span class="fw-bold d-block">Upload New Resume</span>
+                                                <small class="text-muted">Upload a specific resume for this
+                                                    drive.</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <input type="hidden" name="use_profile_resume" value="false">
+                                {% endif %}
+
+                                {% if profile.resume %}
+                                <div id="resumeUploadSection{{ drive.id }}" style="display: none;">
+                                    {% else %}
+                                    <div id="resumeUploadSection{{ drive.id }}">
+                                        {% endif %}
+                                        <div class="mb-4 text-center p-4 rounded-4 border-dashed"
+                                            style="border: 2px dashed #eee;">
+                                            <i class="bi bi-cloud-upload display-4 text-muted mb-3 d-block"></i>
+                                            <label class="form-label fw-bold">Upload Your Resume (PDF)</label>
+                                            {% if not profile.resume %}
+                                            <input type="file" name="resume" id="resumeFileInput{{ drive.id }}"
+                                                class="form-control rounded-pill" accept=".pdf" required>
+                                            {% else %}
+                                            <input type="file" name="resume" id="resumeFileInput{{ drive.id }}"
+                                                class="form-control rounded-pill" accept=".pdf">
+                                            {% endif %}
+                                            <small class="text-muted mt-2 d-block">Make sure your resume is updated and
+                                                in
+                                                PDF format.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0 p-4 pt-0">
+                                    <button type="submit"
+                                        class="btn w-100 rounded-pill py-3 fw-bold text-white shadow-sm"
+                                        style="background-color: #ff5722;">Submit Application</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for drive in ineligible_drives %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-3 opacity-75">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="icon-box p-3 rounded-4 bg-light text-muted">
+                            <i class="bi bi-briefcase fs-4"></i>
+                        </div>
+                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">Ineligible</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">{{ drive.company_name }}</h5>
+                    <p class="text-muted small mb-3">{{ drive.role }}</p>
+
+                    <div class="alert alert-light border small py-2">
+                        <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+                        Criteria: {{ drive.criteria_cgpa }} CGPA | {{ drive.criteria_attendance }}% Attendance
+                    </div>
+
+                    <button class="btn w-100 rounded-pill py-2 fw-bold bg-light text-muted border-0" disabled>
+                        Not Eligible
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not eligible_drives and not ineligible_drives %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">No active placement drives found at this time.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- My Applications -->
+    <div class="row g-4">
+        <div class="col-12">
+            <h4 class="fw-bold mb-4">My Applications</h4>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-center">
+                        <thead class="bg-light text-dark">
+                            <tr>
+                                <th class="py-3 px-4 text-start">Company</th>
+                                <th class="py-3">Role</th>
+                                <th class="py-3">Applied Date</th>
+                                <th class="py-3">Status</th>
+                                <th class="py-3">Resume</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                            <tr>
+                                <td class="py-3 px-4 text-start fw-bold">{{ app.drive.company_name }}</td>
+                                <td class="py-3">{{ app.drive.role }}</td>
+                                <td class="py-3">{{ app.applied_at|date:"M d, Y" }}</td>
+                                <td class="py-3">
+                                    <span
+                                        class="badge rounded-pill px-3 py-2 
+                                        {% if app.status == 'Selected' %}bg-success{% elif app.status == 'Rejected' %}bg-danger{% else %}bg-primary{% endif %} bg-opacity-10 
+                                        {% if app.status == 'Selected' %}text-success{% elif app.status == 'Rejected' %}text-danger{% else %}text-primary{% endif %}">
+                                        {{ app.status }}
+                                    </span>
+                                </td>
+                                <td class="py-3">
+                                    <a href="{{ app.resume.url }}"
+                                        class="text-primary text-decoration-none small fw-bold" target="_blank">View
+                                        Resume</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="py-5 text-muted">You haven't applied to any drives yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleResumeInput(mode, driveId) {
+        const uploadSection = document.getElementById('resumeUploadSection' + driveId);
+        const fileInput = document.getElementById('resumeFileInput' + driveId);
+
+        if (mode === 'upload') {
+            uploadSection.style.display = 'block';
+            fileInput.required = true;
+        } else {
+            uploadSection.style.display = 'none';
+            fileInput.required = false;
+        }
+    }
+</script>
+<style>
+    .drive-card {
+        transition: transform 0.3s ease;
+    }
+
+    .drive-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Grievance Redressal - UMS{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="row g-4 mb-4">
+        <div class="col-md-7">
+            <h2 class="fw-bold mb-1">Grievance Portal</h2>
+            <p class="text-muted">Submit your complaints or suggestions for improvement</p>
+        </div>
+        <div class="col-md-5 text-md-end">
+            <button class="btn btn-danger rounded-pill px-4 py-2" data-bs-toggle="modal"
+                data-bs-target="#complaintModal" style="background-color: #ff5722; border: none;">
+                <i class="bi bi-megaphone me-2"></i>File a Complaint
+            </button>
+        </div>
+    </div>
+
+    <!-- Complaint Stats -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100">
+                <h3 class="fw-bold mb-1 text-dark">{{ complaints.count }}</h3>
+                <p class="text-muted small mb-0">Total Filed</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100">
+                <h3 class="fw-bold mb-1 text-warning">
+                    {{ complaints|dictsort:"status"|length }}
+                </h3>
+                <p class="text-muted small mb-0">Pending</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100">
+                <h3 class="fw-bold mb-1 text-success">
+                    0
+                </h3>
+                <p class="text-muted small mb-0">Resolved</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaint List -->
+    <div class="row g-4">
+        {% for complaint in complaints %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge rounded-pill px-3 py-1 mb-2 bg-light text-dark border">{{ complaint.category
+                            }}</span>
+                        <h5 class="fw-bold text-dark mb-1">{{ complaint.subject }}</h5>
+                        <p class="text-muted small mb-0">Ticket #{{ complaint.id }} | Filed on {{
+                            complaint.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <span
+                        class="badge rounded-pill px-3 py-2 
+                        {% if complaint.status == 'Resolved' %}bg-success{% elif complaint.status == 'Rejected' %}bg-danger{% elif complaint.status == 'In Progress' %}bg-info{% else %}bg-warning{% endif %} bg-opacity-10 
+                        {% if complaint.status == 'Resolved' %}text-success{% elif complaint.status == 'Rejected' %}text-danger{% elif complaint.status == 'In Progress' %}text-info{% else %}text-warning{% endif %}">
+                        {{ complaint.status }}
+                    </span>
+                </div>
+                <div class="p-3 bg-light rounded-4 mb-3">
+                    <p class="mb-0 small text-dark">{{ complaint.message }}</p>
+                </div>
+                {% if complaint.admin_comments %}
+                <div class="mt-2 border-top pt-3">
+                    <p class="small fw-bold mb-1"><i class="bi bi-reply-fill me-2"></i>Admin Response:</p>
+                    <p class="small text-muted mb-0">{{ complaint.admin_comments }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                style="width: 80px; height: 80px;">
+                <i class="bi bi-shield-check fs-1 text-muted"></i>
+            </div>
+            <h4 class="fw-bold text-dark">All Clear!</h4>
+            <p class="text-muted">You don't have any active complaints or grievances.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Complaint Modal -->
+<div class="modal fade" id="complaintModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h5 class="fw-bold">File a Grievance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Category</label>
+                        <select name="category" class="form-select rounded-pill px-3" required>
+                            <option value="Academic">Academic</option>
+                            <option value="Infrastructure">Infrastructure</option>
+                            <option value="Harassment">Harassment</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Subject</label>
+                        <input type="text" name="subject" class="form-control rounded-pill px-3"
+                            placeholder="Brief subject line" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Detailed Message</label>
+                        <textarea name="message" class="form-control rounded-4 p-3" rows="4"
+                            placeholder="Describe your grievance in detail..." required></textarea>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-bold">Attachment (Optional)</label>
+                        <input type="file" name="attachment" class="form-control rounded-pill">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="submit" class="btn w-100 rounded-pill py-3 fw-bold text-white shadow-sm"
+                        style="background-color: #ff5722; border: none;">Submit Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge {
+        font-weight: 500;
+    }
+</style>
+{% endblock %}

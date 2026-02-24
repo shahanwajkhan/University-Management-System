@@ -1,0 +1,159 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}UMS — Announcements{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-3 px-lg-5">
+
+    <!-- Page Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h3 class="fw-black mb-1" style="color:var(--text-dark)">
+                <i class="bi bi-megaphone-fill me-2" style="color:#f59e0b"></i>My Announcements
+            </h3>
+            <p class="text-muted small mb-0">Broadcast notices to students in your department.</p>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm"
+                data-bs-toggle="modal" data-bs-target="#createAnnouncementModal">
+            <i class="bi bi-plus-lg me-2"></i>Post New Announcement
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#6366f1">{{ announcements|length }}</div>
+                <div class="small text-muted fw-semibold">Total Posted</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Announcements Grid -->
+    <div class="row g-4">
+        {% for item in announcements %}
+        <div class="col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden ann-card">
+                <div style="height:4px;background:linear-gradient(90deg,#7c3aed,#6366f1);"></div>
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="fw-bold mb-0" style="color:var(--text-dark);font-size:1rem;">{{ item.title }}</h5>
+                        <div class="dropdown ms-2">
+                            <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3">
+                                <li>
+                                    <a class="dropdown-item text-danger d-flex align-items-center gap-2"
+                                       href="{% url 'faculty_delete_announcement' item.id %}"
+                                       onclick="return confirm('Delete this announcement?')">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        {% if item.department %}
+                        <span class="badge rounded-pill px-2 py-1" style="background:rgba(99,102,241,.1);color:#6366f1;font-size:.68rem;">
+                            <i class="bi bi-building me-1"></i>{{ item.department.name }}
+                        </span>
+                        {% else %}
+                        <span class="badge rounded-pill px-2 py-1" style="background:rgba(14,165,233,.1);color:#0369a1;font-size:.68rem;">
+                            <i class="bi bi-globe me-1"></i>All Departments
+                        </span>
+                        {% endif %}
+                        {% if item.semester %}
+                        <span class="badge rounded-pill px-2 py-1" style="background:rgba(245,158,11,.1);color:#b45309;font-size:.68rem;">
+                            <i class="bi bi-calendar3 me-1"></i>Sem {{ item.semester }}
+                        </span>
+                        {% endif %}
+                        <span class="badge rounded-pill px-2 py-1" style="background:rgba(34,197,94,.1);color:#15803d;font-size:.68rem;">Active</span>
+                    </div>
+
+                    <p class="text-muted small mb-4 flex-grow-1" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{ item.content }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3" style="border-top:1px solid rgba(0,0,0,.06);">
+                        <span class="small text-muted"><i class="bi bi-clock me-1"></i>{{ item.created_at|timesince }} ago</span>
+                        <span class="small fw-bold" style="color:#7c3aed;">by You</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5 my-3">
+                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-4" style="width:90px;height:90px;">
+                    <i class="bi bi-megaphone fs-2 text-muted opacity-50"></i>
+                </div>
+                <h4 class="fw-bold text-muted mb-2">No Announcements Yet</h4>
+                <p class="text-muted small mb-4">You haven't posted any announcements yet. Use the button to broadcast a notice to your students.</p>
+                <button class="btn btn-primary rounded-pill px-5 fw-bold" data-bs-toggle="modal" data-bs-target="#createAnnouncementModal">
+                    <i class="bi bi-megaphone-fill me-2"></i>Post Your First Announcement
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Create Announcement Modal -->
+<div class="modal fade" id="createAnnouncementModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header border-0 px-4 pt-4" style="background:linear-gradient(135deg,#7c3aed,#6366f1);">
+                <div>
+                    <h5 class="modal-title fw-bold text-white mb-0"><i class="bi bi-megaphone-fill me-2"></i>New Announcement</h5>
+                    <p class="small text-white opacity-60 mb-0">Broadcast a notice to students in your department.</p>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Title *</label>
+                        <input type="text" name="title" class="form-control rounded-3 border-light" placeholder="Subject of your notice" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Target Department</label>
+                            <select name="department" class="form-select rounded-3 border-light">
+                                <option value="">All Departments</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Semester</label>
+                            <select name="semester" class="form-select rounded-3 border-light">
+                                <option value="">All Semesters</option>
+                                {% for i in "12345678"|make_list %}
+                                <option value="{{ i }}">Semester {{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted">Message *</label>
+                        <textarea name="content" class="form-control rounded-3 border-light" rows="5"
+                                  placeholder="Write your announcement details here…" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2">
+                        <i class="bi bi-send-fill me-2"></i>Post Announcement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fw-black { font-weight:900; }
+    .ann-card { transition:transform .2s ease, box-shadow .2s ease; }
+    .ann-card:hover { transform:translateY(-4px); box-shadow:0 1rem 2.5rem rgba(0,0,0,.08)!important; }
+</style>
+{% endblock %}

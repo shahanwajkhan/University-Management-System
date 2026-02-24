@@ -1,0 +1,325 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Select Attendance Subject{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-2 px-md-4 animation-fade-in">
+    <!-- Header Area -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}" class="text-decoration-none text-muted"><i class="bi bi-house-door me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Attendance Management</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark mb-0">Attendance Management</h2>
+            <p class="text-muted mb-0 mt-1">Select a subject to mark or edit student attendance records.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Main Form Card -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 premium-card">
+                <div class="card-header bg-white border-0 p-4 pb-0">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-square bg-primary bg-opacity-10 text-primary rounded-3 d-flex justify-content-center align-items-center me-3" style="width: 48px; height: 48px;">
+                            <i class="bi bi-calendar2-check fs-4"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0 text-dark">Select Class & Date</h4>
+                            <p class="text-muted small mb-0">Choose the criteria to proceed.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    {% if not subjects %}
+                    <div class="alert alert-warning border-0 rounded-4 d-flex align-items-center p-4">
+                        <i class="bi bi-exclamation-triangle fs-3 text-warning me-3"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">No Subjects Available</h6>
+                            <p class="mb-0 small text-dark opacity-75">You are not currently assigned to any subjects. Ask your administrator to assign subjects to you to start marking attendance.</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <form method="POST" class="needs-validation" novalidate id="attendanceSelectForm">
+                        {% csrf_token %}
+                        <div class="row g-4">
+                            <div class="col-md-7">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <select name="subject" id="subjectSelect" class="form-select border-0 font-weight-medium" style="background-color: #f8f9fc;" required>
+                                        <option value="" disabled selected>Select assigned subject...</option>
+                                        {% for subject in subjects %}
+                                        <option value="{{ subject.id }}">{{ subject.name }} ({{ subject.code }}) — {{ subject.department.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="subjectSelect" class="text-muted"><i class="bi bi-book me-2 text-primary"></i>Subject</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-5">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <input type="date" name="date" id="dateSelect" value="{{ today }}" class="form-control border-0 font-weight-medium" style="background-color: #f8f9fc;" required>
+                                    <label for="dateSelect" class="text-muted"><i class="bi bi-calendar-event me-2 text-primary"></i>Date</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 d-flex justify-content-end border-top pt-4">
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold btn-hover-lift shadow-sm d-flex align-items-center gap-2">
+                                Continue <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Illustration/Decorative Card -->
+        <div class="col-lg-4 d-none d-lg-block">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden bg-gradient-primary text-white position-relative premium-card">
+                <div class="card-body p-4 p-xl-5 d-flex flex-column justify-content-center z-index-1 position-relative">
+                    <div class="mb-4">
+                        <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold mb-3 shadow-sm"><i class="bi bi-info-circle-fill me-1"></i> Quick Tip</span>
+                        <h3 class="fw-bold mb-3">Keep records up to date!</h3>
+                        <p class="opacity-75 mb-0">Consistent attendance tracking helps identify students who might be at risk of falling behind early in the semester.</p>
+                    </div>
+                </div>
+                <!-- Decorative background elements -->
+                <div class="position-absolute text-white opacity-10" style="bottom: -20px; right: -20px; transform: rotate(-15deg);">
+                    <i class="bi bi-calendar2-check-fill" style="font-size: 15rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    {% if subjects %}
+    <h5 class="fw-bold mb-3 mt-5 px-1"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Quick Actions</h5>
+    <div class="row g-4">
+        <!-- View Percentage Action -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 hover-lift-card interactive-card">
+                <div class="d-flex align-items-start mb-4">
+                    <div class="bg-info bg-opacity-10 text-info p-3 rounded-4 me-3">
+                        <i class="bi bi-pie-chart-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1">View Attendance Trends</h5>
+                        <p class="text-muted small mb-0">Review overall percentages for all students.</p>
+                    </div>
+                </div>
+                
+                <div class="form-floating shadow-sm rounded-3 mb-4 mt-auto">
+                    <select id="viewSubject" class="form-select border-0 font-weight-medium bg-light">
+                        <option value="" disabled selected>Select a subject to analyze...</option>
+                        {% for subject in subjects %}
+                        <option value="{% url 'view_attendance_percentage' subject.id %}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="viewSubject" class="text-muted">Subject to view</label>
+                </div>
+                
+                <button onclick="viewAttendance()" class="btn btn-outline-info rounded-pill w-100 py-2 fw-medium d-flex align-items-center justify-content-center gap-2 btn-hover-fill">
+                    <i class="bi bi-bar-chart-fill"></i> View Analytics
+                </button>
+            </div>
+        </div>
+
+        <!-- Export PDF Action -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 hover-lift-card interactive-card">
+                <div class="d-flex align-items-start mb-4">
+                    <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-4 me-3">
+                        <i class="bi bi-file-earmark-pdf-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1">Export PDF Report</h5>
+                        <p class="text-muted small mb-0">Generate a downloadable register for your records.</p>
+                    </div>
+                </div>
+                
+                <div class="form-floating shadow-sm rounded-3 mb-4 mt-auto">
+                    <select id="exportSubject" class="form-select border-0 font-weight-medium bg-light">
+                        <option value="" disabled selected>Select a subject to export...</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="exportSubject" class="text-muted">Subject to export</label>
+                </div>
+                
+                <button onclick="exportPDF()" class="btn btn-outline-danger rounded-pill w-100 py-2 fw-medium d-flex align-items-center justify-content-center gap-2 btn-hover-fill">
+                    <i class="bi bi-download"></i> Generate PDF
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    :root {
+        --primary-color: #ff5722;
+        --primary-dark: #e64a19;
+        --secondary-color: #0d2b56;
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #ff8a65 100%) !important;
+    }
+    
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+    
+    .btn-primary {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+    }
+    
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: var(--primary-dark) !important;
+        border-color: var(--primary-dark) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(255, 87, 34, 0.3) !important;
+    }
+
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .animation-fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .premium-card {
+        border-radius: 1.25rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .btn-hover-lift {
+        transition: all 0.2s ease;
+    }
+    
+    .hover-lift-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.03) !important;
+    }
+    
+    .hover-lift-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08) !important;
+        border-color: rgba(0,0,0,0.05) !important;
+    }
+    
+    .form-floating .form-select, .form-floating .form-control {
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+    
+    .form-floating .form-select:focus, .form-floating .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(255, 87, 34, 0.25);
+        background-color: #fff !important;
+    }
+
+    .form-floating > label {
+        padding-left: 1.25rem;
+    }
+    
+    .btn-hover-fill {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .btn-hover-fill::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: currentColor;
+        z-index: -1;
+        transition: width 0.3s ease;
+    }
+    
+    .btn-hover-fill:hover::before {
+        width: 100%;
+    }
+    
+    .btn-outline-info:hover, .btn-outline-danger:hover {
+        color: white !important;
+    }
+</style>
+
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+    function viewAttendance() {
+        const select = document.getElementById('viewSubject');
+        const url = select.value;
+        if (url) {
+            
+            window.location.href = url;
+            
+        } else {
+            select.classList.add('is-invalid');
+            setTimeout(() => select.classList.remove('is-invalid'), 2000);
+        }
+    }
+
+    function exportPDF() {
+        const select = document.getElementById('exportSubject');
+        const subjectId = select.value;
+        if (subjectId) {
+            // Button loading state
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Exporting...';
+            btn.classList.add('disabled');
+            
+            const url = "{% url 'export_attendance_pdf' 0 %}".replace('0', subjectId);
+            window.location.href = url;
+            
+            // Reset button after a short delay (browser takes over navigation)
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.classList.remove('disabled');
+            }, 3000);
+        } else {
+            select.classList.add('is-invalid');
+            setTimeout(() => select.classList.remove('is-invalid'), 2000);
+        }
+    }
+</script>
+{% endblock %}

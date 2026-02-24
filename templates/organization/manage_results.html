@@ -1,0 +1,402 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Manage Results — Admin Portal{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-3 px-lg-5">
+
+    <!-- Page Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h3 class="fw-black mb-1" style="color:var(--text-dark)">
+                <i class="bi bi-graph-up-arrow me-2" style="color:#6366f1"></i>Result Management
+            </h3>
+            <p class="text-muted small mb-0">Enter marks per student per subject. Grades & CGPA are computed automatically.</p>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addMarksModal">
+            <i class="bi bi-plus-lg me-2"></i>Add / Update Marks
+        </button>
+    </div>
+
+    <!-- Flash Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-4 border-0 shadow-sm mb-3">
+        <i class="bi bi-info-circle-fill me-2"></i>{{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Filter Bar -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">Department</label>
+                    <select name="dept" class="form-select rounded-3 border-light">
+                        <option value="">All Departments</option>
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if selected_dept == dept.id|stringformat:"s" %}selected{% endif %}>{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Semester</label>
+                    <select name="sem" class="form-select rounded-3 border-light">
+                        <option value="">All Semesters</option>
+                        {% for s in semesters %}
+                        <option value="{{ s }}" {% if selected_sem == s|stringformat:"s" %}selected{% endif %}>Semester {{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold w-100">
+                        <i class="bi bi-funnel me-2"></i>Filter
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'manage_results' %}" class="btn btn-outline-secondary rounded-pill px-3 fw-bold w-100">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#6366f1">{{ student_summaries|length }}</div>
+                <div class="small text-muted fw-semibold">Students</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#22c55e">{{ subjects|length }}</div>
+                <div class="small text-muted fw-semibold">Subjects</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#f59e0b" id="total-records-count">—</div>
+                <div class="small text-muted fw-semibold">Total Records</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 text-center">
+                <div class="fw-black fs-3" style="color:#0ea5e9" id="avg-cgpa-display">—</div>
+                <div class="small text-muted fw-semibold">Avg CGPA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Cards Grid -->
+    {% if student_summaries %}
+    <div class="row g-4">
+        {% for item in student_summaries %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                <!-- Student Header -->
+                <div class="card-header bg-white border-0 p-4 d-flex flex-wrap justify-content-between align-items-center gap-3"
+                     style="border-bottom: 1px solid rgba(0,0,0,0.05) !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center fw-black text-primary"
+                             style="width:46px;height:46px;font-size:1.1rem;">
+                            {{ item.student.username|slice:":1"|upper }}
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">{{ item.student.full_name|default:item.student.username }}</h6>
+                            <span class="small text-muted">
+                                {{ item.student.username }}
+                                {% if item.profile %}· Sem {{ item.profile.semester }} · {{ item.profile.department }}{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- CGPA Badge -->
+                        <div class="text-center px-4 py-2 rounded-3 cgpa-badge-{% if item.cgpa >= 8 %}excellent{% elif item.cgpa >= 6 %}good{% elif item.cgpa > 0 %}average{% else %}none{% endif %}">
+                            <div class="fw-black fs-5 mb-0">
+                                {{ item.cgpa }}
+                            </div>
+                            <div class="smaller text-muted fw-semibold">CGPA</div>
+                        </div>
+                        <!-- Add Marks Button -->
+                        <button class="btn btn-sm rounded-pill px-3 fw-bold"
+                                style="background:rgba(99,102,241,.1);color:#6366f1;border:1px solid rgba(99,102,241,.2);"
+                                data-id="{{ item.student.id }}"
+                                data-name="{{ item.student.full_name|default:item.student.username }}"
+                                data-sem="{{ item.profile.semester|default:1 }}"
+                                onclick="prefillModal(this.dataset.id, this.dataset.name, this.dataset.sem)">
+                            <i class="bi bi-plus-lg me-1"></i>Add Marks
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Records Table -->
+                {% if item.records %}
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" style="font-size:.88rem;">
+                            <thead style="background:rgba(99,102,241,.04);">
+                                <tr>
+                                    <th class="ps-4 py-3 text-muted small fw-bold">Subject</th>
+                                    <th class="py-3 text-muted small fw-bold">Code</th>
+                                    <th class="py-3 text-muted small fw-bold">Type</th>
+                                    <th class="py-3 text-muted small fw-bold">Sem</th>
+                                    <th class="py-3 text-muted small fw-bold">Marks</th>
+                                    <th class="py-3 text-muted small fw-bold">Grade</th>
+                                    <th class="py-3 text-muted small fw-bold">Points</th>
+                                    <th class="py-3 text-muted small fw-bold">Credits</th>
+                                    <th class="pe-4 py-3 text-muted small fw-bold text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rec in item.records %}
+                                <tr>
+                                    <td class="ps-4 fw-semibold" style="color:var(--text-dark)">{{ rec.subject.name }}</td>
+                                    <td class="text-muted small">{{ rec.subject.code }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill px-2 py-1 badge-exam-{% if rec.exam_type == 'Internal' %}internal{% elif rec.exam_type == 'External' %}external{% elif rec.exam_type == 'Practical' %}practical{% else %}other{% endif %}" style="font-size:.68rem;">
+                                            {{ rec.exam_type }}
+                                        </span>
+                                    </td>
+                                    <td class="text-muted">{{ rec.semester }}</td>
+                                    <td>
+                                        <strong>{{ rec.marks_obtained }}</strong>
+                                        <span class="text-muted small">/{{ rec.max_marks }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge fw-bold px-3 py-1 rounded-pill grade-badge-{% if rec.grade_letter == 'O' %}o{% elif rec.grade_letter == 'A+' %}a-plus{% elif rec.grade_letter == 'A' %}a{% elif rec.grade_letter == 'B+' %}b-plus{% elif rec.grade_letter == 'B' %}b{% elif rec.grade_letter == 'C' %}c{% elif rec.grade_letter == 'P' %}p{% else %}fail{% endif %}">
+                                            {{ rec.grade_letter }}
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold" style="color:#6366f1">{{ rec.grade_point }}</td>
+                                    <td class="text-muted">{{ rec.credits }}</td>
+                                    <td class="pe-4 text-center">
+                                        <a href="{% url 'delete_grade_record' rec.id %}"
+                                           class="btn btn-sm rounded-circle"
+                                           style="width:30px;height:30px;padding:0;background:rgba(239,68,68,.1);color:#dc2626;display:inline-flex;align-items:center;justify-content:center;"
+                                           onclick="return confirm('Delete this mark record?')">
+                                            <i class="bi bi-trash3 small"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <!-- Semester GPA footer row -->
+                                <tr style="background:rgba(99,102,241,.04);border-top:2px solid rgba(99,102,241,.15);">
+                                    <td colspan="6" class="ps-4 fw-bold py-2 text-muted small">CGPA (all semesters)</td>
+                                    <td class="fw-black py-2" style="color:#6366f1;font-size:1rem;">{{ item.cgpa }}</td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card-body text-center py-4 text-muted">
+                    <i class="bi bi-inbox d-block fs-3 opacity-25 mb-2"></i>
+                    <span class="small">No marks entered yet for this student.</span>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+            <i class="bi bi-people-fill fs-2 text-muted opacity-50"></i>
+        </div>
+        <h5 class="fw-bold text-muted">No students found</h5>
+        <p class="text-muted small">Try adjusting the department or semester filter, or ensure students are enrolled.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADD / UPDATE MARKS MODAL
+═══════════════════════════════════════════ -->
+<div class="modal fade" id="addMarksModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header border-0 px-4 pt-4" style="background:linear-gradient(135deg,#0d2b56,#6366f1);">
+                <div>
+                    <h5 class="modal-title fw-bold text-white mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Add / Update Marks
+                    </h5>
+                    <p class="small text-white opacity-60 mb-0">Grade & grade point are computed automatically from marks.</p>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="save_marks">
+                    <input type="hidden" name="student_id" id="modal-student-id">
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Student</label>
+                        <input type="text" class="form-control rounded-3 bg-light border-0" id="modal-student-name" readonly>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Subject</label>
+                            <select name="subject_id" class="form-select rounded-3 border-light" required>
+                                <option value="">Select Subject</option>
+                                {% for subj in subjects %}
+                                <option value="{{ subj.id }}">{{ subj.name }} ({{ subj.code }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Semester</label>
+                            <select name="semester" class="form-select rounded-3 border-light" id="modal-semester" required>
+                                {% for s in semesters %}
+                                <option value="{{ s }}">Semester {{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-4">
+                            <label class="form-label small fw-bold">Marks Obtained</label>
+                            <input type="number" name="marks_obtained" class="form-control rounded-3 border-light"
+                                   min="0" max="100" step="0.5" placeholder="e.g. 78" required>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small fw-bold">Max Marks</label>
+                            <input type="number" name="max_marks" class="form-control rounded-3 border-light"
+                                   value="100" min="1" required>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small fw-bold">Credits</label>
+                            <input type="number" name="credits" class="form-control rounded-3 border-light"
+                                   value="3" min="1" max="6" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold">Exam Type</label>
+                        <select name="exam_type" class="form-select rounded-3 border-light">
+                            {% for val, label in exam_type_choices %}
+                            <option value="{{ val }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Grade Preview -->
+                    <div class="p-3 rounded-3 mb-4 d-none" id="grade-preview" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small fw-bold text-muted">Computed Grade:</span>
+                            <div class="text-end">
+                                <span id="preview-grade" class="badge fw-bold px-3 py-1 rounded-pill fs-6" style="background:#ede9fe;color:#6d28d9;">—</span>
+                                <span id="preview-gp" class="ms-2 fw-black" style="color:#6366f1">— pts</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2">
+                        <i class="bi bi-floppy me-2"></i>Save Marks
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function prefillModal(studentId, studentName, semester) {
+    document.getElementById('modal-student-id').value = studentId;
+    document.getElementById('modal-student-name').value = studentName;
+    const semSel = document.getElementById('modal-semester');
+    if (semSel) {
+        for (let opt of semSel.options) { if (opt.value == semester) opt.selected = true; }
+    }
+    new bootstrap.Modal(document.getElementById('addMarksModal')).show();
+}
+
+// Grade Preview on marks input
+document.addEventListener('DOMContentLoaded', function () {
+    const marksInput  = document.querySelector('input[name="marks_obtained"]');
+    const maxInput    = document.querySelector('input[name="max_marks"]');
+    const preview     = document.getElementById('grade-preview');
+    const previewGrd  = document.getElementById('preview-grade');
+    const previewGP   = document.getElementById('preview-gp');
+
+    function computeGrade() {
+        const marks = parseFloat(marksInput.value) || 0;
+        const max   = parseFloat(maxInput.value) || 100;
+        const pct   = (marks / max) * 100;
+        let grade, gp, color;
+        if      (pct >= 90) { grade='O';  gp=10.0; color='#15803d'; }
+        else if (pct >= 80) { grade='A+'; gp=9.0;  color='#047857'; }
+        else if (pct >= 70) { grade='A';  gp=8.0;  color='#1d4ed8'; }
+        else if (pct >= 60) { grade='B+'; gp=7.0;  color='#6d28d9'; }
+        else if (pct >= 55) { grade='B';  gp=6.0;  color='#b45309'; }
+        else if (pct >= 50) { grade='C';  gp=5.0;  color='#c2410c'; }
+        else if (pct >= 40) { grade='P';  gp=4.0;  color='#166534'; }
+        else                { grade='F';  gp=0.0;  color='#b91c1c'; }
+
+        if (marks > 0) {
+            preview.classList.remove('d-none');
+            previewGrd.textContent = grade;
+            previewGrd.style.color = color;
+            previewGP.textContent  = gp.toFixed(1) + ' pts';
+            previewGP.style.color  = color;
+        } else {
+            preview.classList.add('d-none');
+        }
+    }
+    if (marksInput) {
+        marksInput.addEventListener('input', computeGrade);
+        maxInput.addEventListener('input', computeGrade);
+    }
+
+    // Compute stats
+    let totalRecords = 0, totalCgpa = 0, count = 0;
+    document.querySelectorAll('tbody td:nth-child(7)').forEach(td => {
+        const val = parseFloat(td.textContent);
+        if (!isNaN(val) && val > 0) { totalCgpa += val; count++; }
+    });
+    document.querySelectorAll('table tbody tr:not(:last-child)').forEach(() => totalRecords++);
+    document.getElementById('total-records-count').textContent = totalRecords || 0;
+    document.getElementById('avg-cgpa-display').textContent   = count ? (totalCgpa / count).toFixed(2) : '—';
+});
+</script>
+
+<style>
+    /* CGPA Card Badges */
+    .cgpa-badge-excellent { background:rgba(34,197,94,.1); }
+    .cgpa-badge-excellent .fw-black { color:#16a34a; }
+    
+    .cgpa-badge-good { background:rgba(99,102,241,.1); }
+    .cgpa-badge-good .fw-black { color:#6366f1; }
+    
+    .cgpa-badge-average { background:rgba(245,158,11,.1); }
+    .cgpa-badge-average .fw-black { color:#b45309; }
+    
+    .cgpa-badge-none { background:rgba(148,163,184,.1); }
+    .cgpa-badge-none .fw-black { color:#94a3b8; }
+    
+    /* Exam Type Badges */
+    .badge-exam-internal { background:rgba(14,165,233,.12); color:#0369a1; }
+    .badge-exam-external { background:rgba(239,68,68,.12); color:#dc2626; }
+    .badge-exam-practical { background:rgba(20,184,166,.12); color:#0f766e; }
+    .badge-exam-other { background:rgba(99,102,241,.12); color:#6366f1; }
+
+    /* Grade Badges */
+    .grade-badge-o { background:#dcfce7; color:#15803d; }
+    .grade-badge-a-plus { background:#d1fae5; color:#047857; }
+    .grade-badge-a { background:#dbeafe; color:#1d4ed8; }
+    .grade-badge-b-plus { background:#ede9fe; color:#6d28d9; }
+    .grade-badge-b { background:#fef3c7; color:#b45309; }
+    .grade-badge-c { background:#ffedd5; color:#c2410c; }
+    .grade-badge-p { background:#f0fdf4; color:#166534; }
+    .grade-badge-fail { background:#fee2e2; color:#b91c1c; }
+</style>
+{% endblock %}

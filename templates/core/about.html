@@ -1,0 +1,458 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Lovely Professional University UMS{% endblock %}
+
+{% block content %}
+<!-- Preload Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="about-page-wrapper">
+    <!-- Section 1: Hero Section -->
+    <section class="hero-section position-relative d-flex align-items-center justify-content-center text-center overflow-hidden">
+        <div class="hero-bg position-absolute w-100 h-100 top-0 start-0"></div>
+        <div class="container position-relative z-index-2" data-aos="fade-up" data-aos-duration="1000">
+            <span class="badge bg-primary bg-opacity-25 text-primary rounded-pill px-3 py-2 mb-3 fw-medium letter-spacing-1 text-uppercase shadow-sm">Digital Transformation</span>
+            <h1 class="display-4 fw-bolder text-dark mb-4 hero-title">About Our University <br class="d-none d-md-block">Management System</h1>
+            <p class="lead text-secondary fw-normal mx-auto mb-5 hero-subtitle">
+                A secure, unified, and intelligent platform driving the digital transformation of university operations, empowering students, faculty, and administration to achieve more.
+            </p>
+            <a href="#features" class="btn btn-primary rounded-pill px-5 py-3 fw-semibold shadow-lg hover-lift">Explore Features <i class="bi bi-arrow-down ms-2"></i></a>
+        </div>
+    </section>
+
+    <!-- Section 2: About the System -->
+    <section class="about-system-section py-6 bg-white section-margin">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-right">
+                    <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-wide">The Platform</h6>
+                    <h2 class="display-6 fw-bold mb-4 text-dark">Simplifying Administration, Elevating Education.</h2>
+                    <p class="text-secondary fs-6 mb-4 lh-lg">
+                        Our University Management System is engineered to eliminate administrative bottlenecks and provide a seamless digital experience. It acts as the central nervous system connecting every department, classroom, and student.
+                    </p>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-3 text-secondary">
+                        <li class="d-flex align-items-start gap-3">
+                            <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-check2 fw-bold fs-5"></i>
+                            </div>
+                            <div>
+                                <strong class="text-dark">Streamlines Student Management:</strong> From admissions to alumni, handle the entire student lifecycle in one centralized hub.
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-check2 fw-bold fs-5"></i>
+                            </div>
+                            <div>
+                                <strong class="text-dark">Optimizes Faculty Operations:</strong> Simplifies attendance, grading, and material distribution so faculty can focus on teaching.
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-check2 fw-bold fs-5"></i>
+                            </div>
+                            <div>
+                                <strong class="text-dark">Secure & Scalable:</strong> Built on modern, robust architecture ensuring data privacy and high availability during peak traffic.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+                    <div class="image-wrapper position-relative p-3 rounded-4 bg-light shadow-sm">
+                        <div class="decorative-blob position-absolute bg-primary bg-opacity-10 rounded-circle w-75 h-75 end-0 bottom-0 translate-middle-x z-index-0"></div>
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="img-fluid rounded-4 shadow-lg position-relative z-index-1" alt="UMS Dashboard Preview Mockup">
+                        
+                        <!-- Floating Glassmorphism element -->
+                        <div class="floating-card glassmorphism position-absolute bottom-0 start-0 translate-middle p-3 rounded-4 shadow d-flex align-items-center gap-3 z-index-2 d-none d-md-flex">
+                            <div class="bg-success rounded-circle p-2 text-white"><i class="bi bi-graph-up-arrow"></i></div>
+                            <div>
+                                <div class="fw-bold fs-5 text-dark">99.9%</div>
+                                <div class="smaller text-secondary">System Uptime</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Our Mission & Vision -->
+    <section class="mission-vision-section py-6 bg-light section-margin">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-primary fw-bold text-uppercase mb-2">Our Purpose</h6>
+                <h2 class="fw-bold text-dark">Driving Academic Excellence</h2>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <!-- Mission Card -->
+                <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 p-md-5 hover-card">
+                        <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-4 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 70px; height: 70px;">
+                            <i class="bi bi-rocket-takeoff fs-2"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3 text-dark">Our Mission</h3>
+                        <p class="text-secondary mb-0">
+                            To provide a seamless academic management experience by breaking down silos. We aim to improve direct communication between students and faculty, bringing true digital transformation to everyday university processes.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Vision Card -->
+                <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 p-md-5 hover-card">
+                        <div class="icon-circle bg-info bg-opacity-10 text-info mb-4 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 70px; height: 70px;">
+                            <i class="bi bi-eye fs-2"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3 text-dark">Our Vision</h3>
+                        <p class="text-secondary mb-0">
+                            To create a smart, completely paperless campus. We envision a secure and transparent academic ecosystem powered by real-time analytics to help educators make informed decisions that benefit every student.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Key Features Overview -->
+    <section id="features" class="features-section py-6 bg-white section-margin">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-primary fw-bold text-uppercase mb-2">Capabilities</h6>
+                <h2 class="fw-bold text-dark">Key Features Overview</h2>
+                <p class="text-secondary max-w-600 mx-auto mt-3">A comprehensive suite of tools built specifically to handle the complex workflows of modern higher education.</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="50">
+                    <div class="card feature-card h-100 border text-center p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon mb-3 mx-auto text-primary"><i class="bi bi-people"></i></div>
+                        <h5 class="fw-bold text-dark mb-2">Student Management</h5>
+                        <p class="text-secondary small mb-0">Comprehensive tracking of student records, academic history, timelines, and profile data in a secure vault.</p>
+                    </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card feature-card h-100 border text-center p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon mb-3 mx-auto text-success"><i class="bi bi-person-workspace"></i></div>
+                        <h5 class="fw-bold text-dark mb-2">Faculty Operations</h5>
+                        <p class="text-secondary small mb-0">Dedicated portal for educators to upload materials, make announcements, and manage their classes efficiently.</p>
+                    </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150">
+                    <div class="card feature-card h-100 border text-center p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon mb-3 mx-auto text-danger"><i class="bi bi-calendar-check"></i></div>
+                        <h5 class="fw-bold text-dark mb-2">Attendance Tracking</h5>
+                        <p class="text-secondary small mb-0">Digital attendance marking with real-time percentage calculations and automated low-attendance alerts.</p>
+                    </div>
+                </div>
+                <!-- Feature 4 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card feature-card h-100 border text-center p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon mb-3 mx-auto text-warning"><i class="bi bi-wallet2"></i></div>
+                        <h5 class="fw-bold text-dark mb-2">Fee Management</h5>
+                        <p class="text-secondary small mb-0">Transparent billing, digital fee submissions, and approval tracking bridging students and administration.</p>
+                    </div>
+                </div>
+                <!-- Feature 5 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="250">
+                    <div class="card feature-card h-100 border text-center p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon mb-3 mx-auto text-info"><i class="bi bi-person-badge"></i></div>
+                        <h5 class="fw-bold text-dark mb-2">ID Card Generation</h5>
+                        <p class="text-secondary small mb-0">Instantly generate and issue professional, branded digital and printable ID cards for all users.</p>
+                    </div>
+                </div>
+                <!-- Feature 6 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card feature-card h-100 border text-center p-4 rounded-4 shadow-sm">
+                        <div class="feature-icon mb-3 mx-auto" style="color:#6f42c1;"><i class="bi bi-shield-lock"></i></div>
+                        <h5 class="fw-bold text-dark mb-2">Role-Based Access</h5>
+                        <p class="text-secondary small mb-0">Strict RBAC controls ensuring users only see what they are authorized to see, from admins to students.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Why Choose UMS -->
+    <section class="why-choose-section py-6 bg-light section-margin">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5" data-aos="fade-right">
+                    <h2 class="fw-bold text-dark mb-4">Why Universities Choose UMS</h2>
+                    <p class="text-secondary mb-4">
+                        We don't just provide software; we provide a foundation for educational institutions to rapidly scale and modernize their processes without friction.
+                    </p>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-primary rounded-pill px-4 hover-lift">Talk to an Expert</a>
+                </div>
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="row g-4">
+                        <div class="col-md-6 d-flex align-items-start gap-3">
+                            <div class="text-primary fs-3"><i class="bi bi-display"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Fully Responsive</h6>
+                                <p class="text-secondary small mb-0">Access the dashboard flawlessly on native mobile, tablets, and desktop displays.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-start gap-3">
+                            <div class="text-primary fs-3"><i class="bi bi-shield-check"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Secure Authentication</h6>
+                                <p class="text-secondary small mb-0">Enterprise-grade security protocols ensuring user data is always protected.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-start gap-3">
+                            <div class="text-primary fs-3"><i class="bi bi-lightning-charge"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Real-Time Updates</h6>
+                                <p class="text-secondary small mb-0">Instant propagation of marks, announcements, and attendance across the system.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-start gap-3">
+                            <div class="text-primary fs-3"><i class="bi bi-ui-checks-grid"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Intuitive Interface</h6>
+                                <p class="text-secondary small mb-0">Zero learning curve. A clean UX that users can understand and adopt on day one.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-start gap-3">
+                            <div class="text-primary fs-3"><i class="bi bi-server"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Centralized Data</h6>
+                                <p class="text-secondary small mb-0">A single source of truth for the entire institution, eliminating data duplication.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-start gap-3">
+                            <div class="text-primary fs-3"><i class="bi bi-diagram-3"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Scalable Architecture</h6>
+                                <p class="text-secondary small mb-0">Easily handles 10 students or 100,000 students without performance drops.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: University Branding (Lovely Professional University) -->
+    <section class="university-branding-section position-relative py-6 bg-dark text-white overflow-hidden text-center section-margin">
+        <div class="brand-bg-overlay position-absolute top-0 start-0 w-100 h-100">
+            <img src="https://happenings.lpu.in/wp-content/uploads/2024/11/lpu-opens-admissions-for-2025-26-academic-session-via-lpunest.jpg" class="w-100 h-100 object-fit-cover opacity-25" alt="Campus">
+        </div>
+        <div class="container position-relative z-index-2" data-aos="zoom-in">
+            <div class="lpu-logo-box mx-auto mb-4 d-flex justify-content-center align-items-center rounded-circle border border-2 border-white border-opacity-25" style="width: 90px; height: 90px; background: linear-gradient(135deg, #ff5722 0%, #ff9800 100%); box-shadow: 0 10px 30px rgba(255, 87, 34, 0.5);">
+                 <i class="fa-solid fa-graduation-cap display-4 text-white"></i>
+            </div>
+            <h2 class="display-5 fw-bold mb-3">Lovely Professional University</h2>
+            <p class="lead fw-light text-white-50 max-w-800 mx-auto mb-5">
+                India's largest single-campus university. We proudly integrate the advanced UMS technology to maintain excellence in academics, innovation, and global outreach, providing a world-class environment for all scholars.
+            </p>
+            
+            <div class="row justify-content-center g-4 mt-2">
+                <div class="col-6 col-md-3">
+                    <h2 class="display-6 fw-bold text-primary-accent mb-0 counter" data-target="35000">0</h2>
+                    <span class="text-white-50 small text-uppercase letter-spacing-1">Students</span>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-6 fw-bold text-primary-accent mb-0 counter" data-target="2500">0</h2>
+                    <span class="text-white-50 small text-uppercase letter-spacing-1">Faculty</span>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-6 fw-bold text-primary-accent mb-0 counter" data-target="150">0</h2>
+                    <span class="text-white-50 small text-uppercase letter-spacing-1">Programs</span>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-6 fw-bold text-primary-accent mb-0 counter" data-target="40">0</h2>
+                    <span class="text-white-50 small text-uppercase letter-spacing-1">Departments</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Call to Action -->
+    <section class="cta-section py-6 text-center text-white position-relative overflow-hidden mb-0">
+        <div class="cta-gradient position-absolute top-0 start-0 w-100 h-100"></div>
+        <div class="container position-relative z-index-2" data-aos="fade-up">
+            <h2 class="display-6 fw-bold mb-4">Ready to Experience Smart <br class="d-none d-md-block">University Management?</h2>
+            <p class="fs-5 text-white-50 mb-5 max-w-600 mx-auto">Join thousands of students and educators already using the platform to navigate their academic journey efficiently.</p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                <a href="{% url 'role_selection' %}" class="btn btn-light text-primary fw-bold rounded-pill px-5 py-3 shadow-lg hover-lift">Get Started Now</a>
+                <a href="{% url 'contact' %}" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold hover-lift">Contact Administration</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Required Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize AOS Animation Library
+        AOS.init({
+            once: true,
+            offset: 50,
+        });
+
+        // Initialize Animated Counters
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // The lower the slower
+        
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target + "+";
+                    }
+                };
+                
+                // Use Intersection Observer to trigger when visible
+                let observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if(entry.isIntersecting){
+                            updateCount();
+                            observer.unobserve(counter);
+                        }
+                    });
+                });
+                observer.observe(counter);
+            });
+        }
+        animateCounters();
+    });
+</script>
+
+<style>
+    /* Base Variables & Typography */
+    :root {
+        --ums-primary: #0d6efd;
+        --ums-dark: #0b1426;
+        --ums-light: #f8f9fa;
+        --ums-gray: #6c757d;
+        --ums-accent: #ff5722;
+        --transition-soft: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif !important;
+        scroll-behavior: smooth;
+    }
+
+    /* Remove the conflicting background colors from body if dark mode */
+    body.dark-mode .about-page-wrapper {
+        background-color: #0b1426;
+        color: #e2e8f0;
+    }
+    body.dark-mode .bg-white { background-color: #1a2236 !important; }
+    body.dark-mode .bg-light { background-color: #0a1324 !important; }
+    body.dark-mode .text-dark { color: #f8fafc !important; }
+    body.dark-mode .text-secondary { color: #94a3b8 !important; }
+    body.dark-mode .card, body.dark-mode .feature-card { background-color: #1a2236; border-color: rgba(255,255,255,0.05) !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5) !important; }
+    body.dark-mode .border { border-color: rgba(255,255,255,0.05) !important; }
+
+    /* Utilities */
+    .py-6 { padding-top: 5rem; padding-bottom: 5rem; }
+    @media (min-width: 992px) { .py-6 { padding-top: 7rem; padding-bottom: 7rem; } }
+    .max-w-600 { max-width: 600px; }
+    .max-w-800 { max-width: 800px; }
+    .tracking-wide { letter-spacing: 0.1em; }
+    .letter-spacing-1 { letter-spacing: 1px; }
+    .z-index-0 { z-index: 0; }
+    .z-index-1 { z-index: 1; }
+    .z-index-2 { z-index: 2; }
+    .text-primary-accent { color: var(--ums-accent) !important; }
+
+    /* Hero Section */
+    .hero-section {
+        min-height: 80vh;
+        padding: 120px 0 80px;
+    }
+    .hero-bg {
+        background: linear-gradient(135deg, rgba(245, 247, 250, 0.9) 0%, rgba(228, 235, 245, 0.6) 100%), 
+                    url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=2073&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    body.dark-mode .hero-bg {
+        background: linear-gradient(135deg, rgba(11, 20, 38, 0.95) 0%, rgba(26, 34, 54, 0.8) 100%), 
+                    url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=2073&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+    }
+    .hero-subtitle { font-size: 1.15rem; max-width: 700px; line-height: 1.7; }
+    @media(max-width: 768px){ .hero-section { min-height: 60vh; padding-top: 100px; } .hero-title { font-size: 2.5rem; } }
+
+    /* Image Wrappers & Graphics */
+    .decorative-blob { filter: blur(40px); }
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    body.dark-mode .glassmorphism {
+        background: rgba(26, 34, 54, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Cards */
+    .hover-card { transition: var(--transition-soft); border: 1px solid transparent; }
+    .hover-card:hover { 
+        transform: translateY(-8px); 
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important; 
+        border-color: rgba(13, 110, 253, 0.1);
+    }
+    body.dark-mode .hover-card:hover {
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5) !important;
+        border-color: rgba(255,255,255,0.1);
+    }
+
+    .feature-card { transition: var(--transition-soft); }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--ums-primary) !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+    .feature-icon { font-size: 2.5rem; transition: transform 0.3s; }
+    .feature-card:hover .feature-icon { transform: scale(1.1); }
+
+    /* CTA Section */
+    .cta-section {
+        background-color: var(--ums-dark);
+    }
+    .cta-gradient {
+        background: linear-gradient(135deg, #0d2b56 0%, #1e40af 60%, #6366f1 100%);
+        opacity: 0.9;
+    }
+
+    /* Buttons */
+    .hover-lift { transition: var(--transition-soft); }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Typography fixes for mobile */
+    @media (max-width: 576px) {
+        .display-4 { font-size: 2.25rem; }
+        .display-5 { font-size: 2rem; }
+        .display-6 { font-size: 1.75rem; }
+        .text-center-mobile { text-align: center !important; }
+        .py-6 { padding-top: 3rem; padding-bottom: 3rem; }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}UMS - Contact Us{% endblock %}
+
+{% block content %}
+<!-- Preload Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="contact-page-wrapper min-vh-100 overflow-hidden bg-light pb-0">
+
+    <!-- 1. Section Header -->
+    <section class="contact-header-section position-relative pt-6 pb-5 overflow-hidden">
+        <!-- Abstract gradient background for header depth -->
+        <div class="contact-bg-gradient position-absolute top-0 start-0 w-100 h-100 opacity-25 pointer-events-none z-index-0"></div>
+        
+        <div class="container position-relative z-index-2 pt-lg-4 text-center" data-aos="fade-down" data-aos-duration="800">
+            <span class="badge bg-white shadow-sm border text-primary rounded-pill px-3 py-2 mb-3 fw-bold letter-spacing-1 text-uppercase">
+                <i class="bi bi-chat-dots me-1"></i> Get In Touch
+            </span>
+            <h1 class="display-3 fw-bolder text-dark mb-3 font-poppins">Contact Us</h1>
+            <p class="lead text-secondary fw-normal mx-auto mb-0" style="max-width: 650px;">
+                Have questions about our University Management System? We're here to help you integrate, manage, and succeed.
+            </p>
+        </div>
+    </section>
+
+    <!-- 2. Main Contact Layout -->
+    <section class="contact-main-section pb-6 position-relative z-index-2">
+        <div class="container">
+            <div class="row g-4 g-lg-5 align-items-start">
+                
+                <!-- Left Column: Contact Information Card -->
+                <div class="col-lg-5" data-aos="fade-right" data-aos-delay="100">
+                    <div class="card contact-info-card border-0 shadow-sm p-4 p-md-5 h-100 bg-white">
+                        
+                        <h4 class="fw-bold text-dark font-poppins mb-4">Contact Information</h4>
+                        
+                        <div class="d-flex flex-column gap-4 mb-5">
+                            <!-- Address -->
+                            <div class="d-flex align-items-start contact-item group-hover">
+                                <div class="icon-box bg-light text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 me-3 transition-all" style="width: 50px; height: 50px;">
+                                    <i class="fs-5 fa-solid fa-map-location-dot"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-dark">Address</h6>
+                                    <p class="text-secondary small mb-0 lh-base">Lovely Professional University<br>Jalandhar - Delhi G.T. Road,<br>Phagwara, Punjab (India) - 144411</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="d-flex align-items-start contact-item group-hover">
+                                <div class="icon-box bg-light text-success rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 me-3 transition-all" style="width: 50px; height: 50px;">
+                                    <i class="fs-5 fa-regular fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-dark">Email</h6>
+                                    <a href="mailto:support@ums.edu" class="text-secondary small mb-0 text-decoration-none hover-text-primary">support@ums.edu</a>
+                                    <br>
+                                    <a href="mailto:info@ums.edu" class="text-secondary small mb-0 text-decoration-none hover-text-primary">info@lpu.co.in</a>
+                                </div>
+                            </div>
+                            
+                            <!-- Phone -->
+                            <div class="d-flex align-items-start contact-item group-hover">
+                                <div class="icon-box bg-light text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 me-3 transition-all" style="width: 50px; height: 50px;">
+                                    <i class="fs-5 fa-solid fa-phone-volume"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-dark">Phone</h6>
+                                    <a href="tel:+911824404404" class="text-secondary small mb-0 text-decoration-none hover-text-primary">+91-1824-404404</a>
+                                </div>
+                            </div>
+
+                            <!-- Working Hours -->
+                            <div class="d-flex align-items-start contact-item group-hover">
+                                <div class="icon-box bg-light text-info rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 me-3 transition-all" style="width: 50px; height: 50px;">
+                                    <i class="fs-5 fa-regular fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-dark">Working Hours</h6>
+                                    <p class="text-secondary small mb-0">Mon – Fri: 9:00 AM – 6:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Media Links -->
+                        <div class="mt-auto pt-4 border-top">
+                            <h6 class="fw-bold text-dark mb-3">Connect With Us</h6>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="social-circle linkedin ripple-surface"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <a href="#" class="social-circle twitter ripple-surface"><i class="fa-brands fa-x-twitter"></i></a>
+                                <a href="#" class="social-circle instagram ripple-surface"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#" class="social-circle facebook ripple-surface"><i class="fa-brands fa-facebook-f"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Contact Form -->
+                <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
+                    <div class="card contact-form-card border-0 shadow-sm p-4 p-md-5 bg-white">
+                        <h3 class="fw-bold text-dark font-poppins mb-1">Send us a Message</h3>
+                        <p class="text-secondary small mb-4">Fill out the form below and our dedicated team will get back to you within 24 hours.</p>
+
+                        <form id="contactForm" class="needs-validation" novalidate>
+                            <div class="row g-3">
+                                <!-- Full Name -->
+                                <div class="col-md-6 form-group">
+                                    <label class="form-label text-dark small fw-semibold">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                        <input type="text" class="form-control form-control-lg bg-light border-start-0 ps-0 dynamic-input" placeholder="John Doe" required>
+                                        <div class="invalid-feedback">Please enter your name.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Email Address -->
+                                <div class="col-md-6 form-group">
+                                    <label class="form-label text-dark small fw-semibold">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                        <input type="email" class="form-control form-control-lg bg-light border-start-0 ps-0 dynamic-input" placeholder="john@example.com" required>
+                                        <div class="invalid-feedback">Please enter a valid email.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Subject -->
+                                <div class="col-12 form-group">
+                                    <label class="form-label text-dark small fw-semibold">Subject</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-chat-left-text"></i></span>
+                                        <input type="text" class="form-control form-control-lg bg-light border-start-0 ps-0 dynamic-input" placeholder="How can we help?" required>
+                                        <div class="invalid-feedback">Please provide a subject.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Message Textarea -->
+                                <div class="col-12 form-group mb-2">
+                                    <label class="form-label text-dark small fw-semibold">Message</label>
+                                    <textarea class="form-control bg-light dynamic-input p-3" rows="5" placeholder="Write your message here..." required></textarea>
+                                    <div class="invalid-feedback">Please enter your message.</div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 mt-3">
+                                    <button type="submit" class="btn btn-primary-orange w-100 py-3 fs-6 fw-bold rounded-pill shadow-sm hover-darken d-flex justify-content-center align-items-center gap-2" id="submitBtn">
+                                        <span>Send Message</span> <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Success Animation Container (Hidden by default) -->
+                        <div id="successMessage" class="d-none text-center py-5">
+                            <div class="success-icon text-success mb-3">
+                                <i class="fa-solid fa-circle-check" style="font-size: 4rem;"></i>
+                            </div>
+                            <h4 class="fw-bold text-dark font-poppins">Message Sent Successfully!</h4>
+                            <p class="text-secondary">Thank you for reaching out. Our support team will respond to your registered email shortly.</p>
+                            <button class="btn btn-outline-secondary rounded-pill px-4 mt-3" onclick="resetForm()">Send Another Message</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Optional CTA Enhancement Section -->
+    <section class="cta-enhancement-section py-6 text-center position-relative overflow-hidden mt-5">
+        <div class="cta-bg-gradient position-absolute top-0 start-0 w-100 h-100 z-index-0 opacity-90"></div>
+        <div class="container position-relative z-index-2" data-aos="zoom-in">
+            <h2 class="display-5 fw-bold text-white mb-3 font-poppins">Ready to Experience Smart University Management?</h2>
+            <p class="fs-5 text-white-50 mb-5 mx-auto" style="max-width: 600px;">
+                Join the digital transformation. Upgrade your campus operations with a unified, scalable, and secure platform.
+            </p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                <a href="{% url 'role_selection' %}" class="btn btn-light text-primary fw-bold rounded-pill px-5 py-3 shadow hover-lift fs-6">Get Started Now</a>
+                <button class="btn btn-outline-light border-2 rounded-pill px-5 py-3 shadow hover-lift fs-6">Request Demo</button>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Required Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize AOS
+        AOS.init({ once: true, offset: 50 });
+
+        // Simple Form Validation & Success State handling
+        const form = document.getElementById('contactForm');
+        const successMsg = document.getElementById('successMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+            } else {
+                // Simulate sending data API call
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Sending...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    form.classList.add('d-none');
+                    successMsg.classList.remove('d-none');
+                    successMsg.classList.add('animate__animated', 'animate__fadeInUp');
+                }, 1200);
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    // Reset Form function
+    function resetForm() {
+        const form = document.getElementById('contactForm');
+        const successMsg = document.getElementById('successMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        form.reset();
+        form.classList.remove('was-validated');
+        successMsg.classList.add('d-none');
+        form.classList.remove('d-none');
+        form.classList.add('animate__animated', 'animate__fadeIn');
+        submitBtn.innerHTML = '<span>Send Message</span> <i class="fa-solid fa-paper-plane"></i>';
+        submitBtn.disabled = false;
+    }
+</script>
+
+<style>
+/* Base Setup */
+:root {
+    --ums-primary: #0d6efd;
+    --ums-orange: #ff5a1f;
+    --ums-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body { font-family: 'Inter', sans-serif !important; }
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+/* Utilities */
+.pt-6 { padding-top: 5rem; }
+.pb-6 { padding-bottom: 5rem; }
+.py-6 { padding-top: 6rem; padding-bottom: 6rem; }
+@media (min-width: 992px) { 
+    .pt-6 { padding-top: 7rem; } 
+}
+.letter-spacing-1 { letter-spacing: 1px; }
+.z-index-0 { z-index: 0; }
+.z-index-2 { z-index: 2; }
+.transition-all { transition: var(--ums-transition); }
+
+/* Common Card Styling */
+.contact-info-card, .contact-form-card {
+    border-radius: 20px !important;
+    transition: var(--ums-transition);
+}
+.contact-info-card:hover, .contact-form-card:hover {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.06) !important;
+}
+
+/* Hover effects for Left Column Items */
+.group-hover:hover .icon-box {
+    background-color: var(--ums-orange) !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+/* Social Circles */
+.social-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    transition: var(--ums-transition);
+    text-decoration: none;
+    background-color: #e2e8f0;
+    color: #475569;
+}
+.social-circle:hover.linkedin { background-color: #0077b5; color: white; transform: translateY(-4px); box-shadow: 0 8px 15px rgba(0,119,181,0.3); }
+.social-circle:hover.twitter { background-color: #1da1f2; color: white; transform: translateY(-4px); box-shadow: 0 8px 15px rgba(29,161,242,0.3); }
+.social-circle:hover.facebook { background-color: #1877f2; color: white; transform: translateY(-4px); box-shadow: 0 8px 15px rgba(24,119,242,0.3); }
+.social-circle:hover.instagram { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: white; transform: translateY(-4px); box-shadow: 0 8px 15px rgba(220,39,67,0.3); }
+
+/* Form Controls Customization */
+.form-control, .input-group-text, .form-select {
+    border-color: #e2e8f0;
+    border-radius: 12px;
+    transition: var(--ums-transition);
+}
+.input-group-text { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.input-group .form-control { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.form-control:focus, .form-select:focus, .input-group-text:focus-within {
+    box-shadow: none;
+    border-color: var(--ums-orange); 
+}
+.form-control:focus + .input-group-text { border-color: var(--ums-orange); }
+.input-group:focus-within .input-group-text, 
+.input-group:focus-within .form-control {
+    border-color: var(--ums-orange);
+    background-color: #fff !important;
+}
+textarea.form-control:focus { background-color: #fff !important; }
+
+/* Primary Orange Button */
+.btn-primary-orange {
+    background-color: var(--ums-orange);
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.hover-darken:hover {
+    background-color: #e04a14;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Header Gradient Depth */
+.contact-bg-gradient {
+    background: radial-gradient(circle at top center, rgba(13, 110, 253, 0.08) 0%, transparent 50%);
+}
+
+/* CTA Footer Gradient */
+.cta-bg-gradient {
+    background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
+}
+.hover-lift { transition: var(--ums-transition); }
+.hover-lift:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important; }
+
+/* Dark Mode Overrides */
+body.dark-mode .contact-page-wrapper { background-color: #0f172a; color: #f1f5f9; }
+body.dark-mode .bg-light { background-color: #0f172a !important; }
+body.dark-mode .contact-info-card, body.dark-mode .contact-form-card { background-color: #1e293b !important; border: 1px solid rgba(255,255,255,0.05); }
+body.dark-mode .text-dark { color: #f8fafc !important; }
+body.dark-mode .bg-white { background-color: #1e293b !important; }
+body.dark-mode .icon-box.bg-light { background-color: rgba(255,255,255,0.05) !important; }
+body.dark-mode .social-circle { background-color: rgba(255,255,255,0.1); color: #cbd5e1; }
+body.dark-mode .form-control, body.dark-mode .input-group-text, body.dark-mode .form-select { background-color: rgba(255,255,255,0.03) !important; border-color: rgba(255,255,255,0.1); color: white; }
+body.dark-mode .form-control:focus, body.dark-mode .input-group:focus-within .input-group-text { border-color: var(--ums-orange); }
+
+/* Standard Responsiveness */
+@media (max-width: 768px) {
+    .btn-primary-orange { width: 100%; display: flex;}
+    .cta-enhancement-section .btn { width: 100%; display: block; margin-bottom: 10px;}
+    .contact-info-card, .contact-form-card { padding: 1.5rem !important; }
+}
+
+/* Include Animate.css for success animations implicitly through utility classes defined in JS */
+.animate__animated { animation-duration: 0.8s; animation-fill-mode: both; }
+@keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 40px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+.animate__fadeInUp { animation-name: fadeInUp; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.animate__fadeIn { animation-name: fadeIn; }
+</style>
+{% endblock %}

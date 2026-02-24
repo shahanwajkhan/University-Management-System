@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student ID Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --dark-red: #b71c1c;
+            --text-dark: #1a1a1a;
+            --text-muted: #666;
+            --card-bg: #ffffff;
+            --shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        @page {
+            size: landscape;
+            margin: 0;
+        }
+
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .id-card-container {
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        .id-card-wrap {
+            width: 85.6mm;
+            height: 54mm;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 48px;
+        }
+
+        .univ-logo-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .univ-name {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .portal-label {
+            font-size: 7px;
+            font-weight: 400;
+            opacity: 0.8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card-body-inner {
+            padding: 12px 15px;
+            display: flex;
+            flex-grow: 1;
+            gap: 15px;
+            position: relative;
+        }
+
+        .photo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 65px;
+        }
+
+        .student-photo {
+            width: 65px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f8f9fa;
+            border: 2px solid #eee;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .no-photo-placeholder {
+            width: 65px;
+            height: 80px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #999;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .info-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .student-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 170px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 75px 1fr;
+            gap: 4px;
+            font-size: 9px;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 2px;
+        }
+
+        .tag-line {
+            font-size: 7px;
+            font-weight: 600;
+            color: var(--primary-red);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .signature-area {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 80px;
+        }
+
+        .barcode-svg {
+            height: 18px;
+            width: 80px;
+            background: repeating-linear-gradient(90deg, #1a1a1a, #1a1a1a 1px, transparent 1px, transparent 3px);
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+
+        .sig-line {
+            width: 60px;
+            height: 1px;
+            background: #333;
+            margin-bottom: 2px;
+        }
+
+        .sig-text {
+            font-size: 6px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        @media print {
+            body { background: none; }
+            .no-print { display: none; }
+            .id-card-wrap { 
+                box-shadow: none; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            .id-card-container { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print position-fixed top-0 start-50 translate-middle-x mt-4" style="z-index: 1000;">
+        <button onclick="window.print()" class="btn btn-dark rounded-pill px-4 shadow-lg border-0">
+            <i class="bi bi-printer me-2"></i>PRINT ID CARD
+        </button>
+    </div>
+
+    <div class="id-card-container">
+        <div class="id-card-wrap">
+            <div class="card-header">
+                <div class="univ-logo-text">
+                    <img src="https://blog.oureducation.in/wp-content/uploads/2013/03/core-0001-c8a0428e1ca5de81011ca601430f6e2f.l_data-0001-fdbffe84384d219e013850be2e943018.jpg" height="20" style="border-radius: 2px; background: white; padding: 1px;">
+                    <span class="univ-name">Lovely Professional University</span>
+                </div>
+                <div class="portal-label">Digital Identity</div>
+            </div>
+            
+            <div class="card-body-inner">
+                <div class="photo-section">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" class="student-photo" alt="Student Photo">
+                    {% else %}
+                        <div class="no-photo-placeholder">PHOTO REQUIRED</div>
+                    {% endif %}
+                </div>
+
+                <div class="info-section">
+                    <div class="student-name">{% if student %}{{ student.full_name|default:student.username }}{% else %}{{ user.full_name|default:user.username }}{% endif %}</div>
+                    
+                    <div class="data-grid">
+                        <div class="label">REGD NO</div>
+                        <div class="value">: {{ profile.roll_number|default:"N/A" }}</div>
+                        
+                        <div class="label">DEPARTMENT</div>
+                        <div class="value">: {{ profile.department.name|default:"General" }}</div>
+                        
+                        <div class="label">SEMESTER</div>
+                        <div class="value">: SEM {{ profile.semester|default:"1" }}</div>
+                        
+                        <div class="label">VALID THRU</div>
+                        <div class="value">: JUNE 2028</div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="tag-line">STUDENT CARD</div>
+                        <div class="signature-area">
+                            <div class="barcode-svg"></div>
+                            <div class="sig-line"></div>
+                            <div class="sig-text">Signatory</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

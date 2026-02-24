@@ -1,0 +1,240 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Faculty Management{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold text-dark">Faculty Management</h1>
+            <p class="text-muted">Manage faculty profiles, designations, and subject assignments.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <form class="d-flex" method="GET">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 rounded-start-pill px-3">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0 rounded-end-pill me-2 px-3" 
+                           placeholder="Search faculty..." value="{{ search_query }}">
+                </div>
+            </form>
+            <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addFacultyModal">
+                <i class="bi bi-person-plus me-2"></i>Add Faculty
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-4 py-3 border-0">FACULTY</th>
+                        <th class="py-3 border-0">FACULTY UID</th>
+                        <th class="py-3 border-0">DESIGNATION</th>
+                        <th class="py-3 border-0">DEPARTMENT</th>
+                        <th class="py-3 border-0">SUBJECTS</th>
+                        <th class="py-3 border-0 text-end px-4">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for faculty in faculties %}
+                    <tr>
+                        <td class="px-4 py-3 border-0">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
+                                    {{ faculty.username|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">{{ faculty.full_name|default:faculty.username }}</div>
+                                    <div class="text-muted small">{{ faculty.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 border-0">
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3">
+                                {{ faculty.faculty_profile.faculty_uid|default:"N/A" }}
+                            </span>
+                        </td>
+                        <td class="py-3 border-0 text-muted">
+                            {{ faculty.faculty_profile.designation|default:"Unassigned" }}
+                        </td>
+                        <td class="py-3 border-0 text-muted">
+                            {{ faculty.faculty_profile.department.name|default:"Unassigned" }}
+                        </td>
+                        <td class="py-3 border-0">
+                            {% for subject in faculty.faculty_profile.assigned_subjects.all %}
+                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 small">{{ subject.code }}</span>
+                            {% empty %}
+                                <span class="text-muted smaller">None</span>
+                            {% endfor %}
+                        </td>
+                        <td class="py-3 border-0 text-end px-4">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-2" 
+                                    onclick="editFaculty('{{ faculty.id }}', '{{ faculty.full_name|escapejs }}', '{{ faculty.email|escapejs }}', '{{ faculty.faculty_profile.faculty_uid|escapejs }}', '{{ faculty.faculty_profile.designation|escapejs }}', '{{ faculty.faculty_profile.department.id }}', [{% for s in faculty.faculty_profile.assigned_subjects.all %}'{{ s.id }}'{% if not forloop.last %},{% endif %}{% endfor %}])">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </button>
+                            <form action="{% url 'manage_faculty' %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="faculty_id" value="{{ faculty.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" 
+                                        onclick="return confirm('Remove faculty {{ faculty.username }}?')">
+                                    <i class="bi bi-trash me-1"></i>Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-person-badge display-4 opacity-25 d-block mb-3"></i>
+                            No faculty members matching "{{ search_query }}" found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addFacultyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">Add New Faculty</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'manage_faculty' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <div class="modal-body p-4 pt-0">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">USERNAME</label>
+                            <input type="text" name="username" class="form-control rounded-3 p-2" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">FACULTY UID</label>
+                            <input type="text" name="faculty_uid" class="form-control rounded-3 p-2" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">FULL NAME</label>
+                            <input type="text" name="full_name" class="form-control rounded-3 p-2">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">EMAIL</label>
+                            <input type="email" name="email" class="form-control rounded-3 p-2" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">DESIGNATION</label>
+                            <input type="text" name="designation" class="form-control rounded-3 p-2" placeholder="e.g. Assistant Professor">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">DEPARTMENT</label>
+                            <select name="dept_id" class="form-select rounded-3 p-2">
+                                <option value="">Select Dept</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">ASSIGN SUBJECTS</label>
+                            <select name="subject_ids" class="form-select rounded-3 p-2" multiple style="height: 120px;">
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.code }} - {{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <small class="text-muted">Hold Ctrl/Cmd to select multiple subjects</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editFacultyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold">Edit Faculty Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'manage_faculty' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="faculty_id" id="edit-faculty-id">
+                <div class="modal-body p-4 pt-0">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">FULL NAME</label>
+                            <input type="text" name="full_name" id="edit-faculty-name" class="form-control rounded-3 p-2">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">EMAIL</label>
+                            <input type="email" name="email" id="edit-faculty-email" class="form-control rounded-3 p-2" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">FACULTY UID</label>
+                            <input type="text" name="faculty_uid" id="edit-faculty-uid" class="form-control rounded-3 p-2" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">DESIGNATION</label>
+                            <input type="text" name="designation" id="edit-faculty-desig" class="form-control rounded-3 p-2">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted">DEPARTMENT</label>
+                            <select name="dept_id" id="edit-faculty-dept" class="form-select rounded-3 p-2">
+                                <option value="">Select Dept</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">ASSIGN SUBJECTS</label>
+                            <select name="subject_ids" id="edit-faculty-subjects" class="form-select rounded-3 p-2" multiple style="height: 120px;">
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.code }} - {{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Update Details</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function editFaculty(id, name, email, uid, desig, deptId, subjectIds) {
+    document.getElementById('edit-faculty-id').value = id;
+    document.getElementById('edit-faculty-name').value = name;
+    document.getElementById('edit-faculty-email').value = email;
+    document.getElementById('edit-faculty-uid').value = uid;
+    document.getElementById('edit-faculty-desig').value = desig;
+    document.getElementById('edit-faculty-dept').value = deptId !== 'None' ? deptId : '';
+    
+    const subjectSelect = document.getElementById('edit-faculty-subjects');
+    Array.from(subjectSelect.options).forEach(option => {
+        option.selected = subjectIds.includes(option.value);
+    });
+    
+    new bootstrap.Modal(document.getElementById('editFacultyModal')).show();
+}
+</script>
+{% endblock %}

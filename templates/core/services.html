@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Services - Lovely Professional University UMS{% endblock %}
+
+{% block content %}
+<!-- Preload Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="services-page-wrapper bg-light min-vh-100">
+    
+    <!-- Section Heading Area -->
+    <section class="services-header pt-6 pb-4 text-center position-relative overflow-hidden">
+        <div class="container position-relative z-index-2" data-aos="fade-down" data-aos-duration="800">
+            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3 fw-medium letter-spacing-1 text-uppercase border border-primary border-opacity-25">Product Modules</span>
+            <h1 class="display-4 fw-bolder text-dark mb-3 font-poppins">Our Services</h1>
+            <p class="lead text-secondary fw-normal mx-auto mb-4" style="max-width: 650px;">
+                Comprehensive digital solutions engineered for seamless, end-to-end university management.
+            </p>
+            <div class="decorative-divider mx-auto bg-primary rounded-pill" style="width: 60px; height: 4px;"></div>
+        </div>
+        <!-- Decorative Background Elements -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden z-index-0 pointer-events-none">
+            <div class="bg-shape shape-1 rounded-circle bg-primary opacity-5 position-absolute top-0 start-0 translate-middle"></div>
+            <div class="bg-shape shape-2 rounded-circle bg-info opacity-5 position-absolute top-50 end-0 translate-middle-y"></div>
+        </div>
+    </section>
+
+    <!-- Services Grid Layout -->
+    <section class="services-grid py-5 position-relative z-index-2">
+        <div class="container">
+            <div class="row g-4 g-lg-5">
+                
+                <!-- 1. Student Management -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="50">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top bg-primary position-absolute top-0 start-0 w-100 h-1"></div>
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fa-solid fa-user-graduate fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Student Management</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Admission handling</li>
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Student records</li>
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Profile management</li>
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Academic tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2. Faculty Management -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top bg-success position-absolute top-0 start-0 w-100 h-1"></div>
+                        <div class="icon-box bg-success bg-opacity-10 text-success rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fa-solid fa-chalkboard-user fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Faculty Management</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 text-success me-2 fw-bold"></i> Faculty registration</li>
+                            <li><i class="bi bi-check2 text-success me-2 fw-bold"></i> UID generation</li>
+                            <li><i class="bi bi-check2 text-success me-2 fw-bold"></i> Subject allocation</li>
+                            <li><i class="bi bi-check2 text-success me-2 fw-bold"></i> Workload tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3. Attendance Management -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="150">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top bg-danger position-absolute top-0 start-0 w-100 h-1"></div>
+                        <div class="icon-box bg-danger bg-opacity-10 text-danger rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fa-solid fa-clipboard-user fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Attendance System</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 text-danger me-2 fw-bold"></i> Real-time attendance</li>
+                            <li><i class="bi bi-check2 text-danger me-2 fw-bold"></i> Percentage tracking</li>
+                            <li><i class="bi bi-check2 text-danger me-2 fw-bold"></i> Low attendance alerts</li>
+                            <li><i class="bi bi-check2 text-danger me-2 fw-bold"></i> Attendance reports</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. Course & Department Management -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top bg-info position-absolute top-0 start-0 w-100 h-1"></div>
+                        <div class="icon-box bg-info bg-opacity-10 text-info rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fa-solid fa-sitemap fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Course & Dept Setup</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 text-info me-2 fw-bold"></i> Course creation</li>
+                            <li><i class="bi bi-check2 text-info me-2 fw-bold"></i> Department setup</li>
+                            <li><i class="bi bi-check2 text-info me-2 fw-bold"></i> Semester planning</li>
+                            <li><i class="bi bi-check2 text-info me-2 fw-bold"></i> Credit management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 5. Fee & Finance Management -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="250">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top bg-warning position-absolute top-0 start-0 w-100 h-1"></div>
+                        <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fa-solid fa-file-invoice-dollar fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Fee & Finance</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 text-warning me-2 fw-bold"></i> Fee structure setup</li>
+                            <li><i class="bi bi-check2 text-warning me-2 fw-bold"></i> Payment tracking</li>
+                            <li><i class="bi bi-check2 text-warning me-2 fw-bold"></i> Receipt generation</li>
+                            <li><i class="bi bi-check2 text-warning me-2 fw-bold"></i> Financial reports</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 6. ID Card Generation -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top position-absolute top-0 start-0 w-100 h-1" style="background-color: #6f42c1;"></div>
+                        <div class="icon-box bg-opacity-10 rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; color: #6f42c1; background-color: rgba(111, 66, 193, 0.1);">
+                            <i class="fa-solid fa-id-badge fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">ID Card Generator</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #6f42c1;"></i> Student ID (Horizontal)</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #6f42c1;"></i> Faculty ID (Vertical)</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #6f42c1;"></i> QR code verification</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #6f42c1;"></i> LPU University Branding</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 7. Examination & Results -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="350">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top position-absolute top-0 start-0 w-100 h-1" style="background-color: #d63384;"></div>
+                        <div class="icon-box bg-opacity-10 rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; color: #d63384; background-color: rgba(214, 51, 132, 0.1);">
+                            <i class="fa-solid fa-spell-check fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Exams & Results</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #d63384;"></i> Marks upload</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #d63384;"></i> Result publishing</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #d63384;"></i> Grade management</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #d63384;"></i> Performance analytics</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 8. Reports & Analytics -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top position-absolute top-0 start-0 w-100 h-1" style="background-color: #20c997;"></div>
+                        <div class="icon-box bg-opacity-10 rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; color: #20c997; background-color: rgba(32, 201, 151, 0.1);">
+                            <i class="fa-solid fa-chart-pie fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Reports & Analytics</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #20c997;"></i> Academic performance</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #20c997;"></i> Enrollment statistics</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #20c997;"></i> Attendance trends</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #20c997;"></i> Exportable reports (PDF)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 9. Announcements & Notifications -->
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="450">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden">
+                        <div class="card-border-top position-absolute top-0 start-0 w-100 h-1" style="background-color: #fd7e14;"></div>
+                        <div class="icon-box bg-opacity-10 rounded-circle mb-4 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; color: #fd7e14; background-color: rgba(253, 126, 20, 0.1);">
+                            <i class="fa-solid fa-bullhorn fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Announcements</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #fd7e14;"></i> Broadcast messaging</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #fd7e14;"></i> Dept-specific alerts</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #fd7e14;"></i> Email notifications</li>
+                            <li><i class="bi bi-check2 me-2 fw-bold" style="color: #fd7e14;"></i> Scheduled publishing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 10. Role-Based Access Control -->
+                <div class="col-lg-4 col-md-6 col-12 mx-auto" data-aos="fade-up" data-aos-delay="500">
+                    <div class="service-card card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white position-relative overflow-hidden shadow-lg border border-primary border-opacity-10" style="transform: scale(1.02);">
+                        <div class="card-border-top bg-primary position-absolute top-0 start-0 w-100 h-1"></div>
+                        <div class="icon-box bg-primary text-white rounded-circle mb-4 d-flex align-items-center justify-content-center shadow-sm" style="width: 64px; height: 64px;">
+                            <i class="fa-solid fa-shield-halved fs-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Secure Access Control</h4>
+                        <ul class="list-unstyled text-secondary small mb-0 d-flex flex-column gap-2">
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Admin, Faculty & Student panels</li>
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Granular permission management</li>
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Secure session authentication</li>
+                            <li><i class="bi bi-check2 text-primary me-2 fw-bold"></i> Anti-bot verification (Turnstile)</li>
+                        </ul>
+                        <div class="position-absolute bottom-0 end-0 p-3 opacity-10">
+                            <i class="fa-solid fa-lock" style="font-size: 8rem;"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="services-cta py-5 pb-6 text-center" data-aos="fade-up">
+        <div class="container">
+            <div class="card border-0 rounded-5 shadow-lg overflow-hidden position-relative" style="background: linear-gradient(135deg, #0d2b56 0%, #1e40af 60%, #4f46e5 100%);">
+                <!-- Background Pattern -->
+                <div class="position-absolute w-100 h-100 top-0 start-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+                
+                <div class="card-body p-5 p-md-6 position-relative z-index-2">
+                    <h2 class="display-6 fw-bold text-white mb-3 font-poppins">Empowering Universities with Smart Digital Solutions</h2>
+                    <p class="fs-5 text-white-50 mb-5 mx-auto" style="max-width: 600px;">
+                        Take full control of your academic ecosystem. Centralize data, automate workflows, and boost productivity campus-wide.
+                    </p>
+                    <a href="{% url 'role_selection' %}" class="btn btn-light text-primary fw-bold rounded-pill px-5 py-3 shadow hover-lift fs-5 d-inline-flex align-items-center gap-2">
+                        Get Started <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Required Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize AOS Animation Library
+        AOS.init({
+            once: true,
+            offset: 50,
+        });
+    });
+</script>
+
+<style>
+    /* Base Variables & Typography */
+    :root {
+        --ums-primary: #0d6efd;
+        --ums-dark: #0b1426;
+        --ums-light: #f5f7fa;
+        --ums-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif !important;
+    }
+    .font-poppins {
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    .services-page-wrapper {
+        background-color: var(--ums-light);
+    }
+    
+    /* Dark Mode Handling - Override global backgrounds */
+    body.dark-mode .services-page-wrapper {
+        background-color: var(--ums-dark);
+        color: #e2e8f0;
+    }
+    body.dark-mode .bg-light { background-color: var(--ums-dark) !important; }
+    body.dark-mode .bg-white { background-color: #1a2236 !important; }
+    body.dark-mode .text-dark { color: #f8fafc !important; }
+    body.dark-mode .text-secondary { color: #94a3b8 !important; }
+    body.dark-mode .service-card { 
+        background-color: #1a2236; 
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5) !important; 
+    }
+
+    /* Utilities */
+    .pt-6 { padding-top: 5rem; }
+    .pb-6 { padding-bottom: 5rem; }
+    @media (min-width: 992px) { 
+        .pt-6 { padding-top: 7rem; } 
+        .pb-6 { padding-bottom: 7rem; } 
+    }
+    .letter-spacing-1 { letter-spacing: 1px; }
+    .z-index-0 { z-index: 0; }
+    .z-index-2 { z-index: 2; }
+    .pointer-events-none { pointer-events: none; }
+    .h-1 { height: 4px; }
+
+    /* Header Geometric Shapes */
+    .bg-shape {
+        width: 400px;
+        height: 400px;
+        filter: blur(80px);
+    }
+
+    /* Service Cards */
+    .service-card {
+        transition: var(--ums-transition);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.02);
+    }
+    
+    body.dark-mode .service-card {
+        border-color: rgba(255,255,255,0.05) !important;
+    }
+
+    .service-card:hover { 
+        transform: translateY(-8px) !important; 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; 
+    }
+    
+    body.dark-mode .service-card:hover {
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+    }
+
+    .card-border-top {
+        transition: height 0.3s ease;
+    }
+    
+    .service-card:hover .card-border-top {
+        height: 6px;
+    }
+
+    .icon-box {
+        transition: var(--ums-transition);
+    }
+
+    .service-card:hover .icon-box {
+        transform: scale(1.1);
+    }
+
+    /* Buttons */
+    .hover-lift { transition: var(--ums-transition); }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Typography fixes for mobile */
+    @media (max-width: 576px) {
+        .display-4 { font-size: 2.25rem; }
+        .display-6 { font-size: 1.75rem; }
+    }
+</style>
+{% endblock %}

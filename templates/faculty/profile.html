@@ -1,0 +1,113 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}UMS - Faculty Profile{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-2 px-md-4 animation-fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}" class="text-decoration-none text-muted"><i class="bi bi-grid-1x2 me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">My Profile</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark mb-0">Faculty Profile Settings</h2>
+            <p class="text-muted mb-0 mt-1">Manage your academic credentials and display picture.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Visual Profile Card -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4 text-center position-relative overflow-hidden premium-card">
+                <div class="position-absolute bg-gradient-primary w-100 top-0 start-0" style="height: 120px; z-index: 0;"></div>
+                
+                <div class="position-relative z-index-1 mt-4">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" class="rounded-circle border border-4 border-white shadow-sm mb-3" style="width: 150px; height: 150px; object-fit: cover; background: #fff;" alt="Profile Picture">
+                    {% else %}
+                        <div class="rounded-circle border border-4 border-white shadow-sm mb-3 mx-auto d-flex align-items-center justify-content-center fw-bold text-white fs-1 bg-secondary" style="width: 150px; height: 150px; background: linear-gradient(135deg, #6c757d, #adb5bd);">
+                            {{ user.full_name|default:user.username|make_list|first|upper }}
+                        </div>
+                    {% endif %}
+                    
+                    <h4 class="fw-bold text-dark mb-1">{{ user.full_name|default:user.username }}</h4>
+                    <p class="text-muted small mb-3">{{ profile.designation|default:"Faculty Member" }}</p>
+                    
+                    <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2 fw-bold shadow-sm">
+                        <i class="bi bi-building me-1"></i> {{ profile.department.name|default:"General Department" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Form Card -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4 premium-card">
+                <h5 class="fw-bold text-dark mb-4 border-bottom pb-3"><i class="bi bi-pencil-square text-primary me-2"></i>Edit Professional Info</h5>
+                
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small">Full Name (Read-Only)</label>
+                            <input type="text" class="form-control rounded-3 bg-light" value="{{ user.full_name|default:user.username }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small">Department (Read-Only)</label>
+                            <input type="text" class="form-control rounded-3 bg-light" value="{{ profile.department.name|default:'N/A' }}" readonly>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-dark small">Designation / Role Title</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-bookmark text-muted"></i></span>
+                                <input type="text" name="designation" class="form-control rounded-end-3 border-start-0" value="{{ profile.designation|default:'' }}" placeholder="e.g. Associate Professor">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-dark small">Faculty UID Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person-badge text-muted"></i></span>
+                                <input type="text" name="faculty_uid" class="form-control rounded-end-3 border-start-0" value="{{ profile.faculty_uid|default:'' }}" placeholder="e.g. FAC-2024-001">
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4 pt-3 border-top">
+                            <label class="form-label fw-bold text-dark small">Display Picture (DP)</label>
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="file" name="profile_picture" class="form-control rounded-3 py-2" accept="image/*">
+                            </div>
+                            <small class="text-muted d-block mt-2"><i class="bi bi-info-circle me-1"></i> Upload a square image for best results (Max size 5MB).</small>
+                        </div>
+                        
+                        <div class="col-12 mt-4 d-flex flex-wrap gap-3 mt-5">
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 btn-hover-lift">
+                                <i class="bi bi-save"></i> Save Profile Changes
+                            </button>
+                            <a href="{% url 'download_faculty_id_card' %}" target="_blank" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 btn-hover-lift">
+                                <i class="bi bi-download"></i> Download Faculty ID Card
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .animation-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    .bg-gradient-primary { background: linear-gradient(135deg, #0d2b56 0%, #ff5722 100%); }
+    .premium-card { transition: all 0.3s ease; }
+    .premium-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
+    .btn-hover-lift { transition: transform 0.2s ease; }
+    .btn-hover-lift:hover { transform: translateY(-2px); }
+</style>
+{% endblock %}

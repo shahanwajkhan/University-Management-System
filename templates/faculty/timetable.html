@@ -1,0 +1,212 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Time Table - UMS{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-lg-5 animation-fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}" class="text-decoration-none text-muted"><i class="bi bi-house-door me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Time Table</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                <i class="bi bi-calendar-week-fill text-primary"></i> 
+                Teaching Schedule
+            </h2>
+            <p class="text-muted mb-0">{{ profile.department.name|default:"Department Not Assigned" }}</p>
+        </div>
+        <div>
+            <button class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold d-none d-md-block" onclick="window.print()">
+                <i class="bi bi-printer me-2"></i>Print Schedule
+            </button>
+        </div>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div class="mb-5">
+        <h4 class="fw-bold text-dark mb-3 d-flex align-items-center">
+            <i class="bi bi-calendar2-day text-primary me-2"></i> Today's Classes <span class="badge bg-primary ms-2 rounded-pill fs-6">{{ today }}</span>
+        </h4>
+        
+        <div class="card border-0 shadow-sm rounded-4 premium-card p-3 p-md-4">
+            {% if today_schedule %}
+            <div class="row g-3">
+                {% for entry in today_schedule %}
+                <div class="col-md-6 col-xl-4">
+                    <div class="card border border-light shadow-sm rounded-4 h-100 class-card position-relative overflow-hidden">
+                        <!-- Colored indicator line -->
+                        <div class="position-absolute top-0 start-0 h-100 bg-primary" style="width: 4px;"></div>
+                        
+                        <div class="card-body p-4 ms-2">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 fw-bold fs-6 shadow-sm">
+                                    {{ entry.start_time|time:"g:i A" }} - {{ entry.end_time|time:"g:i A" }}
+                                </span>
+                                <span class="text-muted fw-bold d-flex align-items-center bg-light rounded-pill px-2 py-1 small">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ entry.room|default:"TBA" }}
+                                </span>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-1">{{ entry.subject.name }}</h5>
+                            <p class="text-muted small mb-3">{{ entry.subject.code }}</p>
+                            
+                            <hr class="border-light my-2">
+                            <div class="d-flex align-items-center mt-2 justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-people-fill text-muted me-2 small"></i>
+                                    <span class="small fw-medium text-dark">Semester {{ entry.semester }}</span>
+                                </div>
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill">{{ entry.department.name|truncatechars:15 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <div class="d-inline-flex justify-content-center align-items-center bg-light rounded-circle mb-3" style="width: 80px; height: 80px;">
+                    <i class="bi bi-cup-hot text-muted fs-1 opacity-50"></i>
+                </div>
+                <h5 class="fw-bold text-dark">Clear Schedule Today</h5>
+                <p class="text-muted mx-auto max-w-sm">You have no classes scheduled for today. Take a breather or focus on research and grading!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Weekly Time Table Grid -->
+    <h4 class="fw-bold text-dark mb-3">Weekly Overview</h4>
+    <div class="row g-4 mb-4">
+        {% for day in days %}
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 premium-card overflow-hidden {% if day == today %}border-2 border-primary border{% endif %}">
+                <div class="card-header border-0 p-4 text-white d-flex justify-content-between align-items-center {% if day == today %}bg-gradient-primary{% else %}bg-dark-blue{% endif %}">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center">
+                        {{ day }}
+                        {% if day == today %}
+                        <span class="badge bg-white text-primary ms-2 rounded-pill small" style="font-size: 0.6rem; letter-spacing: 0.5px;">TODAY</span>
+                        {% endif %}
+                    </h5>
+                    <i class="bi bi-calendar3 opacity-50"></i>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for entry in schedule|get_item:day %}
+                        <div class="list-group-item border-0 p-4 border-bottom border-light hover-accent transition-all">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge rounded-pill bg-light text-dark border small fw-bold">
+                                    {{ entry.start_time|time:"H:i" }} - {{ entry.end_time|time:"H:i" }}
+                                </span>
+                                <span class="smaller text-muted fw-bold text-uppercase">
+                                    <i class="bi bi-geo-alt me-1 text-primary"></i> {{ entry.room|default:"TBA" }}
+                                </span>
+                            </div>
+                            <h6 class="fw-bold text-dark mb-1">{{ entry.subject.name }}</h6>
+                            <div class="d-flex align-items-center mt-2 justify-content-between">
+                                <div>
+                                    <i class="bi bi-mortarboard-fill text-muted me-1 small"></i>
+                                    <span class="smaller text-muted">Sem {{ entry.semester }}</span>
+                                </div>
+                                <span class="smaller fw-medium text-muted bg-light px-2 py-1 rounded-2">{{ entry.department.name|truncatechars:12 }}</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="p-5 text-center text-muted opacity-50">
+                            <i class="bi bi-cup-hot display-6 d-block mb-3"></i>
+                            <p class="small mb-0 fw-medium">No classes scheduled</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #ff5722;
+        --secondary-color: #0d2b56;
+    }
+
+    .text-primary { color: var(--primary-color) !important; }
+    .bg-primary { background-color: var(--primary-color) !important; }
+    
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+    .animation-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .premium-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .class-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .class-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08) !important;
+    }
+
+    .hover-accent {
+        transition: all 0.2s ease;
+    }
+
+    .hover-accent:hover {
+        background-color: #f8faff !important;
+        border-left: 4px solid var(--primary-color) !important;
+        padding-left: 1.25rem !important; /* Visual shift */
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #ff8a65 100%);
+    }
+
+    .bg-dark-blue {
+        background: linear-gradient(135deg, var(--secondary-color) 0%, #1a3a6e 100%);
+    }
+
+    .max-w-sm {
+        max-width: 350px;
+    }
+
+    @media print {
+        nav, button, .weekly-overview, .breadcrumb {
+            display: none !important;
+        }
+
+        .dashboard-container {
+            padding: 0 !important;
+        }
+        
+        .card {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+        }
+    }
+</style>
+{% endblock %}

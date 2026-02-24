@@ -1,0 +1,175 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Manage Placements{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-2 px-md-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold text-dark">Placement Management</h1>
+            <p class="text-muted">Create and manage recruitment drives for students.</p>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#driveModal">
+            <i class="bi bi-plus-lg me-2"></i>New Drive
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="border-0 px-4 py-3">COMPANY</th>
+                        <th class="border-0 py-3">ROLE</th>
+                        <th class="border-0 py-3">PACKAGE</th>
+                        <th class="border-0 py-3">DATE</th>
+                        <th class="border-0 py-3">STATUS</th>
+                        <th class="border-0 px-4 py-3 text-end">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in drives %}
+                    <tr>
+                        <td class="px-4 py-3">
+                            <span class="fw-bold text-dark">{{ d.company_name }}</span>
+                        </td>
+                        <td>{{ d.role }}</td>
+                        <td>{{ d.package }}</td>
+                        <td>{{ d.date_of_drive }}</td>
+                        <td>
+                            <span class="badge rounded-pill {% if d.status == 'Open' %}bg-success{% else %}bg-secondary{% endif %} bg-opacity-10 {% if d.status == 'Open' %}text-success{% else %}text-secondary{% endif %} px-3">
+                                {{ d.status }}
+                            </span>
+                        </td>
+                        <td class="px-4 text-end">
+                            <button class="btn btn-sm btn-light rounded-pill px-3 me-1 edit-btn" 
+                                    data-id="{{ d.id }}" 
+                                    data-company="{{ d.company_name }}"
+                                    data-role="{{ d.role }}"
+                                    data-package="{{ d.package }}"
+                                    data-date="{{ d.date_of_drive|date:'Y-m-d' }}"
+                                    data-deadline="{{ d.deadline|date:'Y-m-d\TH:i' }}"
+                                    data-cgpa="{{ d.criteria_cgpa }}"
+                                    data-status="{{ d.status }}"
+                                    data-departments='[{% for dept in d.target_departments.all %}"{{ dept.id }}"{% if not forloop.last %},{% endif %}{% endfor %}]'
+                                    data-bs-toggle="modal" data-bs-target="#driveModal">
+                                Edit
+                            </button>
+                            <form method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="drive_id" value="{{ d.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Delete this drive?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">No placement drives found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="driveModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="modalTitle">New Placement Drive</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save">
+                <input type="hidden" name="drive_id" id="drive_id">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Company Name</label>
+                            <input type="text" name="company_name" id="modal_company" class="form-control rounded-pill" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Role</label>
+                            <input type="text" name="role" id="modal_role" class="form-control rounded-pill" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Package (LPA)</label>
+                            <input type="text" name="package" id="modal_package" class="form-control rounded-pill" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Criteria (Min CGPA)</label>
+                            <input type="number" step="0.01" name="criteria_cgpa" id="modal_cgpa" class="form-control rounded-pill" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Date of Drive</label>
+                            <input type="date" name="date_of_drive" id="modal_date" class="form-control rounded-pill" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Application Deadline</label>
+                            <input type="datetime-local" name="deadline" id="modal_deadline" class="form-control rounded-pill" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Status</label>
+                            <select name="status" id="modal_status" class="form-select rounded-pill">
+                                <option value="Open">Open</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Target Departments</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                {% for dept in departments %}
+                                <div class="form-check">
+                                    <input class="form-check-input dept-check" type="checkbox" name="departments" value="{{ dept.id }}" id="dept_{{ dept.id }}">
+                                    <label class="form-check-label small" for="dept_{{ dept.id }}">{{ dept.name }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-toggle="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Save Drive</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('modalTitle').innerText = 'Edit Placement Drive';
+                document.getElementById('drive_id').value = this.dataset.id;
+                document.getElementById('modal_company').value = this.dataset.company;
+                document.getElementById('modal_role').value = this.dataset.role;
+                document.getElementById('modal_package').value = this.dataset.package;
+                document.getElementById('modal_date').value = this.dataset.date;
+                document.getElementById('modal_deadline').value = this.dataset.deadline;
+                document.getElementById('modal_cgpa').value = this.dataset.cgpa;
+                document.getElementById('modal_status').value = this.dataset.status;
+                
+                const depts = JSON.parse(this.dataset.departments);
+                document.querySelectorAll('.dept-check').forEach(cb => {
+                    cb.checked = depts.includes(cb.value);
+                });
+            });
+        });
+
+        // Reset modal for new drive
+        document.getElementById('driveModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('modalTitle').innerText = 'New Placement Drive';
+            document.getElementById('drive_id').value = '';
+            document.querySelector('form').reset();
+            document.querySelectorAll('.dept-check').forEach(cb => cb.checked = false);
+        });
+    });
+</script>
+{% endblock %}

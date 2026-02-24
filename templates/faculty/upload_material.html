@@ -1,0 +1,345 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Learning Materials{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-2 px-md-4 animation-fade-in">
+    <!-- Header Area -->
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}" class="text-decoration-none text-muted"><i class="bi bi-house-door me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Materials</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark mb-0">Learning Materials</h2>
+            <p class="text-muted mb-0 mt-1">Manage and share academic resources with your students.</p>
+        </div>
+        <div>
+            <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2" type="button" data-bs-toggle="collapse" data-bs-target="#uploadFormCollapse" aria-expanded="false" aria-controls="uploadFormCollapse">
+                <i class="bi bi-cloud-arrow-up-fill"></i> Upload New
+            </button>
+        </div>
+    </div>
+
+    <!-- Upload Form Collapse -->
+    <div class="collapse mb-5 {% if not materials %}show{% endif %}" id="uploadFormCollapse">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden premium-card bg-white">
+            <div class="row g-0">
+                <div class="col-lg-4 bg-gradient-primary text-white p-4 p-md-5 d-flex flex-column justify-content-center">
+                    <div class="icon-square bg-white bg-opacity-25 rounded-3 d-flex justify-content-center align-items-center mb-4 text-white" style="width: 56px; height: 56px;">
+                        <i class="bi bi-cloud-arrow-up fs-3"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Share Resources</h3>
+                    <p class="opacity-75 mb-4 d-none d-lg-block">Provide your students with the best learning materials to help them succeed in their academic journey.</p>
+                    <ul class="list-unstyled opacity-75 small">
+                        <li class="mb-2"><i class="bi bi-check2-circle me-2"></i> Only PDF files are supported</li>
+                        <li class="mb-2"><i class="bi bi-check2-circle me-2"></i> Maximum file size is 10MB</li>
+                        <li class="mb-2"><i class="bi bi-check2-circle me-2"></i> Visible instantly to students</li>
+                    </ul>
+                </div>
+                <div class="col-lg-8 p-4 p-md-5">
+                    <h4 class="fw-bold text-dark mb-4">Upload Details</h4>
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate id="uploadMaterialForm">
+                        {% csrf_token %}
+                        <div class="row g-4">
+                            <!-- Title -->
+                            <div class="col-md-6">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <input type="text" name="title" id="titleInput" class="form-control border-0 bg-light" placeholder="Material Title" required>
+                                    <label for="titleInput" class="text-muted"><i class="bi bi-type me-2 text-primary"></i>Material Title</label>
+                                </div>
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="col-md-6">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <select name="subject" id="subjectSelect" class="form-select border-0 bg-light" required>
+                                        <option value="" disabled selected>Select assigned subject...</option>
+                                        {% for subject in subjects %}
+                                        <option value="{{ subject.id }}">{{ subject.name }} ({{ subject.code }})</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="subjectSelect" class="text-muted"><i class="bi bi-book me-2 text-primary"></i>Subject</label>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <textarea name="description" id="descInput" class="form-control border-0 bg-light" placeholder="Description" style="height: 100px"></textarea>
+                                    <label for="descInput" class="text-muted"><i class="bi bi-text-paragraph me-2 text-primary"></i>Description (Optional)</label>
+                                </div>
+                            </div>
+
+                            <!-- File Upload Area -->
+                            <div class="col-12">
+                                <div class="upload-area border-2 border-dashed rounded-4 p-4 text-center bg-light position-relative">
+                                    <i class="bi bi-file-earmark-pdf fs-1 text-danger mb-2"></i>
+                                    <h5 class="fw-bold mb-1">Drag & Drop PDF</h5>
+                                    <p class="text-muted small mb-3">or click to browse from your device</p>
+                                    <input type="file" name="file" id="fileInput" class="form-control file-input-overlay" accept=".pdf" required>
+                                    <button type="button" class="btn btn-sm btn-white rounded-pill px-4 border shadow-sm upload-btn">Select PDF</button>
+                                    <div id="fileNameDisplay" class="mt-2 small fw-bold text-primary d-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-3 text-end d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light rounded-pill px-4 fw-medium text-muted" data-bs-toggle="collapse" data-bs-target="#uploadFormCollapse">Cancel</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold btn-hover-lift shadow-sm">
+                                Upload File <i class="bi bi-cloud-upload ms-1"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Materials List -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold text-dark mb-0">Your Uploaded Materials</h4>
+        {% if materials %}
+        <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-2 fw-medium border">{{ materials|length }} Total Resources</span>
+        {% endif %}
+    </div>
+
+    {% if materials %}
+    <div class="row g-4">
+        {% for material in materials %}
+        <div class="col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 premium-card material-card hover-lift">
+                <div class="card-body p-4 d-flex flex-column h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="icon-square bg-danger bg-opacity-10 text-danger rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                            <i class="bi bi-file-earmark-pdf-fill fs-4"></i>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-light rounded-circle p-2 border shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2">
+                                <li><a class="dropdown-item fw-medium" href="{{ material.file.url }}" target="_blank"><i class="bi bi-eye text-primary me-2"></i>View PDF</a></li>
+                                <li><a class="dropdown-item fw-medium" href="{% url 'edit_material' material.id %}"><i class="bi bi-pencil me-2 text-warning"></i>Edit Details</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item fw-medium text-danger delete-btn" href="#" data-delete-url="{% url 'delete_material' material.id %}" data-material-title="{{ material.title }}" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                        <i class="bi bi-trash3 me-2"></i>Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold text-dark mb-2 line-clamp-2" title="{{ material.title }}">{{ material.title }}</h5>
+                    
+                    <div class="mt-auto pt-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1 flex-shrink-0">{{ material.subject.code }}</span>
+                            <span class="small text-muted text-truncate">{{ material.subject.name }}</span>
+                        </div>
+                        
+                        {% if material.description %}
+                        <p class="text-muted small line-clamp-2 mb-3 mt-2">{{ material.description }}</p>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
+                            <div class="small text-muted d-flex align-items-center">
+                                <i class="bi bi-clock me-1"></i> {{ material.uploaded_at|date:"M d, Y" }}
+                            </div>
+                            <a href="{{ material.file.url }}" download class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-dark border shadow-sm btn-hover-primary">
+                                <i class="bi bi-download me-1"></i> Save
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white premium-card">
+        <div class="icon-square bg-light text-muted rounded-circle mx-auto d-flex justify-content-center align-items-center mb-4" style="width: 80px; height: 80px;">
+            <i class="bi bi-folder2-open fs-1"></i>
+        </div>
+        <h4 class="fw-bold text-dark mb-2">It's quiet here.</h4>
+        <p class="text-muted mb-4 max-w-lg mx-auto d-inline-block">You haven't uploaded any learning materials yet. Start sharing resources with your students today.</p>
+        <div class="mt-2">
+            <button class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#uploadFormCollapse">
+                <i class="bi bi-cloud-upload me-2"></i>Upload Your First Material
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header bg-danger bg-opacity-10 border-0 p-4">
+                <h5 class="modal-title fw-bold text-danger d-flex align-items-center" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill fs-4 me-2"></i> Confirm Deletion
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="fs-6 mb-1">Are you sure you want to delete <strong id="deleteMaterialTitle" class="text-dark"></strong>?</p>
+                <p class="text-muted small mb-0">This action cannot be undone and students will lose access to this resource.</p>
+            </div>
+            <div class="modal-footer bg-light border-0 p-3">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-medium border" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">Delete Material</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #ff5722;
+        --primary-dark: #e64a19;
+    }
+
+    .bg-gradient-primary { background: linear-gradient(135deg, var(--primary-color) 0%, #ff8a65 100%) !important; }
+    .text-primary { color: var(--primary-color) !important; }
+    
+    .btn-primary {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--primary-dark) !important;
+        border-color: var(--primary-dark) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(255, 87, 34, 0.3) !important;
+    }
+    
+    .btn-hover-primary:hover {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+        border-color: var(--primary-color) !important;
+    }
+
+    .animation-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .premium-card {
+        border-radius: 1.25rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08) !important;
+    }
+    
+    .form-floating .form-select, .form-floating .form-control {
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+    
+    .form-floating .form-select:focus, .form-floating .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(255, 87, 34, 0.25);
+        background-color: #fff !important;
+    }
+
+    .form-floating > label { padding-left: 1.25rem; }
+
+    /* Custom File Upload Area */
+    .upload-area {
+        border-color: #cbd5e1 !important;
+        transition: all 0.3s ease;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+        border-color: var(--primary-color) !important;
+        background-color: rgba(255, 87, 34, 0.02) !important;
+    }
+    
+    .file-input-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 10;
+    }
+    
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        });
+
+        // File upload visual feedback
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const uploadBtn = document.querySelector('.upload-btn');
+        const uploadArea = document.querySelector('.upload-area');
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    fileNameDisplay.textContent = this.files[0].name;
+                    fileNameDisplay.classList.remove('d-none');
+                    uploadBtn.textContent = 'Change Selection';
+                    uploadArea.classList.add('border-primary');
+                } else {
+                    fileNameDisplay.classList.add('d-none');
+                    uploadBtn.textContent = 'Select PDF';
+                    uploadArea.classList.remove('border-primary');
+                }
+            });
+
+            // Drag and drop visual cues
+            uploadArea.addEventListener('dragover', () => uploadArea.classList.add('dragover'));
+            uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+            uploadArea.addEventListener('drop', () => uploadArea.classList.remove('dragover'));
+        }
+
+        // Delete Modal Setup
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        const deleteMaterialTitle = document.getElementById('deleteMaterialTitle');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const title = this.getAttribute('data-material-title');
+                const url = this.getAttribute('data-delete-url');
+                
+                deleteMaterialTitle.textContent = title;
+                confirmDeleteBtn.setAttribute('href', url);
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Portfolio - Lovely Professional University UMS{% endblock %}
+
+{% block content %}
+<!-- Preload Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<!-- Isotope for Filtering Matrix -->
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+
+<div class="portfolio-page-wrapper bg-light min-vh-100 pb-5">
+    
+    <!-- Section Heading Area -->
+    <section class="portfolio-header pt-6 pb-4 text-center position-relative overflow-hidden">
+        <div class="container position-relative z-index-2" data-aos="fade-down" data-aos-duration="800">
+            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3 fw-medium letter-spacing-1 text-uppercase border border-primary border-opacity-25">System Showcase</span>
+            <h1 class="display-4 fw-bolder text-dark mb-3 font-poppins">Our Portfolio</h1>
+            <p class="lead text-secondary fw-normal mx-auto mb-4" style="max-width: 650px;">
+                Showcasing the features, interfaces, and powerful capabilities of our University Management System.
+            </p>
+            <div class="decorative-divider mx-auto bg-primary rounded-pill mb-5" style="width: 60px; height: 4px;"></div>
+        </div>
+        
+        <!-- Decorative Background Elements -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden z-index-0 pointer-events-none">
+            <div class="bg-shape shape-1 rounded-circle bg-primary opacity-5 position-absolute top-0 start-0 translate-middle"></div>
+            <div class="bg-shape shape-2 rounded-circle bg-info opacity-5 position-absolute top-50 end-0 translate-middle-y"></div>
+        </div>
+    </section>
+
+    <!-- Filter Buttons Area -->
+    <section class="portfolio-filters mb-5 text-center position-relative z-index-2" data-aos="fade-up" data-aos-delay="100">
+        <div class="container">
+            <div class="button-group filter-button-group d-flex flex-wrap justify-content-center gap-2">
+                <button class="btn filter-btn rounded-pill px-4 active" data-filter="*">All</button>
+                <button class="btn filter-btn rounded-pill px-4" data-filter=".admin">Admin</button>
+                <button class="btn filter-btn rounded-pill px-4" data-filter=".student">Student</button>
+                <button class="btn filter-btn rounded-pill px-4" data-filter=".faculty">Faculty</button>
+                <button class="btn filter-btn rounded-pill px-4" data-filter=".finance">Finance</button>
+                <button class="btn filter-btn rounded-pill px-4" data-filter=".analytics">Analytics</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid Layout -->
+    <section class="portfolio-grid-section position-relative z-index-2">
+        <div class="container">
+            <div class="row g-4 portfolio-grid isotope-container">
+                
+                <!-- 1. Admin Dashboard Interface -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item admin analytics">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Admin Dashboard">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Admin Dashboard Interface</h5>
+                            <p class="text-secondary small mb-0">Centralized control panel with university-wide metrics and real-time operational insights.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Student Dashboard Panel -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item student">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Student Dashboard">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Student Dashboard Panel</h5>
+                            <p class="text-secondary small mb-0">Personalized portal for courses, schedules, fees, and results tailored for a seamless experience.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Faculty Dashboard Panel -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item faculty">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Faculty Dashboard">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Faculty Dashboard Panel</h5>
+                            <p class="text-secondary small mb-0">Comprehensive toolkit for managing subjects, grades, attendance, and student interaction.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Attendance Management System -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item faculty student">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1576267423048-15c0040fec78?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Attendance System">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Attendance Management</h5>
+                            <p class="text-secondary small mb-0">Real-time attendance tracking with visual charts, warnings, and percentage compliance.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Fee & Finance Module -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item finance student">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Finance Module">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Fee & Finance Module</h5>
+                            <p class="text-secondary small mb-0">Secure UI for handling payments, tracking pending approvals, and generating online receipts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. ID Card Generator Module -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item admin student faculty">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=1974&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="ID Card Generator">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">ID Card Generator Module</h5>
+                            <p class="text-secondary small mb-0">Automated engine producing customized, printer-ready virtual cards with QR codes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Reports & Analytics Section -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item admin analytics">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Reports Module">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Reports & Analytics Section</h5>
+                            <p class="text-secondary small mb-0">Dynamic graphing and charting interfaces to measure institutional academic success.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Announcement System -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item admin faculty student">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Announcement System">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Announcement System</h5>
+                            <p class="text-secondary small mb-0">Targeted broadcast messaging board for department-specific notices and real-time alerts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Role-Based Access Control -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item admin">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Role-Based Access Control">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Role-Based Access Control</h5>
+                            <p class="text-secondary small mb-0">Behind-the-scenes interface mapping user hierarchies with stringent permission boundaries.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Mobile Responsive View Preview -->
+                <div class="col-lg-4 col-md-6 col-12 portfolio-item admin student faculty finance analytics">
+                    <div class="card portfolio-card h-100 border-0 rounded-4 overflow-hidden position-relative shadow-sm">
+                        <div class="img-wrapper position-relative overflow-hidden w-100" style="height: 240px;">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop" class="portfolio-img w-100 h-100 object-fit-cover" alt="Mobile View Preview" style="object-position: center bottom;">
+                            <div class="portfolio-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+                                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-lg hover-lift">View Details</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <h5 class="fw-bold mb-2 font-poppins text-dark">Mobile Responsive View</h5>
+                            <p class="text-secondary small mb-0">Complete platform scaling intelligently on iOS and Android devices without sacrificing features.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="portfolio-cta py-5 pb-6 mt-4 text-center" data-aos="fade-up">
+        <div class="container">
+            <div class="card border-0 rounded-5 shadow-lg overflow-hidden position-relative" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);">
+                <!-- Background Pattern -->
+                <div class="position-absolute w-100 h-100 top-0 start-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+                
+                <div class="card-body p-5 p-md-6 position-relative z-index-2">
+                    <h2 class="display-6 fw-bold text-white mb-3 font-poppins">Experience the Complete Digital University Solution</h2>
+                    <p class="fs-5 text-white-50 mb-5 mx-auto" style="max-width: 600px;">
+                        Join the next generation of academic tech. Manage, analyze, and scale your institution effortlessly.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'role_selection' %}" class="btn btn-light text-primary fw-bold rounded-pill px-5 py-3 shadow hover-lift fs-5 d-inline-flex align-items-center gap-2">
+                            Request Demo <i class="bi bi-person-video3"></i>
+                        </a>
+                        <a href="{% url 'services' %}" class="btn btn-outline-light fw-bold rounded-pill px-5 py-3 shadow hover-lift fs-5 d-inline-flex align-items-center gap-2">
+                            Explore Features <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Required Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize AOS Animation Library
+        AOS.init({
+            once: true,
+            offset: 50,
+        });
+
+        // Initialize Isotope for filtering
+        setTimeout(() => {
+            const grid = document.querySelector('.portfolio-grid');
+            if(grid) {
+                const iso = new Isotope(grid, {
+                    itemSelector: '.portfolio-item',
+                    layoutMode: 'fitRows'
+                });
+
+                // Filter button click events
+                const filtersElem = document.querySelector('.filter-button-group');
+                filtersElem.addEventListener('click', function(event) {
+                    if (!matchesSelector(event.target, 'button')) {
+                        return;
+                    }
+                    var filterValue = event.target.getAttribute('data-filter');
+                    iso.arrange({ filter: filterValue });
+
+                    // Update active class
+                    const currentlyActive = filtersElem.querySelector('.active');
+                    if (currentlyActive) {
+                        currentlyActive.classList.remove('active');
+                    }
+                    event.target.classList.add('active');
+                });
+            }
+        }, 300); // small timeout to ensure images are parsed
+    });
+</script>
+
+<style>
+    /* Base Variables & Typography */
+    :root {
+        --ums-primary: #0d6efd;
+        --ums-dark: #0b1426;
+        --ums-light: #f5f7fa;
+        --ums-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif !important;
+    }
+    .font-poppins {
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    .portfolio-page-wrapper {
+        background-color: var(--ums-light);
+    }
+    
+    /* Dark Mode Handling */
+    body.dark-mode .portfolio-page-wrapper {
+        background-color: var(--ums-dark);
+        color: #e2e8f0;
+    }
+    body.dark-mode .bg-light { background-color: var(--ums-dark) !important; }
+    body.dark-mode .bg-white { background-color: #1a2236 !important; }
+    body.dark-mode .text-dark { color: #f8fafc !important; }
+    body.dark-mode .text-secondary { color: #94a3b8 !important; }
+    body.dark-mode .portfolio-card { 
+        background-color: #1a2236; 
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5) !important; 
+    }
+
+    /* Utilities */
+    .pt-6 { padding-top: 5rem; }
+    .pb-6 { padding-bottom: 5rem; }
+    @media (min-width: 992px) { 
+        .pt-6 { padding-top: 7rem; } 
+        .pb-6 { padding-bottom: 7rem; } 
+    }
+    .letter-spacing-1 { letter-spacing: 1px; }
+    .z-index-0 { z-index: 0; }
+    .z-index-2 { z-index: 2; }
+    .pointer-events-none { pointer-events: none; }
+
+    /* Header Geometric Shapes */
+    .bg-shape {
+        width: 400px;
+        height: 400px;
+        filter: blur(80px);
+    }
+
+    /* Filters Box */
+    .filter-btn {
+        border: 2px solid rgba(13, 110, 253, 0.1);
+        color: #4b5563;
+        font-weight: 500;
+        background: transparent;
+        transition: var(--ums-transition);
+    }
+    body.dark-mode .filter-btn {
+        border-color: rgba(255,255,255,0.1);
+        color: #cbd5e1;
+    }
+    .filter-btn:hover {
+        background: rgba(13, 110, 253, 0.05);
+        color: var(--ums-primary);
+    }
+    .filter-btn.active {
+        background: var(--ums-primary);
+        color: white;
+        border-color: var(--ums-primary);
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    }
+
+    /* Portfolio Cards & Hover FX */
+    .portfolio-card {
+        transition: var(--ums-transition);
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    body.dark-mode .portfolio-card {
+        border-color: rgba(255,255,255,0.05) !important;
+    }
+
+    .portfolio-img {
+        transition: transform 0.5s ease;
+    }
+
+    .portfolio-overlay {
+        background: rgba(11, 20, 38, 0.7);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--ums-transition);
+        z-index: 2;
+    }
+
+    /* Hover States */
+    .portfolio-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+    }
+    body.dark-mode .portfolio-card:hover {
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+    }
+    
+    .portfolio-card:hover .portfolio-img {
+        transform: scale(1.1);
+    }
+
+    .portfolio-card:hover .portfolio-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Interactive elements */
+    .hover-lift { transition: var(--ums-transition); }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Typography fixes for mobile */
+    @media (max-width: 576px) {
+        .display-4 { font-size: 2.25rem; }
+        .display-6 { font-size: 1.75rem; }
+    }
+</style>
+{% endblock %}

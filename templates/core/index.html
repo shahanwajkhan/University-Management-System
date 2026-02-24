@@ -1,0 +1,487 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}UMS - Smart University Management System{% endblock %}
+
+{% block content %}
+<!-- Preload Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="homepage-wrapper min-vh-100 overflow-hidden bg-light">
+
+    <!-- 1. Hero Section -->
+    <section class="hero-section position-relative pt-6 pb-5 overflow-hidden">
+        <!-- Abstract gradient background -->
+        <div class="hero-bg-gradient position-absolute top-0 start-0 w-100 h-100 opacity-25 pointer-events-none"></div>
+        <div class="container position-relative z-index-2 pt-lg-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 text-center text-lg-start" data-aos="fade-up" data-aos-duration="1000">
+                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3 fw-medium letter-spacing-1 text-uppercase border border-primary border-opacity-25">Digital Campus Transformation</span>
+                    <h1 class="display-3 fw-bolder text-dark mb-4 font-poppins hero-title">
+                        Smart University <br>
+                        <span class="text-primary">Management System</span>
+                    </h1>
+                    <p class="lead text-secondary fw-normal mb-5 hero-subtitle">
+                        Streamline your entire academic operation with digital excellence. From admissions and attendance to finance and alumni relations, all unified in one secure platform.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
+                        <a href="{% url 'role_selection' %}" class="btn btn-primary btn-lg rounded-pill px-5 shadow hover-lift fw-semibold">Login / Register</a>
+                        <a href="{% url 'services' %}" class="btn btn-outline-dark btn-lg rounded-pill px-5 hover-lift fw-medium">Explore Features</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 position-relative text-center mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
+                    <div class="hero-image-wrapper position-relative mx-auto rounded-4 shadow-2xl overflow-hidden border border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop" alt="UMS Dashboard Preview" class="img-fluid w-100 h-100 object-fit-cover">
+                        <!-- Floating Accent Elements -->
+                        <div class="position-absolute top-0 end-0 p-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2 shadow-sm"><i class="bi bi-shield-check me-1"></i> Data Secured</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Quick Statistics Section -->
+    <section class="stats-section pb-6 position-relative z-index-2 mt-n4 mt-lg-n5">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <div class="col-xl-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="50">
+                    <div class="stat-card card text-center border-0 rounded-4 shadow-sm h-100 py-4 p-xl-5 bg-white">
+                        <div class="text-primary fs-1 mb-2"><i class="fa-solid fa-users"></i></div>
+                        <h2 class="display-5 fw-bold text-dark font-poppins mb-1 counter-value" data-target="35000">0</h2>
+                        <p class="text-secondary fw-medium mb-0 text-uppercase letter-spacing-1 small">Total Students</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-card card text-center border-0 rounded-4 shadow-sm h-100 py-4 p-xl-5 bg-white">
+                        <div class="text-success fs-1 mb-2"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <h2 class="display-5 fw-bold text-dark font-poppins mb-1 counter-value" data-target="2500">0</h2>
+                        <p class="text-secondary fw-medium mb-0 text-uppercase letter-spacing-1 small">Faculty Members</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="150">
+                    <div class="stat-card card text-center border-0 rounded-4 shadow-sm h-100 py-4 p-xl-5 bg-white">
+                        <div class="text-warning fs-1 mb-2"><i class="fa-solid fa-building-columns"></i></div>
+                        <h2 class="display-5 fw-bold text-dark font-poppins mb-1 counter-value" data-target="40">0</h2>
+                        <p class="text-secondary fw-medium mb-0 text-uppercase letter-spacing-1 small">Departments</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-card card text-center border-0 rounded-4 shadow-sm h-100 py-4 p-xl-5 bg-white">
+                        <div class="text-info fs-1 mb-2"><i class="fa-solid fa-book-open"></i></div>
+                        <h2 class="display-5 fw-bold text-dark font-poppins mb-1 counter-value" data-target="150">0</h2>
+                        <p class="text-secondary fw-medium mb-0 text-uppercase letter-spacing-1 small">Courses Offered</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. About Preview Section -->
+    <section class="about-preview-section py-6 bg-white overflow-hidden">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-right">
+                    <div class="position-relative p-2 p-md-4">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-light rounded-5 z-index-0"></div>
+                        <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop" alt="About University" class="img-fluid rounded-4 shadow-lg position-relative z-index-2 w-100">
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+                    <h6 class="text-primary fw-bold text-uppercase letter-spacing-1 mb-2">About Our System</h6>
+                    <h2 class="display-5 fw-bold text-dark font-poppins mb-4">Empowering the Future of Education</h2>
+                    <p class="fs-5 text-secondary mb-4">Our University Management System is engineered to eliminate administrative bottlenecks, allowing educators to focus on what matters most: student success.</p>
+                    <p class="text-muted mb-5">We are on a mission to completely digitize campus operations. From paperless admissions to AI-driven performance analytics, we provide an intuitive, secure, and scalable environment for higher education institutions.</p>
+                    <a href="{% url 'about' %}" class="btn btn-outline-primary rounded-pill px-4 py-2 hover-lift fw-semibold d-inline-flex align-items-center gap-2">
+                        Read Full Story <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Services Section Preview -->
+    <section class="services-preview-section py-6 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-primary fw-bold text-uppercase letter-spacing-1 mb-2">Core Modules</h6>
+                <h2 class="display-5 fw-bold text-dark font-poppins mb-3">Comprehensive University Services</h2>
+                <p class="lead text-secondary mx-auto" style="max-width: 600px;">Integrated solutions designed to handle every facet of the student and faculty lifecycle.</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Service 1 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card service-card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white shadow-sm text-center">
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fa-solid fa-user-graduate fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Student Management</h4>
+                        <p class="text-secondary small mb-0">Centralized database for student profiles, academic progress, and enrollment.</p>
+                    </div>
+                </div>
+                <!-- Service 2 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="50">
+                    <div class="card service-card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white shadow-sm text-center">
+                        <div class="icon-box bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fa-solid fa-chalkboard-user fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Faculty Management</h4>
+                        <p class="text-secondary small mb-0">Organize faculty schedules, workload distribution, and performance evaluations.</p>
+                    </div>
+                </div>
+                <!-- Service 3 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card service-card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white shadow-sm text-center">
+                        <div class="icon-box bg-danger bg-opacity-10 text-danger rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fa-solid fa-clipboard-user fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Attendance Tracking</h4>
+                        <p class="text-secondary small mb-0">Biometric or manual real-time attendance logging with instant low-percentage alerts.</p>
+                    </div>
+                </div>
+                <!-- Service 4 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150">
+                    <div class="card service-card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white shadow-sm text-center">
+                        <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fa-solid fa-file-invoice-dollar fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Fee Management</h4>
+                        <p class="text-secondary small mb-0">Secure payment gateway integration for tracking dues, installments, and receipts.</p>
+                    </div>
+                </div>
+                <!-- Service 5 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card service-card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white shadow-sm text-center">
+                        <div class="icon-box bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fa-solid fa-id-badge fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">ID Card Generation</h4>
+                        <p class="text-secondary small mb-0">Automated digital and printable ID cards with integrated QR verification.</p>
+                    </div>
+                </div>
+                <!-- Service 6 -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="250">
+                    <div class="card service-card h-100 border-0 rounded-4 p-4 p-xl-5 bg-white shadow-sm text-center">
+                        <div class="icon-box bg-dark bg-opacity-10 text-dark rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fa-solid fa-chart-pie fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 font-poppins text-dark">Reports & Analytics</h4>
+                        <p class="text-secondary small mb-0">Rich data visualizations mapping academic performance and institutional growth.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="{% url 'services' %}" class="btn btn-primary rounded-pill px-5 py-3 hover-lift fw-bold">View All Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Why Choose Our UMS -->
+    <section class="why-choose-section py-6 bg-white border-top border-bottom">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5" data-aos="fade-right">
+                    <h6 class="text-primary fw-bold text-uppercase letter-spacing-1 mb-2">The Advantage</h6>
+                    <h2 class="display-5 fw-bold text-dark font-poppins mb-4">Why Choose Our UMS?</h2>
+                    <p class="fs-5 text-secondary mb-4">Built on modern tech stacks, our platform prioritizes speed, security, and user experience above all else.</p>
+                    <a href="{% url 'about' %}#why-choose" class="btn btn-outline-dark rounded-pill px-4 py-2 hover-lift fw-medium mt-2 d-none d-lg-inline-block">Learn More</a>
+                </div>
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="text-primary fs-3"><i class="bi bi-phone"></i></div>
+                                <div>
+                                    <h5 class="fw-bold font-poppins text-dark mb-1">Fully Responsive</h5>
+                                    <p class="text-muted small">Flawless experience across desktop, tablet, and mobile devices.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="text-success fs-3"><i class="bi bi-shield-lock"></i></div>
+                                <div>
+                                    <h5 class="fw-bold font-poppins text-dark mb-1">Secure Authentication</h5>
+                                    <p class="text-muted small">Enterprise-grade security preventing unauthorized role access.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="text-danger fs-3"><i class="bi bi-lightning-charge"></i></div>
+                                <div>
+                                    <h5 class="fw-bold font-poppins text-dark mb-1">Real-Time Updates</h5>
+                                    <p class="text-muted small">Instant notifications for announcements, results, and fees.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="text-warning fs-3"><i class="bi bi-person-badge"></i></div>
+                                <div>
+                                    <h5 class="fw-bold font-poppins text-dark mb-1">Role-Based Access</h5>
+                                    <p class="text-muted small">Granular permission control mapping directly to actual administration tiers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Dashboard Preview Section -->
+    <section class="dashboards-section py-6 bg-light overflow-hidden">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-primary fw-bold text-uppercase letter-spacing-1 mb-2">Clean Interface</h6>
+                <h2 class="display-5 fw-bold text-dark font-poppins mb-3">Intuitive Dashboards</h2>
+                <p class="lead text-secondary mx-auto" style="max-width: 600px;">Tailored experiences for every user role, putting exactly what they need at their fingertips.</p>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <!-- Admin Preview -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card dashboard-preview-card h-100 border-0 rounded-4 overflow-hidden shadow-sm bg-white p-2">
+                        <div class="overflow-hidden rounded-3">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="w-100 object-fit-cover zoom-img" style="height: 200px;" alt="Admin Dashboard">
+                        </div>
+                        <div class="pt-3 pb-2 px-2 text-center">
+                            <h5 class="fw-bold font-poppins text-dark mb-0">Admin Panel</h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- Student Preview -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card dashboard-preview-card h-100 border-0 rounded-4 overflow-hidden shadow-sm bg-white p-2">
+                        <div class="overflow-hidden rounded-3">
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" class="w-100 object-fit-cover zoom-img" style="height: 200px;" alt="Student Dashboard">
+                        </div>
+                        <div class="pt-3 pb-2 px-2 text-center">
+                            <h5 class="fw-bold font-poppins text-dark mb-0">Student Portal</h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- Faculty Preview -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card dashboard-preview-card h-100 border-0 rounded-4 overflow-hidden shadow-sm bg-white p-2">
+                        <div class="overflow-hidden rounded-3">
+                            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop" class="w-100 object-fit-cover zoom-img" style="height: 200px;" alt="Faculty Dashboard">
+                        </div>
+                        <div class="pt-3 pb-2 px-2 text-center">
+                            <h5 class="fw-bold font-poppins text-dark mb-0">Faculty Workspace</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="{% url 'portfolio' %}" class="btn btn-outline-primary rounded-pill px-4 py-2 hover-lift fw-medium">View Full Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Testimonials Section -->
+    <section class="testimonials-section py-6 bg-white position-relative">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <i class="fa-solid fa-quote-left display-3 text-primary opacity-25 mb-3"></i>
+                <h2 class="display-5 fw-bold text-dark font-poppins mb-3">Trusted by Academics</h2>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <!-- Testimonial 1 -->
+                <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card testimonial-card h-100 border-0 rounded-4 p-4 p-md-5 bg-light shadow-sm">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin1&gender=male" class="rounded-circle me-3 border border-2 border-white shadow-sm" width="65" height="65" alt="Dr. Robert Fox">
+                            <div>
+                                <h5 class="fw-bold mb-0 text-dark font-poppins">Dr. Robert Fox</h5>
+                                <p class="text-secondary small mb-0">Dean of Sciences</p>
+                            </div>
+                        </div>
+                        <p class="text-muted fst-italic mb-0">"The UMS streamlined our faculty workload allocation incredibly. The intuitive interface meant zero training time was required for our professors."</p>
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card testimonial-card h-100 border-0 rounded-4 p-4 p-md-5 bg-light shadow-sm">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin2&gender=female" class="rounded-circle me-3 border border-2 border-white shadow-sm" width="65" height="65" alt="Eleanor Pena">
+                            <div>
+                                <h5 class="fw-bold mb-0 text-dark font-poppins">Eleanor Pena</h5>
+                                <p class="text-secondary small mb-0">Head of IT Administration</p>
+                            </div>
+                        </div>
+                        <p class="text-muted fst-italic mb-0">"Migrating to this platform was seamless. The role-based access security and real-time database updates are exactly what our vast campus needed."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Call to Action Section -->
+    <section class="cta-section py-6 text-center position-relative overflow-hidden">
+        <div class="cta-bg-gradient position-absolute top-0 start-0 w-100 h-100 z-index-0"></div>
+        <div class="container position-relative z-index-2" data-aos="zoom-in">
+            <h2 class="display-4 fw-bold text-white mb-4 font-poppins">Ready to Digitize Your University?</h2>
+            <p class="fs-4 text-white-50 mb-5 mx-auto" style="max-width: 700px;">
+                Join the forefront of academic management. Effortless integration, powerful tools, and a seamless experience for everyone on campus.
+            </p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                <a href="{% url 'role_selection' %}" class="btn btn-light text-primary fw-bold rounded-pill px-5 py-3 shadow-lg hover-lift fs-5">Get Started Now</a>
+                <a href="{% url 'contact' %}" class="btn btn-outline-light border-2 rounded-pill px-5 py-3 shadow hover-lift fs-5">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Required Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize AOS Animation Library
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800
+        });
+
+        // Numeric Counter Animation for Statistics Section
+        const counters = document.querySelectorAll('.counter-value');
+        const speed = 200; // The lower the slower
+        
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(animateCounters, 15);
+                } else {
+                    counter.innerText = target + (target >= 1000 && target < 20000 ? '+' : '');
+                    // Add '+' sign formatting for thousands manually if needed
+                    if (target == 35000) counter.innerText = '35k+';
+                    if (target == 2500) counter.innerText = '2.5k+';
+                    if (target == 150) counter.innerText = '150+';
+                }
+            });
+        };
+        
+        // Trigger counters when scrolled into view
+        const statSection = document.querySelector('.stats-section');
+        let animated = false;
+        
+        if (statSection) {
+            window.addEventListener('scroll', () => {
+                const sectionPos = statSection.getBoundingClientRect().top;
+                const screenPos = window.innerHeight;
+                if (sectionPos < screenPos && !animated) {
+                    animateCounters();
+                    animated = true;
+                }
+            });
+            // Initial check in case it's in view on load
+            const sectionPos = statSection.getBoundingClientRect().top;
+            if (sectionPos < window.innerHeight) {
+                animateCounters();
+                animated = true;
+            }
+        }
+    });
+</script>
+
+<style>
+    /* Base Variables & Typography */
+    :root {
+        --ums-primary: #0d6efd;
+        --ums-dark: #0b1426;
+        --ums-light: #f5f7fa;
+        --ums-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body { font-family: 'Inter', sans-serif !important; }
+    .font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+    /* Utilities */
+    .pt-6 { padding-top: 5rem; }
+    .pb-6 { padding-bottom: 5rem; }
+    .py-6 { padding-top: 5rem; padding-bottom: 5rem; }
+    @media (min-width: 992px) { 
+        .pt-6 { padding-top: 7rem; } 
+        .pb-6 { padding-bottom: 7rem; } 
+        .py-6 { padding-top: 7rem; padding-bottom: 7rem; } 
+    }
+    .letter-spacing-1 { letter-spacing: 1px; }
+    .z-index-0 { z-index: 0; }
+    .z-index-2 { z-index: 2; }
+    .pointer-events-none { pointer-events: none; }
+    
+    .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Dark Mode Handling - Override global backgrounds */
+    body.dark-mode .homepage-wrapper { background-color: var(--ums-dark); color: #e2e8f0; }
+    body.dark-mode .bg-light { background-color: var(--ums-dark) !important; }
+    body.dark-mode .bg-white { background-color: #1a2236 !important; }
+    body.dark-mode .text-dark { color: #f8fafc !important; }
+    body.dark-mode .text-secondary, body.dark-mode .text-muted { color: #94a3b8 !important; }
+    body.dark-mode .card { background-color: #1a2236; border-color: rgba(255,255,255,0.05) !important; }
+    body.dark-mode .border-white { border-color: #1a2236 !important; }
+    
+    /* 1. Hero Section */
+    .hero-bg-gradient {
+        background: radial-gradient(circle at top right, rgba(13, 110, 253, 0.1) 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(13, 110, 253, 0.05) 0%, transparent 40%);
+    }
+    .hero-title { line-height: 1.2; }
+    .hero-image-wrapper { max-height: 500px; }
+
+    /* Hover Lift Effect for varied items */
+    .hover-lift { transition: var(--ums-transition); }
+    .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+    }
+
+    /* Cards Transitions */
+    .stat-card, .service-card, .dashboard-preview-card, .testimonial-card {
+        transition: var(--ums-transition);
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    .stat-card:hover, .service-card:hover, .dashboard-preview-card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+    }
+    body.dark-mode .stat-card:hover, body.dark-mode .service-card:hover, body.dark-mode .dashboard-preview-card:hover {
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+    }
+
+    /* Images Zooming */
+    .zoom-img { transition: transform 0.6s ease; }
+    .dashboard-preview-card:hover .zoom-img { transform: scale(1.08); }
+
+    /* CTA Section Gradient */
+    .cta-bg-gradient {
+        background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
+    }
+
+    /* Typography fixes for mobile screens */
+    @media (max-width: 576px) {
+        .display-3 { font-size: 2.5rem; }
+        .display-4 { font-size: 2rem; }
+        .display-5 { font-size: 1.75rem; }
+        .hero-section { text-align: center; }
+        .btn-lg { width: 100%; display: block; margin-bottom: 10px;}
+    }
+</style>
+{% endblock %}

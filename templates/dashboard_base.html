@@ -1,0 +1,568 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block global_messages %}{% endblock %}
+
+{% block content %}
+<!-- Font Preloads (Optional but recommended for premium feel) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar shadow-lg">
+        <div class="sidebar-header">
+            <a href="{% url 'home' %}" class="brand d-flex align-items-center">
+                <i class="fa-solid fa-building-columns brand-icon fs-3"></i>
+                <span class="brand-name ms-2 fw-bold fs-4">UMS</span>
+            </a>
+            <button id="sidebarCollapse" class="btn btn-link text-white d-lg-none">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav mt-4">
+            <ul class="nav flex-column gap-1 px-3">
+                {% if user.role == 'Student' %}
+                    <li class="nav-item">
+                        <a href="{% url 'student_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+                            <i class="bi bi-grid-1x2"></i> <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'learning_materials' %}" class="nav-link {% if request.resolver_match.url_name == 'learning_materials' %}active{% endif %}">
+                            <i class="bi bi-book"></i> <span>Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'student_results' %}" class="nav-link {% if request.resolver_match.url_name == 'student_results' %}active{% endif %}">
+                            <i class="bi bi-file-earmark-bar-graph"></i> <span>Results</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'placement_portal' %}" class="nav-link {% if request.resolver_match.url_name == 'placement_portal' %}active{% endif %}">
+                            <i class="bi bi-briefcase"></i> <span>Placement</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'fee_portal' %}" class="nav-link {% if request.resolver_match.url_name == 'fee_portal' %}active{% endif %}">
+                            <i class="bi bi-credit-card"></i> <span>Fees</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'service_requests' %}" class="nav-link {% if request.resolver_match.url_name == 'service_requests' %}active{% endif %}">
+                            <i class="bi bi-file-earmark-person"></i> <span>Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'grievance_portal' %}" class="nav-link {% if request.resolver_match.url_name == 'grievance_portal' %}active{% endif %}">
+                            <i class="bi bi-exclamation-octagon"></i> <span>Grievance</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'student_timetable' %}" class="nav-link {% if request.resolver_match.url_name == 'student_timetable' %}active{% endif %}">
+                            <i class="bi bi-calendar3"></i> <span>Time Table</span>
+                        </a>
+                    </li>
+                {% elif user.role == 'Faculty' %}
+                    <li class="nav-item">
+                        <a href="{% url 'faculty_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'faculty_dashboard' %}active{% endif %}">
+                            <i class="bi bi-grid-1x2"></i> <span>Faculty Portal</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'edit_attendance' %}" class="nav-link {% if request.resolver_match.url_name == 'edit_attendance' or request.resolver_match.url_name == 'mark_attendance' or request.resolver_match.url_name == 'view_attendance_percentage' or request.resolver_match.url_name == 'export_attendance_pdf' %}active{% endif %}">
+                            <i class="bi bi-clipboard-check"></i> <span>Attendance</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'upload_material' %}" class="nav-link {% if request.resolver_match.url_name == 'upload_material' %}active{% endif %}">
+                            <i class="bi bi-cloud-arrow-up"></i> <span>Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'faculty_timetable' %}" class="nav-link {% if request.resolver_match.url_name == 'faculty_timetable' %}active{% endif %}">
+                            <i class="bi bi-calendar3"></i> <span>Time Table</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'faculty_announcements' %}" class="nav-link {% if request.resolver_match.url_name == 'faculty_announcements' %}active{% endif %}">
+                            <i class="bi bi-megaphone"></i> <span>Announcements</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'faculty_complaints' %}" class="nav-link {% if request.resolver_match.url_name == 'faculty_complaints' %}active{% endif %}">
+                            <i class="bi bi-exclamation-triangle"></i> <span>Complaints</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'faculty_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'faculty_profile' %}active{% endif %}">
+                            <i class="bi bi-person-circle"></i> <span>Profile</span>
+                        </a>
+                    </li>
+
+                {% elif user.role == 'Admin' %}
+                    <li class="nav-item">
+                        <a href="{% url 'admin_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                            <i class="bi bi-shield-lock"></i> <span>Admin Portal</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_timetable' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_timetable' %}active{% endif %}">
+                            <i class="bi bi-calendar3"></i> <span>Timetable</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_placements' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_placements' %}active{% endif %}">
+                            <i class="bi bi-briefcase"></i> <span>Placements</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_departments' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_departments' %}active{% endif %}">
+                            <i class="bi bi-building"></i> <span>Departments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_subjects' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_subjects' %}active{% endif %}">
+                            <i class="bi bi-book"></i> <span>Subjects</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_students' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_students' %}active{% endif %}">
+                            <i class="bi bi-person"></i> <span>Students</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_faculty' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_faculty' %}active{% endif %}">
+                            <i class="bi bi-person-badge"></i> <span>Faculty</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_announcements' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_announcements' %}active{% endif %}">
+                            <i class="bi bi-megaphone"></i> <span>Announcements</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_complaints' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_complaints' %}active{% endif %}">
+                            <i class="bi bi-exclamation-triangle"></i> <span>Complaints</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_id_cards' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_id_cards' %}active{% endif %}">
+                            <i class="bi bi-card-heading"></i> <span>ID Cards</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_fees' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_fees' %}active{% endif %} position-relative">
+                            <i class="bi bi-cash-coin"></i> <span>Fee Approvals</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_results' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_results' %}active{% endif %}">
+                            <i class="bi bi-graph-up-arrow"></i> <span>Results</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'manage_requests' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_requests' %}active{% endif %}">
+                            <i class="bi bi-file-earmark-text"></i> <span>Requests</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer p-3 mt-auto">
+            <div class="card bg-primary bg-opacity-10 border-0 rounded-4 p-3">
+                <p class="small text-white mb-2 opacity-75">University Management System v2.0</p>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="status-indicator ripple"></div>
+                    <span class="small text-white">System Active</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Top Navbar -->
+        <header class="top-navbar shadow-sm sticky-top glass">
+            <div class="container-fluid h-100 d-flex align-items-center justify-content-between px-lg-4">
+                <div class="d-flex align-items-center gap-3">
+                    <button id="sidebarToggle" class="btn btn-icon rounded-circle d-none d-lg-flex">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <button id="sidebarToggleMobile" class="btn btn-icon rounded-circle d-lg-none">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="search-box d-none d-md-flex align-items-center bg-light px-3 py-1 rounded-pill border">
+                        <i class="bi bi-search text-muted small me-2"></i>
+                        <input type="text" placeholder="Global system search..." class="border-0 bg-transparent small outline-none" style="width: 200px;">
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Dark Mode Toggle -->
+                    <button id="themeToggle" class="btn btn-icon rounded-circle">
+                        <i class="bi bi-moon-stars"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <button class="btn btn-icon rounded-circle position-relative" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-white rounded-circle" style="margin-top: 10px; margin-left: -10px;"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-3 mt-2 animate-slide-in" style="width: 320px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+                                <h6 class="fw-bold mb-0">Notifications</h6>
+                                <span class="badge bg-primary rounded-pill smaller">3 New</span>
+                            </div>
+                            <div class="notification-list overflow-auto" style="max-height: 300px;">
+                                {% for n in notifications|slice:":5" %}
+                                <div class="notification-item p-2 rounded-3 mb-2 bg-light d-flex gap-3">
+                                    <div class="icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                        <i class="bi bi-info-circle"></i>
+                                    </div>
+                                    <div>
+                                        <p class="small mb-1 fw-medium">{{ n.message|truncatechars:60 }}</p>
+                                        <span class="smaller text-muted">Just now</span>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="text-center py-4 text-muted">
+                                    <i class="bi bi-check2-circle mb-2 display-6 d-block"></i>
+                                    <span class="smaller">All caught up!</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center small text-primary fw-bold">View All Activity</a>
+                        </div>
+                    </div>
+
+                    <!-- Profile -->
+                    <div class="dropdown">
+                        <button class="btn btn-profile d-flex align-items-center gap-2 p-1 pe-3 rounded-pill bg-white shadow-sm border" data-bs-toggle="dropdown">
+                            <div class="avatar bg-transparent text-white rounded-circle overflow-hidden shadow-sm d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; border: 2px solid rgba(255,255,255,0.2);">
+                                {% if user.role == 'Student' %}
+                                    {% if user.student_profile.profile_picture %}
+                                        <img src="{{ user.student_profile.profile_picture.url }}" class="w-100 h-100 object-fit-cover" alt="">
+                                    {% else %}
+                                        <!-- Student Mini SVG -->
+                                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-100 h-100">
+                                            <defs><linearGradient id="nav_sg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#4f46e5"/><stop offset="100%" style="stop-color:#7c3aed"/></linearGradient></defs>
+                                            <circle cx="60" cy="60" r="60" fill="url(#nav_sg)"/>
+                                            <rect x="30" y="82" width="60" height="38" rx="10" fill="#6366f1"/>
+                                            <ellipse cx="60" cy="60" rx="22" ry="23" fill="#fcd34d"/>
+                                            <ellipse cx="60" cy="42" rx="22" ry="10" fill="#1e1b4b"/>
+                                            <rect x="40" y="37" width="40" height="5" rx="2" fill="#1e1b4b"/>
+                                            <polygon points="60,28 82,37 60,42 38,37" fill="#312e81"/>
+                                        </svg>
+                                    {% endif %}
+                                {% elif user.role == 'Faculty' %}
+                                    {% if user.faculty_profile.profile_picture %}
+                                        <img src="{{ user.faculty_profile.profile_picture.url }}" class="w-100 h-100 object-fit-cover" alt="">
+                                    {% else %}
+                                        <!-- Faculty Mini SVG -->
+                                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-100 h-100">
+                                            <defs><linearGradient id="nav_fg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0369a1"/><stop offset="100%" style="stop-color:#0d9488"/></linearGradient></defs>
+                                            <circle cx="60" cy="60" r="60" fill="url(#nav_fg)"/>
+                                            <path d="M25 120 Q30 80 60 78 Q90 80 95 120 Z" fill="#1e3a5f"/>
+                                            <ellipse cx="60" cy="58" rx="21" ry="22" fill="#fcd34d"/>
+                                            <ellipse cx="60" cy="40" rx="21" ry="9" fill="#78350f"/>
+                                            <rect x="44" y="57" width="12" height="9" rx="3" fill="none" stroke="white" stroke-width="2"/>
+                                            <rect x="64" y="57" width="12" height="9" rx="3" fill="none" stroke="white" stroke-width="2"/>
+                                        </svg>
+                                    {% endif %}
+                                {% else %}
+                                    <!-- Admin Mini SVG -->
+                                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-100 h-100">
+                                        <defs><linearGradient id="nav_ag" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e3a8a"/><stop offset="100%" style="stop-color:#0a2342"/></linearGradient></defs>
+                                        <circle cx="60" cy="60" r="60" fill="url(#nav_ag)"/>
+                                        <path d="M22 120 Q28 78 60 76 Q92 78 98 120 Z" fill="#0f172a"/>
+                                        <ellipse cx="60" cy="56" rx="22" ry="23" fill="#fed7aa"/>
+                                        <ellipse cx="60" cy="37" rx="22" ry="8" fill="#1e293b"/>
+                                        <polygon points="60,80 57,86 60,104 63,86" fill="#f59e0b"/>
+                                    </svg>
+                                {% endif %}
+                            </div>
+                            <div class="text-start d-none d-sm-block">
+                                <div class="smaller fw-bold text-dark lh-1">{{ user.username }}</div>
+                                <div class="smaller text-muted opacity-75 lh-1 mt-1">{{ user.role }}</div>
+                            </div>
+                            <i class="bi bi-chevron-down smaller text-muted ms-1"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 animate-slide-in">
+                            <li class="px-3 py-3 border-bottom mb-2 bg-light">
+                                <div class="fw-bold small">{{ user.full_name|default:user.username }}</div>
+                                <div class="text-muted smaller">Active Organization Member</div>
+                            </li>
+                            {% if user.role == 'Student' %}
+                            <li><a class="dropdown-item" href="{% url 'student_profile' %}"><i class="bi bi-person me-2 text-primary"></i>My Profile</a></li>
+                            {% elif user.role == 'Faculty' %}
+                            <li><a class="dropdown-item" href="{% url 'faculty_profile' %}"><i class="bi bi-person me-2 text-primary"></i>My Profile</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2 text-primary"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+                                    {% csrf_token %}
+                                </form>
+                                <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Sign Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content-body py-4 px-3 px-lg-5 min-vh-100">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4 ps-4 animate-slide-in" role="alert">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% block dashboard_content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<style>
+    :root {
+        --sidebar-bg: #0d2b56;
+        --sidebar-link-hover: rgba(255, 255, 255, 0.08);
+        --primary-accent: #ff5722;
+        --soft-bg: #f5f7fa;
+        --white: #ffffff;
+        --text-dark: #2d3748;
+        --text-muted: #718096;
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --navbar-bg: rgba(255, 255, 255, 0.8);
+    }
+
+    body.dark-mode {
+        --soft-bg: #0b1426;
+        --white: #1a2236;
+        --text-dark: #e2e8f0;
+        --text-muted: #a0aec0;
+        --navbar-bg: rgba(26, 34, 54, 0.8);
+        --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        --sidebar-bg: #0a1b32;
+    }
+
+    body.dark-mode img { filter: brightness(0.8) contrast(1.2); }
+    body.dark-mode .bg-light { background-color: rgba(255,255,255,0.05) !important; color: var(--text-dark) !important; }
+    body.dark-mode .border { border-color: rgba(255,255,255,0.1) !important; }
+    body.dark-mode .dropdown-menu { background-color: var(--white); border: 1px solid rgba(255,255,255,0.1); }
+    body.dark-mode .dropdown-item { color: var(--text-dark); }
+    body.dark-mode .dropdown-item:hover { background-color: rgba(255,255,255,0.05); }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--soft-bg);
+        color: var(--text-dark);
+        overflow-x: hidden;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dashboard-wrapper { display: flex; width: 100vw; }
+
+    /* Sidebar Styling */
+    .sidebar {
+        width: 280px;
+        height: 100vh;
+        background: var(--sidebar-bg);
+        color: white;
+        transition: all 0.3s ease;
+        position: sticky;
+        top: 0;
+        z-index: 1040;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar.collapsed { width: 80px; }
+    .sidebar.collapsed .brand-name, 
+    .sidebar.collapsed .nav-link span,
+    .sidebar.collapsed .sidebar-footer p { display: none; }
+    .sidebar.collapsed .sidebar-nav { padding: 0 10px; }
+    .sidebar.collapsed .nav-link { justify-content: center; padding: 12px 0; }
+    .sidebar.collapsed .brand { justify-content: center; padding: 20px 0; }
+    
+    .sidebar-header {
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .brand { text-decoration: none; color: white; transition: all 0.3s ease; }
+    .brand:hover { color: var(--primary-accent); }
+    .brand-icon { color: var(--primary-accent); }
+
+    .sidebar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.75);
+        padding: 12px 20px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .sidebar-nav .nav-link i { font-size: 1.1rem; }
+    .sidebar-nav .nav-link:hover { color: white; background: var(--sidebar-link-hover); }
+    .sidebar-nav .nav-link.active { 
+        color: white; 
+        background: var(--primary-accent); 
+        box-shadow: 0 8px 15px rgba(255, 87, 34, 0.25);
+    }
+
+    /* Top Navbar */
+    .top-navbar {
+        height: 70px;
+        background: var(--white);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        z-index: 1030;
+    }
+
+    .glass {
+        backdrop-filter: blur(12px);
+        background: rgba(var(--white), 0.8) !important;
+    }
+
+    .main-content {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+        background: transparent;
+        border: none;
+        transition: all 0.2s ease;
+    }
+    .btn-icon:hover { background: rgba(0,0,0,0.05); }
+
+    /* Animations & Utilities */
+    .animate-slide-in {
+        animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+        from { transform: translateY(10px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #48bb78;
+    }
+
+    .ripple {
+        position: relative;
+        overflow: hidden;
+    }
+    .ripple::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4);
+        animation: rippleEffect 1.5s infinite;
+    }
+    @keyframes rippleEffect {
+        0% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(72, 187, 120, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0); }
+    }
+
+    /* Cards & Glassmorphism */
+    .card {
+        background-color: var(--white);
+        border: none;
+        box-shadow: var(--card-shadow);
+        color: var(--text-dark);
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991.98px) {
+        .sidebar {
+            position: fixed;
+            left: -280px;
+        }
+        .sidebar.mobile-show { left: 0; }
+        .sidebar.collapsed { left: -280px; }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarToggleMobile = document.getElementById('sidebarToggleMobile');
+        const sidebarCollapse = document.getElementById('sidebarCollapse');
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Sidebar Toggle Desktop
+        if(sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+            });
+        }
+
+        // Sidebar Toggle Mobile
+        if(sidebarToggleMobile) {
+            sidebarToggleMobile.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-show');
+            });
+        }
+        if(sidebarCollapse) {
+            sidebarCollapse.addEventListener('click', () => {
+                sidebar.classList.remove('mobile-show');
+            });
+        }
+
+        // Theme Toggle
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.querySelector('i').classList.replace('bi-moon-stars', 'bi-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeToggle.querySelector('i').classList.toggle('bi-moon-stars');
+            themeToggle.querySelector('i').classList.toggle('bi-sun');
+        });
+    });
+</script>
+{% endblock %}

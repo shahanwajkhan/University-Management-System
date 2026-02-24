@@ -1,0 +1,230 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Edit Learning Material{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-2 px-md-4 animation-fade-in">
+    <!-- Header Area -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard' %}" class="text-decoration-none text-muted"><i class="bi bi-house-door me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'upload_material' %}" class="text-decoration-none text-muted">Materials</a></li>
+                    <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Edit</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark mb-0">Edit Material</h2>
+            <p class="text-muted mb-0 mt-1">Update details for "{{ material.title }}"</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Main Form Card -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden premium-card">
+                <div class="card-header bg-white border-0 p-4 pb-0">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-square bg-warning bg-opacity-10 text-warning rounded-3 d-flex justify-content-center align-items-center me-3 flex-shrink-0" style="width: 48px; height: 48px;">
+                            <i class="bi bi-pencil-square fs-4"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0 text-dark">Material Details</h4>
+                            <p class="text-muted small mb-0">Make changes and save to update the resource.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate id="editMaterialForm">
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            <!-- Title -->
+                            <div class="col-12">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <input type="text" name="title" id="titleInput" value="{{ material.title }}" class="form-control border-0 font-weight-medium bg-light" required>
+                                    <label for="titleInput" class="text-muted"><i class="bi bi-type me-2 text-primary"></i>Material Title</label>
+                                </div>
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="col-12">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <select name="subject" id="subjectSelect" class="form-select border-0 font-weight-medium bg-light" required>
+                                        {% for subject in subjects %}
+                                        <option value="{{ subject.id }}" {% if subject.id == material.subject.id %}selected{% endif %}>
+                                            {{ subject.name }} ({{ subject.code }}) — {{ subject.department.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="subjectSelect" class="text-muted"><i class="bi bi-book me-2 text-primary"></i>Associated Subject</label>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <div class="form-floating shadow-sm rounded-3">
+                                    <textarea name="description" id="descInput" class="form-control border-0 font-weight-medium bg-light" style="height: 100px">{{ material.description }}</textarea>
+                                    <label for="descInput" class="text-muted"><i class="bi bi-text-paragraph me-2 text-primary"></i>Description (Optional)</label>
+                                </div>
+                            </div>
+
+                            <!-- File Upload -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-dark small mb-2"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Update PDF File (Optional)</label>
+                                
+                                <div class="mb-3 p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-file-earmark-pdf-fill text-danger fs-3 me-3"></i>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">Current File</h6>
+                                            <span class="small text-muted text-break">{{ material.file.name|truncatechars:40 }}</span>
+                                        </div>
+                                    </div>
+                                    <a href="{{ material.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3">View</a>
+                                </div>
+                                
+                                <div class="upload-area border-2 border-dashed rounded-4 p-4 text-center bg-light position-relative">
+                                    <i class="bi bi-cloud-arrow-up fs-2 text-primary mb-2"></i>
+                                    <h6 class="fw-bold mb-1">Replace File</h6>
+                                    <p class="text-muted small mb-3">Leave empty to keep the existing file</p>
+                                    <input type="file" name="file" id="fileInput" class="form-control file-input-overlay" accept=".pdf">
+                                    <button type="button" class="btn btn-sm btn-light rounded-pill px-4 border shadow-sm upload-btn">Choose New PDF</button>
+                                    <div id="fileNameDisplay" class="mt-2 small fw-bold text-primary d-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 d-flex gap-3 justify-content-end border-top pt-4">
+                            <a href="{% url 'upload_material' %}" class="btn btn-light rounded-pill px-4 py-2 fw-medium text-muted border border-light-subtle">Cancel</a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold btn-hover-lift shadow-sm d-flex align-items-center gap-2">
+                                Save Changes <i class="bi bi-check2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #ff5722;
+        --primary-dark: #e64a19;
+    }
+
+    .text-primary { color: var(--primary-color) !important; }
+    
+    .bg-primary { background-color: var(--primary-color) !important; }
+    
+    .btn-primary {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--primary-dark) !important;
+        border-color: var(--primary-dark) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(255, 87, 34, 0.3) !important;
+    }
+
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .animation-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .premium-card {
+        border-radius: 1.25rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+    }
+    
+    .form-floating .form-select, .form-floating .form-control {
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+    
+    .form-floating .form-select:focus, .form-floating .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(255, 87, 34, 0.25);
+        background-color: #fff !important;
+    }
+
+    .form-floating > label { padding-left: 1.25rem; }
+
+    /* Custom File Upload Area */
+    .upload-area {
+        border-color: #cbd5e1 !important;
+        transition: all 0.3s ease;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+        border-color: var(--primary-color) !important;
+        background-color: rgba(255, 87, 34, 0.02) !important;
+    }
+    
+    .file-input-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 10;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        });
+
+        // File upload visual feedback
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const uploadBtn = document.querySelector('.upload-btn');
+        const uploadArea = document.querySelector('.upload-area');
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+                fileNameDisplay.classList.remove('d-none');
+                uploadBtn.textContent = 'Change PDF';
+                uploadArea.classList.add('border-primary');
+            } else {
+                fileNameDisplay.classList.add('d-none');
+                uploadBtn.textContent = 'Choose New PDF';
+                uploadArea.classList.remove('border-primary');
+            }
+        });
+
+        // Drag and drop visual cues
+        uploadArea.addEventListener('dragover', () => uploadArea.classList.add('dragover'));
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', () => uploadArea.classList.remove('dragover'));
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,3 @@
+# Ignore Django templates to prevent formatter from splitting template tags
+templates/
+*.html

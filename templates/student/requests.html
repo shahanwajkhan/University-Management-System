@@ -1,0 +1,118 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% block title %}Requests - UMS{% endblock %}
+{% block dashboard_content %}
+<div class="container-fluid py-4 px-lg-5">
+<div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom border-light">
+<div>
+<h2 class="fw-bold mb-1">Service Requests</h2>
+<p class="text-muted small">Apply for leave or request academic certificates</p>
+</div>
+<div class="d-flex gap-3 align-items-center">
+<div class="stat-card px-4 py-2 bg-white rounded-pill shadow-sm border-0 d-flex align-items-center gap-3">
+<div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary"><i class="bi bi-clock-history"></i></div>
+<div>
+<span class="text-muted smaller d-block fw-bold text-uppercase">TOTAL</span>
+<span class="fw-black text-dark">{{ total_requests }}</span>
+</div>
+</div>
+<div class="stat-card px-4 py-2 bg-white rounded-pill shadow-sm border-0 d-flex align-items-center gap-3">
+<div class="p-2 rounded-circle bg-success bg-opacity-10 text-success"><i class="bi bi-check2-circle"></i></div>
+<div>
+<span class="text-muted smaller d-block fw-bold text-uppercase">APPROVED</span>
+<span class="fw-black text-dark">{{ approved_requests }}</span>
+</div>
+</div>
+<button class="btn btn-dark rounded-pill px-4 py-2 ms-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#requestModal" style="background-color:#0d2b56;border:none;">
+<i class="bi bi-plus-lg me-2"></i>New Request
+</button>
+</div>
+</div>
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+<div class="table-responsive">
+<table class="table table-hover align-middle mb-0">
+<thead class="bg-light">
+<tr>
+<th class="ps-4 py-3 text-muted small fw-bold" style="letter-spacing:1px">TYPE</th>
+<th class="py-3 text-muted small fw-bold" style="letter-spacing:1px">MESSAGE</th>
+<th class="py-3 text-muted small fw-bold" style="letter-spacing:1px">LEAVE DATES</th>
+<th class="py-3 text-muted small fw-bold" style="letter-spacing:1px">DATE SUBMITTED</th>
+<th class="pe-4 py-3 text-end text-muted small fw-bold" style="letter-spacing:1px">STATUS</th>
+</tr>
+</thead>
+<tbody>
+{% for req in requests %}
+<tr>
+<td class="ps-4"><span class="badge rounded-pill px-3 py-2 bg-light text-dark border">{{ req.request_type }}</span></td>
+<td class="small text-muted">{{ req.message|truncatechars:50 }}</td>
+<td class="small">{% if req.request_type == 'Leave' and req.leave_from_date %}{{ req.leave_from_date|date:"M d, Y" }}{% if req.leave_to_date %} &rarr; {{ req.leave_to_date|date:"M d, Y" }}{% endif %}{% else %}—{% endif %}</td>
+<td class="small">{{ req.created_at|date:"M d, Y" }}</td>
+<td class="pe-4 text-end">
+{% if req.status == 'Approved' %}<span class="badge rounded-pill px-3 py-2 bg-success bg-opacity-10 text-success">Approved</span>{% endif %}
+{% if req.status == 'Rejected' %}<span class="badge rounded-pill px-3 py-2 bg-danger bg-opacity-10 text-danger">Rejected</span>{% endif %}
+{% if req.status == 'Pending' %}<span class="badge rounded-pill px-3 py-2 bg-warning bg-opacity-10 text-warning">Pending</span>{% endif %}
+</td>
+</tr>
+{% empty %}
+<tr><td colspan="5" class="py-5 text-center text-muted">No requests yet. Click "New Request" to start.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="modal fade" id="requestModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content border-0 rounded-4">
+<div class="modal-header border-0 p-4 pb-0">
+<h5 class="fw-bold">Submit New Request</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<form method="POST">
+{% csrf_token %}
+<div class="modal-body p-4">
+<div class="mb-3">
+<label class="form-label fw-bold">Request Type</label>
+<select name="request_type" id="requestTypeSelect" class="form-select rounded-pill px-3" required onchange="toggleLeaveDates()">
+<option value="Leave">Leave Request</option>
+<option value="Bonafide">Bonafide Certificate</option>
+</select>
+</div>
+<div id="leaveDatesSection" class="mb-3">
+<div class="row g-3">
+<div class="col-6">
+<label class="form-label fw-bold">From Date</label>
+<input type="date" name="leave_from_date" id="leaveFromDate" class="form-control rounded-pill px-3">
+</div>
+<div class="col-6">
+<label class="form-label fw-bold">To Date</label>
+<input type="date" name="leave_to_date" id="leaveToDate" class="form-control rounded-pill px-3">
+</div>
+</div>
+</div>
+<div class="mb-0">
+<label class="form-label fw-bold">Reason / Details</label>
+<textarea name="message" class="form-control rounded-4 p-3" rows="4" placeholder="Briefly describe your request..." required></textarea>
+</div>
+</div>
+<div class="modal-footer border-0 p-4 pt-0">
+<button type="submit" class="btn w-100 rounded-pill py-3 fw-bold text-white shadow-sm" style="background-color:#ff5722;border:none;">Submit Request</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+function toggleLeaveDates(){
+var t=document.getElementById('requestTypeSelect').value;
+var s=document.getElementById('leaveDatesSection');
+var f=document.getElementById('leaveFromDate');
+var td=document.getElementById('leaveToDate');
+if(t==='Leave'){s.style.display='block';f.required=true;}
+else{s.style.display='none';f.required=false;f.value='';td.value='';}
+}
+var today=new Date().toISOString().split('T')[0];
+document.getElementById('leaveFromDate').min=today;
+document.getElementById('leaveToDate').min=today;
+</script>
+{% endblock %}

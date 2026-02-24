@@ -1,0 +1,126 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}UMS - Learning Materials{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid py-0 px-0">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="mb-4">
+            <a href="{% url 'student_dashboard' %}" class="btn btn-link text-decoration-none text-muted ps-0">
+                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Header & Filters -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-5 bg-white">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-4">
+                    <h1 class="fw-bold text-dark h3 mb-1">Learning Materials</h1>
+                    <p class="text-muted mb-0">Browse and download subject-wise resources.</p>
+                </div>
+                <div class="col-lg-8">
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-5">
+                            <div class="input-group bg-light rounded-pill px-3">
+                                <span class="input-group-text bg-transparent border-0"><i
+                                        class="bi bi-search text-muted"></i></span>
+                                <input type="text" name="search" value="{{ search_query|default:'' }}"
+                                    class="form-control bg-transparent border-0" placeholder="Search materials...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="subject" class="form-select border-light bg-light rounded-pill px-3">
+                                <option value="">All Subjects</option>
+                                {% for subject in subjects %}
+                                {% if selected_subject == subject.id|stringformat:"s" %}
+                                <option value="{{ subject.id }}" selected>{{ subject.name }}</option>
+                                {% else %}
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn w-100 rounded-pill fw-bold text-white"
+                                style="background-color: #ff5722;">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Materials Grid -->
+        <div class="row g-4">
+            {% for material in materials %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 material-card bg-white">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="file-icon bg-opacity-10 p-3 rounded-4 fs-3"
+                                style="background-color: rgba(255, 87, 34, 0.1); color: #ff5722;">
+                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                            </div>
+                            <span class="badge bg-light text-dark border small">{{ material.subject.code }}</span>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">{{ material.title }}</h5>
+                        <p class="text-muted small mb-4 flex-grow-1">{{ material.description|truncatewords:20 }}</p>
+
+                        <div class="pt-3 border-top mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted smaller"><i class="bi bi-person me-1"></i>{{ material.uploaded_by.full_name|default:material.uploaded_by.username }}</span>
+                                <span class="text-muted smaller"><i class="bi bi-calendar-event me-1"></i>{{ material.uploaded_at|date:"M d, Y" }}</span>
+                            </div>
+                            {% if material.file %}
+                            <a href="{{ material.file.url }}" class="btn w-100 rounded-pill py-2 fw-medium text-white"
+                                style="background-color: #ff5722;" download>
+                                <i class="bi bi-download me-2"></i>Download PDF
+                            </a>
+                            {% else %}
+                            <span class="btn w-100 rounded-pill py-2 fw-medium text-muted bg-light border-0 disabled">No
+                                file attached</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="bg-white border-0 shadow-sm rounded-4 p-5 d-inline-block">
+                    <div class="fs-1 text-muted mb-3"><i class="bi bi-folder2-open"></i></div>
+                    <h4 class="fw-bold">No materials found</h4>
+                    <p class="text-muted">Try adjusting your filters or search query.</p>
+                    <a href="{% url 'learning_materials' %}" class="btn btn-link text-decoration-none">Clear all
+                        filters</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .material-card {
+        transition: all 0.3s ease;
+        border: 1px solid transparent !important;
+    }
+
+    .material-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(13, 110, 253, 0.2) !important;
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
+    }
+
+    .file-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .material-card:hover .file-icon {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    .smaller {
+        font-size: 0.75rem;
+    }
+</style>
+{% endblock %}

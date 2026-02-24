@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty ID Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --dark-red: #b71c1c;
+            --text-dark: #1a1a1a;
+            --text-muted: #666;
+            --card-bg: #ffffff;
+            --shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        @page {
+            size: portrait;
+            margin: 0;
+        }
+
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .id-card-container {
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        .id-card-wrap {
+            width: 54mm;
+            height: 85.6mm;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: white;
+            padding: 10px 5px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .univ-name {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin: 0;
+            width: 100%;
+            padding: 0 5px;
+        }
+
+        .photo-area {
+            margin: 15px auto 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .faculty-photo {
+            width: 60px;
+            height: 75px;
+            border: 3px solid #eee;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f8f9fa;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .no-photo-placeholder {
+            width: 60px;
+            height: 75px;
+            border: 3px solid #eee;
+            border-radius: 8px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 0 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .faculty-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .faculty-uid {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--primary-red);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .label {
+            font-size: 7px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+            font-size: 9px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .footer-card {
+            margin-top: auto;
+            padding-bottom: 15px;
+        }
+
+        .sig-line {
+            width: 70px;
+            height: 1px;
+            background: #ccc;
+            margin: 0 auto 4px;
+        }
+
+        .auth-sig {
+            font-size: 8px;
+            color: #666;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-strip {
+            height: 6px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary-red), var(--dark-red));
+        }
+
+        @media print {
+            body { background: none; }
+            .no-print { display: none; }
+            .id-card-wrap { 
+                box-shadow: none; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            .id-card-container { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print position-fixed top-0 start-50 translate-middle-x mt-4" style="z-index: 1000;">
+        <button onclick="window.print()" class="btn btn-dark rounded-pill px-4 shadow-lg border-0">
+            <i class="bi bi-printer me-2"></i>PRINT ID CARD
+        </button>
+    </div>
+
+    <div class="id-card-container">
+        <div class="id-card-wrap">
+            <div class="card-header">
+                <div class="univ-name">Lovely Professional University</div>
+            </div>
+            
+            <div class="photo-area">
+                {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" class="faculty-photo" alt="Faculty Photo">
+                {% else %}
+                    <div class="no-photo-placeholder">PHOTO REQUIRED</div>
+                {% endif %}
+            </div>
+
+            <div class="content-area">
+                <div class="faculty-name">{% if faculty %}{{ faculty.full_name|default:faculty.username }}{% else %}{{ user.full_name|default:user.username }}{% endif %}</div>
+                <div class="faculty-uid">UID: {{ profile.faculty_uid|default:"N/A" }}</div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Department</span>
+                        <span class="value">{{ profile.department.name|default:"General" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Designation</span>
+                        <span class="value">{{ profile.designation|default:"Faculty" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Joining Date</span>
+                        <span class="value">{{ profile.joining_date|date:"d M Y"|default:"-" }}</span>
+                    </div>
+                </div>
+
+                <div class="footer-card">
+                    <div class="sig-line"></div>
+                    <div class="auth-sig">Authorized Signatory</div>
+                </div>
+            </div>
+            
+            <div class="card-strip"></div>
+        </div>
+    </div>
+</body>
+</html>

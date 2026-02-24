@@ -1,0 +1,15 @@
+=== DEPARTMENTS ===
+ID: 1, Name: BTech
+ID: 2, Name: BCA
+ID: 3, Name: Computer Science
+
+=== STUDENT PROFILES ===
+User: skhan425, DeptID: 3, Sem: 1
+User: skhan123, DeptID: 3, Sem: 1
+
+=== ANNOUNCEMENTS ===
+Title: Holiday Alert, DeptID: 1, Sem: 1, CreatedBy: aditya123
+
+=== POTENTIAL MATCHES ===
+Student skhan425 matches 0 announcements.
+Student skhan123 matches 0 announcements.
