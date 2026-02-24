@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    'core.apps.CoreConfig',
     'student',
     'faculty',
     'organization',
@@ -58,6 +58,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ums_project.urls'
+
+# Use cookie-based sessions for Vercel read-only filesystem
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 TEMPLATES = [
     {
