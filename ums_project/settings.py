@@ -30,7 +30,11 @@ JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-dev-secret-key-67890')
 # SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = ['*'] # Allow all for Vercel/Cloudflare custom domains
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app'] # Add custom domains to this if forms fail
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'https://*.shahanwajkhan.com',
+    'https://shahanwajkhan.com'
+] # Add custom domains to this if forms fail
 
 # Application definition
 
@@ -59,8 +63,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ums_project.urls'
 
-# Use cookie-based sessions for Vercel read-only filesystem
-SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+# Standard database sessions (now that we have Neon Postgres)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 TEMPLATES = [
     {
