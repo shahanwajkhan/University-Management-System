@@ -51,11 +51,9 @@
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <span class="badge rounded-pill px-3 py-1 mb-2 bg-light text-dark border">{{ complaint.category
-                            }}</span>
+                        <span class="badge rounded-pill px-3 py-1 mb-2 bg-light text-dark border">{{ complaint.category }}</span>
                         <h5 class="fw-bold text-dark mb-1">{{ complaint.subject }}</h5>
-                        <p class="text-muted small mb-0">Ticket #{{ complaint.id }} | Filed on {{
-                            complaint.created_at|date:"M d, Y" }}</p>
+                        <p class="text-muted small mb-0">Ticket #{{ complaint.id }} | Filed on {{ complaint.created_at|date:"M d, Y" }}</p>
                     </div>
                     <span
                         class="badge rounded-pill px-3 py-2 

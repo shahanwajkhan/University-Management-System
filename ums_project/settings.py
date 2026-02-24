@@ -28,6 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-cv^%oy2mm@hz9a@%!k=p3ocv@b
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-dev-secret-key-67890')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['*'] # Allow all for Vercel/Cloudflare custom domains
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = [

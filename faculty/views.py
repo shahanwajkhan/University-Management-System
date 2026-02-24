@@ -664,17 +664,24 @@ def manage_complaints(request):
         
     profile = request.user.faculty_profile
     # Show Academic complaints — filter by dept if faculty has one, else show all
+    base_query = Complaint.objects.filter(category='Academic')
     if profile.department:
-        complaints = Complaint.objects.filter(
-            category='Academic',
-            student__student_profile__department=profile.department
-        ).order_by('-created_at')
-    else:
-        complaints = Complaint.objects.filter(category='Academic').order_by('-created_at')
+        base_query = base_query.filter(student__student_profile__department=profile.department)
+    
+    complaints = base_query.order_by('-created_at')
+
+    # Calculate Stats for Ticketing Dashboard
+    stats = {
+        'total': base_query.count(),
+        'pending': base_query.filter(status='Pending').count(),
+        'in_progress': base_query.filter(status='In Progress').count(),
+        'resolved': base_query.filter(status='Resolved').count(),
+    }
 
     context = {
         'complaints': complaints,
-        'profile': profile
+        'profile': profile,
+        'stats': stats
     }
     return render(request, 'faculty/complaints.html', context)
 
