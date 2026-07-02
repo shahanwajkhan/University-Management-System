@@ -1,5 +1,6 @@
 # 🏛️ University Management System (UMS)
 
+[![Live Demo](https://img.shields.io/badge/demo-live%20preview-brightgreen?style=for-the-badge&logo=vercel&logoColor=white)](https://university-management-system-kappa-sepia.vercel.app)
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Django Version](https://img.shields.io/badge/django-6.0.2-green?style=for-the-badge&logo=django&logoColor=white)](https://djangoproject.com)
 [![Database](https://img.shields.io/badge/database-SQLite%20%7C%20PostgreSQL-lightgrey?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
@@ -7,6 +8,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 A next-generation digital administration ecosystem built with Django 6.0 for modern academic institutions. UMS bridges administrators, educators, and students under a single, highly-secure, role-restricted dashboard infrastructure. It streamlines academic operations, automates attendance checking, organizes timetables, calculates grades, processes online payments, and handles corporate placement drives.
+
+**🔗 Live Demo:** Experience the application live at [university-management-system-kappa-sepia.vercel.app](https://university-management-system-kappa-sepia.vercel.app).
 
 ---
 
